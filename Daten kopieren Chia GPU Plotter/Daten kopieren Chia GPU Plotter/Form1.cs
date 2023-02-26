@@ -22,7 +22,8 @@ namespace Daten_kopieren_Chia_GPU_Plotter
 
         List<KopierDaten> Kopierliste= new List<KopierDaten>();
         List<string> ZielPfad= new List<string>();
-        BackgroundWorker PSBackgroundWorker =new BackgroundWorker();
+        BackgroundWorker PSBackgroundWorker =new BackgroundWorker();// Wird für die Powershell verwendet
+        
         int i = 0; // Zähler das die Zielpfade gleichmäßig abgewechselt werden
         List<BackgroundWorker> workerList = new List<BackgroundWorker>();
         
@@ -35,6 +36,7 @@ namespace Daten_kopieren_Chia_GPU_Plotter
         {
             InitializeComponent();
             PSBackgroundWorker.DoWork += PSBackgroundWorker_DoWork;
+            PSBackgroundWorker.WorkerSupportsCancellation = true;
         }
         /// <summary>
         /// Wird verwendet um den Cuda Plotter mit den jeweiligen Paramtern zu starten
@@ -157,10 +159,14 @@ namespace Daten_kopieren_Chia_GPU_Plotter
                 DateTime zeit = DateTime.Now;
                 String endkürzel = ".tmp";
                 logGlobal("kopieren von " + auwahl.pfad);
-                logGlobal("nach " + auwahl.zielort + endkürzel+ " Uhrzeit: " + zeit.ToShortTimeString() + " s");
+                logGlobal("nach " + auwahl.zielort + endkürzel+ " Uhrzeit: " + zeit.ToShortTimeString());
                 Stopwatch watch = new Stopwatch();
                 watch.Start();
                 //Thread.Sleep(20000);// Wird zum testen verwendet
+                if (File.Exists( auwahl.zielort + endkürzel))// Die temp Datei ist bereits vorhanden und kann gelöscht werden
+                {
+                    File.Delete(auwahl.zielort + endkürzel);
+                }
                 System.IO.File.Move(auwahl.pfad, auwahl.zielort+ endkürzel);//Kopieren vom Plot
                 watch.Stop();
                 logGlobal("kopieren nach "+ auwahl.zielort + " Dauer: " + watch.Elapsed.TotalSeconds + " s");
@@ -234,16 +240,31 @@ namespace Daten_kopieren_Chia_GPU_Plotter
         void reset()
         {
             ZielPfad.Clear();
+            workerList.Clear();
+
             foreach (String pfad in zielPfadListe.Items)
             {
                 ZielPfad.Add(pfad + "\\");// Ziellaufwerke
             }
-            workerList.Clear();
+            foreach (var item in Kopierliste)
+            {
+                if (item.kopiert == false)
+                {
+                    foreach (var pfad in ZielPfad)
+                    {
+                        if (item.zielort == pfad) {
+                            item.zielort = "";
+                        } 
+                    }
+                }
+            }
             for (int k = 0; k < ZielPfad.Count(); k++)
             {
                 workerList.Add(new BackgroundWorker());
+                workerList[k].WorkerSupportsCancellation = true;
                 workerList[k].DoWork += new DoWorkEventHandler(backgroundWorker1_DoWork);
             }
+            Console.WriteLine("test");
         }
 
         private void KopierenStarten_Click(object sender, EventArgs e)
@@ -291,6 +312,7 @@ namespace Daten_kopieren_Chia_GPU_Plotter
                 {
                     zielPfadListe.Items.Add(dialog.SelectedPath);
                     KopierenAnhalten_Click(null, EventArgs.Empty);// Hält den Kopiervorgang an
+                    reset();
                 }
             }
         }
@@ -302,20 +324,6 @@ namespace Daten_kopieren_Chia_GPU_Plotter
             
             zielPfadListe.Items.Clear();
 
-            /// ADAM können weg nur für Testzwecke
-            /// 
-            /*
-            quellPfad.Items.Add("G:\\Chia");
-            zielPfadListe.Items.Add("E:\\109_18TB_T_PP_BB");
-            zielPfadListe.Items.Add("L:\\110_18TB_T_CP");
-            quelle = "G:\\Chia";
-            FarmerKey.Text = "80a740bf183764a7435044c247f49425571201c5733ce27e0951dff77eb569902e5b47e4da220ace758f2060f4778efb";
-            PoolKey.Text = "xch1v6u8gftud9hnnaqlex50hec9skzklvanf0g958u8frgp35upf9wqfl0jsw";
-            pfadBladBitGPUPlotter = "C:\\Users\\micro\\Documents\\GitHub\\bladebit\\bladebit_cuda.exe";
-            PfadCudaPlotterListe.Items.Add(pfadBladBitGPUPlotter);
-            PlotterGefunden.Checked = true;
-            */
-            ///
             StopPlot.Visible= false;
             StartPlot.Visible = true;
 
@@ -369,6 +377,8 @@ namespace Daten_kopieren_Chia_GPU_Plotter
                     // Find the string in ListBox2.
                     int index = zielPfadListe.FindString(curItem);
                     zielPfadListe.Items.RemoveAt(index);
+                    reset();
+
 
                 }
             }
@@ -589,6 +599,18 @@ namespace Daten_kopieren_Chia_GPU_Plotter
         {
             string target = "https://www.paypal.com/donate/?hosted_button_id=T67HY3Z5H4222";
             Process.Start(new ProcessStartInfo() { FileName = target, UseShellExecute = true });
+        }
+
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            _ps.Stop();
+            PSBackgroundWorker.CancelAsync();
+
+            foreach (var item in workerList)
+            {
+                item.CancelAsync();
+            }
+
         }
     }
 }

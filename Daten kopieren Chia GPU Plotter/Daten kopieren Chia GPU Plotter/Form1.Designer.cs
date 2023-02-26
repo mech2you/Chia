@@ -379,6 +379,7 @@
             this.Controls.Add(this.Kopieren);
             this.Name = "Form1";
             this.Text = "mech2youDV v1.0.0";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.Load += new System.EventHandler(this.Form1_Load);
             ((System.ComponentModel.ISupportInitialize)(this.AnzahlPlots)).EndInit();
             this.ResumeLayout(false);
