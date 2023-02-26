@@ -134,7 +134,7 @@
             this.log.Multiline = true;
             this.log.Name = "log";
             this.log.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.log.Size = new System.Drawing.Size(2421, 504);
+            this.log.Size = new System.Drawing.Size(1820, 504);
             this.log.TabIndex = 7;
             // 
             // LogLöschen
@@ -286,9 +286,9 @@
             // 
             // SettingsSpeichern
             // 
-            this.SettingsSpeichern.Location = new System.Drawing.Point(2798, 116);
+            this.SettingsSpeichern.Location = new System.Drawing.Point(2158, 3);
             this.SettingsSpeichern.Name = "SettingsSpeichern";
-            this.SettingsSpeichern.Size = new System.Drawing.Size(182, 34);
+            this.SettingsSpeichern.Size = new System.Drawing.Size(221, 34);
             this.SettingsSpeichern.TabIndex = 23;
             this.SettingsSpeichern.Text = "Settings speichern";
             this.SettingsSpeichern.UseVisualStyleBackColor = true;
@@ -304,7 +304,7 @@
             // PlotsPrüfen
             // 
             this.PlotsPrüfen.AutoSize = true;
-            this.PlotsPrüfen.Location = new System.Drawing.Point(2175, 43);
+            this.PlotsPrüfen.Location = new System.Drawing.Point(2158, 43);
             this.PlotsPrüfen.Name = "PlotsPrüfen";
             this.PlotsPrüfen.Size = new System.Drawing.Size(134, 29);
             this.PlotsPrüfen.TabIndex = 25;
@@ -348,7 +348,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(3030, 765);
+            this.ClientSize = new System.Drawing.Size(2384, 765);
             this.Controls.Add(this.WerbungSpende);
             this.Controls.Add(this.WerbungYouTube);
             this.Controls.Add(this.Werbelink);

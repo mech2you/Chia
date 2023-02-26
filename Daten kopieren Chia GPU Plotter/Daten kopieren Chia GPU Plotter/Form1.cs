@@ -156,13 +156,14 @@ namespace Daten_kopieren_Chia_GPU_Plotter
             {
                 DateTime zeit = DateTime.Now;
                 String endkürzel = ".tmp";
-                logGlobal("kopieren von " + auwahl.pfad + " nach " + auwahl.zielort + endkürzel+ " Zeit: " +zeit.ToShortTimeString());
+                logGlobal("kopieren von " + auwahl.pfad);
+                logGlobal("nach " + auwahl.zielort + endkürzel+ " Uhrzeit: " + zeit.ToShortTimeString() + " s");
                 Stopwatch watch = new Stopwatch();
                 watch.Start();
                 //Thread.Sleep(20000);// Wird zum testen verwendet
-                System.IO.File.Move(auwahl.pfad, auwahl.zielort+ endkürzel);
+                System.IO.File.Move(auwahl.pfad, auwahl.zielort+ endkürzel);//Kopieren vom Plot
                 watch.Stop();
-                logGlobal("kopieren nach "+ auwahl.zielort+" Zeit: "+watch.Elapsed.TotalSeconds+" s" );
+                logGlobal("kopieren nach "+ auwahl.zielort + " Dauer: " + watch.Elapsed.TotalSeconds + " s");
                 System.IO.File.Move(auwahl.zielort + endkürzel, auwahl.zielort);// Umbenennen
             }
         }
