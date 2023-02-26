@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "khWzJyZ46ucs44E2QouL7uiXNwDebN5Om4DYan64ngV5ffHmanX1AM4YEMSDVMu2MgVFOmTGP1h7kxuvjs6XqA==",
+  "dgSpecHash": "5jngC8SWDflloCmFulrBZ9WMpPpMDLow+STGVIyMmecgQW5LvW4xs5rCa/xNfWOmvAzxT5Uh45HAtxga6NoFvA==",
   "success": true,
-  "projectFilePath": "C:\\Users\\micro\\Documents\\GitHub\\Chia-Privat\\Daten kopieren Chia GPU Plotter\\Daten kopieren Chia GPU Plotter\\Daten kopieren Chia GPU Plotter.csproj",
+  "projectFilePath": "C:\\Users\\micro\\Documents\\GitHub\\Chia\\Daten kopieren Chia GPU Plotter\\Daten kopieren Chia GPU Plotter\\Daten kopieren Chia GPU Plotter.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\micro\\.nuget\\packages\\markdig.signed\\0.30.4\\markdig.signed.0.30.4.nupkg.sha512",
     "C:\\Users\\micro\\.nuget\\packages\\microsoft.applicationinsights\\2.21.0\\microsoft.applicationinsights.2.21.0.nupkg.sha512",

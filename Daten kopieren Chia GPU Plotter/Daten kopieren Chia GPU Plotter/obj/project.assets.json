@@ -6268,11 +6268,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\micro\\Documents\\GitHub\\Chia-Privat\\Daten kopieren Chia GPU Plotter\\Daten kopieren Chia GPU Plotter\\Daten kopieren Chia GPU Plotter.csproj",
+      "projectUniqueName": "C:\\Users\\micro\\Documents\\GitHub\\Chia\\Daten kopieren Chia GPU Plotter\\Daten kopieren Chia GPU Plotter\\Daten kopieren Chia GPU Plotter.csproj",
       "projectName": "Daten kopieren Chia GPU Plotter",
-      "projectPath": "C:\\Users\\micro\\Documents\\GitHub\\Chia-Privat\\Daten kopieren Chia GPU Plotter\\Daten kopieren Chia GPU Plotter\\Daten kopieren Chia GPU Plotter.csproj",
+      "projectPath": "C:\\Users\\micro\\Documents\\GitHub\\Chia\\Daten kopieren Chia GPU Plotter\\Daten kopieren Chia GPU Plotter\\Daten kopieren Chia GPU Plotter.csproj",
       "packagesPath": "C:\\Users\\micro\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\micro\\Documents\\GitHub\\Chia-Privat\\Daten kopieren Chia GPU Plotter\\Daten kopieren Chia GPU Plotter\\obj\\",
+      "outputPath": "C:\\Users\\micro\\Documents\\GitHub\\Chia\\Daten kopieren Chia GPU Plotter\\Daten kopieren Chia GPU Plotter\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\micro\\AppData\\Roaming\\NuGet\\NuGet.Config",

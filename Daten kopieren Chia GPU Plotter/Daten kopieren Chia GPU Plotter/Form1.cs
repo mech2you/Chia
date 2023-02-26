@@ -315,7 +315,14 @@ namespace Daten_kopieren_Chia_GPU_Plotter
             KopierenStarten.Visible = true;
 
             // Läd alle gespeicherten Werte in die GUI
-            AnzahlPlots.Value=Properties.Settings.Default.AnzahlPlots;
+            if (Properties.Settings.Default.AnzahlPlots>0)// Verhindert Fehler bei Release exe
+            {
+                AnzahlPlots.Value = Properties.Settings.Default.AnzahlPlots;
+            }
+            else
+            {
+                AnzahlPlots.Value = 1;
+            }
             FarmerKey.Text=Properties.Settings.Default.FarmerKey ;
 
             PoolKey.Text=Properties.Settings.Default.PoolKey;
@@ -567,6 +574,12 @@ namespace Daten_kopieren_Chia_GPU_Plotter
         private void WerbungYouTube_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             string target = "https://www.youtube.com/@AdamWilczek";
+            Process.Start(new ProcessStartInfo() { FileName = target, UseShellExecute = true });
+        }
+
+        private void WerbungSpende_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            string target = "https://www.paypal.com/donate/?hosted_button_id=T67HY3Z5H4222";
             Process.Start(new ProcessStartInfo() { FileName = target, UseShellExecute = true });
         }
     }

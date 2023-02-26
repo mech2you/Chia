@@ -55,6 +55,7 @@
             this.PlotsPrüfen = new System.Windows.Forms.CheckBox();
             this.Werbelink = new System.Windows.Forms.LinkLabel();
             this.WerbungYouTube = new System.Windows.Forms.LinkLabel();
+            this.WerbungSpende = new System.Windows.Forms.LinkLabel();
             ((System.ComponentModel.ISupportInitialize)(this.AnzahlPlots)).BeginInit();
             this.SuspendLayout();
             // 
@@ -313,7 +314,7 @@
             // Werbelink
             // 
             this.Werbelink.AutoSize = true;
-            this.Werbelink.Location = new System.Drawing.Point(35, 14);
+            this.Werbelink.Location = new System.Drawing.Point(185, 14);
             this.Werbelink.Name = "Werbelink";
             this.Werbelink.Size = new System.Drawing.Size(217, 25);
             this.Werbelink.TabIndex = 26;
@@ -324,7 +325,7 @@
             // WerbungYouTube
             // 
             this.WerbungYouTube.AutoSize = true;
-            this.WerbungYouTube.Location = new System.Drawing.Point(258, 14);
+            this.WerbungYouTube.Location = new System.Drawing.Point(408, 14);
             this.WerbungYouTube.Name = "WerbungYouTube";
             this.WerbungYouTube.Size = new System.Drawing.Size(158, 25);
             this.WerbungYouTube.TabIndex = 27;
@@ -332,11 +333,23 @@
             this.WerbungYouTube.Text = "Werbung YouTube";
             this.WerbungYouTube.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.WerbungYouTube_LinkClicked);
             // 
+            // WerbungSpende
+            // 
+            this.WerbungSpende.AutoSize = true;
+            this.WerbungSpende.Location = new System.Drawing.Point(35, 14);
+            this.WerbungSpende.Name = "WerbungSpende";
+            this.WerbungSpende.Size = new System.Drawing.Size(144, 25);
+            this.WerbungSpende.TabIndex = 28;
+            this.WerbungSpende.TabStop = true;
+            this.WerbungSpende.Text = "Spende mir Geld";
+            this.WerbungSpende.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.WerbungSpende_LinkClicked);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(3030, 765);
+            this.Controls.Add(this.WerbungSpende);
             this.Controls.Add(this.WerbungYouTube);
             this.Controls.Add(this.Werbelink);
             this.Controls.Add(this.PlotsPrüfen);
@@ -402,5 +415,6 @@
         private CheckBox PlotsPrüfen;
         private LinkLabel Werbelink;
         private LinkLabel WerbungYouTube;
+        private LinkLabel WerbungSpende;
     }
 }
