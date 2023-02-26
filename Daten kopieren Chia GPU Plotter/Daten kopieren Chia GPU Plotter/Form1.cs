@@ -169,37 +169,44 @@ namespace Daten_kopieren_Chia_GPU_Plotter
         //Versteckter Button der die Listen für das Kopieren befüllt und den Backgroundworker startet 
         private void Kopieren_Click(object sender, EventArgs e)
         {
+            bool abbrechen= false;
             if(PlotsPrüfen.Checked==true)// Prüft ob die Plots valide sind und löscht sie gegebenfalls
             {
-                PlotsQuellePrüfen();
+                abbrechen=PlotsQuellePrüfen();
             }
-            
+            if (abbrechen)
+            {
+
+            }
             string[] dateien = Directory.GetFiles(quelle);
             foreach (string datei in dateien)
             {
                 if (datei.Substring(datei.Length-4) =="plot")
                 {
-                    // wenn die Liste leer ist füge ein Element hinzu
-                    if (Kopierliste.Count==0) {
-                        Kopierliste.Add(new KopierDaten(datei));
-                    }
-                    else
+                    if(File.Exists(datei))// Nur wenn die Datei existiert geht es weiter
                     {
-                        bool gefunden = true;
-                        // fügt die Datei nur zum Kopieren hinzu wenn diese nicht auf der Liste ist
-                        foreach (KopierDaten inhalt in Kopierliste)
-                        {
-                            if (datei == inhalt.pfad)
-                            {
-                                gefunden = false;
-                            }
-                        }
-                        if (gefunden)
+                        // wenn die Liste leer ist füge ein Element hinzu
+                        if (Kopierliste.Count == 0)
                         {
                             Kopierliste.Add(new KopierDaten(datei));
                         }
+                        else
+                        {
+                            bool gefunden = true;
+                            // fügt die Datei nur zum Kopieren hinzu wenn diese nicht auf der Liste ist
+                            foreach (KopierDaten inhalt in Kopierliste)
+                            {
+                                if (datei == inhalt.pfad)
+                                {
+                                    gefunden = false;
+                                }
+                            }
+                            if (gefunden)
+                            {
+                                Kopierliste.Add(new KopierDaten(datei));
+                            }
+                        }
                     }
-                    
                 }
             }
             

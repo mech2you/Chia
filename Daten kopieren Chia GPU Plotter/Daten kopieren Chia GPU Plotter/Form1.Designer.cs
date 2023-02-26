@@ -314,7 +314,7 @@
             // Werbelink
             // 
             this.Werbelink.AutoSize = true;
-            this.Werbelink.Location = new System.Drawing.Point(185, 14);
+            this.Werbelink.Location = new System.Drawing.Point(225, 14);
             this.Werbelink.Name = "Werbelink";
             this.Werbelink.Size = new System.Drawing.Size(217, 25);
             this.Werbelink.TabIndex = 26;
@@ -325,7 +325,7 @@
             // WerbungYouTube
             // 
             this.WerbungYouTube.AutoSize = true;
-            this.WerbungYouTube.Location = new System.Drawing.Point(408, 14);
+            this.WerbungYouTube.Location = new System.Drawing.Point(448, 14);
             this.WerbungYouTube.Name = "WerbungYouTube";
             this.WerbungYouTube.Size = new System.Drawing.Size(158, 25);
             this.WerbungYouTube.TabIndex = 27;
@@ -338,10 +338,10 @@
             this.WerbungSpende.AutoSize = true;
             this.WerbungSpende.Location = new System.Drawing.Point(35, 14);
             this.WerbungSpende.Name = "WerbungSpende";
-            this.WerbungSpende.Size = new System.Drawing.Size(144, 25);
+            this.WerbungSpende.Size = new System.Drawing.Size(184, 25);
             this.WerbungSpende.TabIndex = 28;
             this.WerbungSpende.TabStop = true;
-            this.WerbungSpende.Text = "Spende mir Geld";
+            this.WerbungSpende.Text = "Unterstüzte den Kanal";
             this.WerbungSpende.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.WerbungSpende_LinkClicked);
             // 
             // Form1
