@@ -24,10 +24,10 @@
       <Value Profile="(Default)">32</Value>
     </Setting>
     <Setting Name="kompression" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
+      <Value Profile="(Default)">7</Value>
     </Setting>
     <Setting Name="PlotterAuswahl" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
+      <Value Profile="(Default)">Chia GPU Plotter</Value>
     </Setting>
     <Setting Name="gpuSharedMemory" Type="System.String" Scope="User">
       <Value Profile="(Default)">1</Value>

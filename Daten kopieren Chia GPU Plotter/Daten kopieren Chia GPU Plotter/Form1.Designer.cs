@@ -358,10 +358,10 @@
             // 
             this.PlotterAuswahl.FormattingEnabled = true;
             this.PlotterAuswahl.Items.AddRange(new object[] {
-            "MadMaxGPUPlotter",
-            "MadMaxCPUPlotter",
-            "ChiaGPUPlotter",
-            "ChiaCPUPlotter"});
+            "MadMax GPU Plotter",
+            "MadMax CPU Plotter",
+            "Chia GPU Plotter",
+            "Chia CPU Plotter"});
             this.PlotterAuswahl.Location = new System.Drawing.Point(749, 196);
             this.PlotterAuswahl.Name = "PlotterAuswahl";
             this.PlotterAuswahl.Size = new System.Drawing.Size(219, 33);

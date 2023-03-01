@@ -109,7 +109,7 @@ namespace Daten_kopieren_Chia_GPU_Plotter.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        [global::System.Configuration.DefaultSettingValueAttribute("7")]
         public string kompression {
             get {
                 return ((string)(this["kompression"]));
@@ -121,7 +121,7 @@ namespace Daten_kopieren_Chia_GPU_Plotter.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Chia GPU Plotter")]
         public string PlotterAuswahl {
             get {
                 return ((string)(this["PlotterAuswahl"]));

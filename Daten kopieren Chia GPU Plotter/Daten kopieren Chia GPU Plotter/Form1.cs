@@ -20,6 +20,10 @@ namespace Daten_kopieren_Chia_GPU_Plotter
         String kompression = "0";
         String plotterAuswahl = "";
         String gpuSharedMemory = "1";
+
+        List<Kopiervorgang> DatenKopierer = new List<Kopiervorgang>();// Jedes Ziellaufwerk erhält einen kopierer
+
+
         public List<KopierDaten> Kopierliste= new List<KopierDaten>();// Quell und Zielpfade
         List<string> ZielPfad= new List<string>();// Liste mit den Zielpfaden
         BackgroundWorker PSBackgroundWorker =new BackgroundWorker();// Wird für die Powershell verwendet
@@ -51,12 +55,12 @@ namespace Daten_kopieren_Chia_GPU_Plotter
                 rückgabePS.Clear();
 
 
-                if (plotterAuswahl == "ChiaGPUPlotter")
+                if (plotterAuswahl == "Chia GPU Plotter")
                 {
                     argumente = " -n " + Convert.ToString(AnzahlPlots.Value) + " --compress "+ kompression + " -f " + FarmerKey.Text + " -c " + PoolKey.Text + " cudaplot " + quelle;
                 }
 
-                if (plotterAuswahl == "MadMaxGPUPlotter")
+                if (plotterAuswahl == "MadMax GPU Plotter")
                 {
 
                     //argumente = " -n " + Convert.ToString(AnzahlPlots.Value) + " -M "+ gpuSharedMemory + " -C "+ kompression + " -f " + FarmerKey.Text + " -c " + PoolKey.Text + " -w -2 "+ quelle+ "\\" + " -t " + quelle+"\\";
@@ -275,7 +279,18 @@ namespace Daten_kopieren_Chia_GPU_Plotter
                 {
                     if (inhalt.zielort=="")//Falls kein Pfad zum kopieren eingetragen ist wird dies nun gemacht
                     {
-                        
+                        int w = 0;
+                        foreach (var s in Kopierliste)
+                        {
+                            if (s.fertig == false)
+                            {
+                                if (s.kopiert ==true)
+                                {
+                                    w++;
+                                }
+                            }
+
+                        }
                         if (workerList.Count()>3 )
                         {
                             String ziel = ZielPfad[i % ZielPfad.Count];// über die Modulo Rechnung wird immer der jeweilige nächste Pfad gewählt 
@@ -368,8 +383,7 @@ namespace Daten_kopieren_Chia_GPU_Plotter
                 if (result == System.Windows.Forms.DialogResult.OK)
                 {
                     zielPfadListe.Items.Add(dialog.SelectedPath);
-                    KopierenAnhalten_Click(null, EventArgs.Empty);// Hält den Kopiervorgang an
-                    reset();
+                    
                 }
             }
         }
