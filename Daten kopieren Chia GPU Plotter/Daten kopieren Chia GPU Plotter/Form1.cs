@@ -89,6 +89,7 @@ namespace Daten_kopieren_Chia_GPU_Plotter
                 {
                     foreach (var error in _ps.Streams.Error)
                     {
+                        // Manchmal Fehler WritePark(): ans_length (859) > max_ans_length (858) (y = 1, i = 6283)
                         string tmp = error.ToString();
                         logGlobal(tmp);
                         Console.WriteLine(error.ToString());
@@ -190,30 +191,59 @@ namespace Daten_kopieren_Chia_GPU_Plotter
                         }
                     }
                 }
+                bool abbrechen2=false;
                 foreach (var item in DatenKopierer)
                 {
                     if (item.BWkopieren.IsBusy == false)// Ein Laufwerk wird ausgewählt wo der BW nicht beschäftigt mit kopieren ist
                     {
-                        foreach (KopierDaten inhalt in Kopierliste)//  File wir ausgewählt die kopiert werden soll
+                        foreach (KopierDaten inhalt in Kopierliste)//  File wird ausgewählt die kopiert werden soll
                         {
                             if (inhalt.fertig == false)// Datei wird nicht bereits kopiert
                             {
-                                item.quellpfad = inhalt.quellpfad;
-                                item.dateiname = inhalt.dateiname;
-                                item.fertig = true;// Sperrt die Datei das dies nun von ausgewählten BW bearbeitet wird 
-                                inhalt.fertig = true;
-                                item.BWkopieren.RunWorkerAsync();
+
+                                DriveInfo[] allDrives = DriveInfo.GetDrives();
+                                foreach (DriveInfo drive in allDrives)
+                                {
+                                    if (item.zielpfad.IndexOf(drive.Name) != -1)//Ist der Datenträger im Zielpfad?
+                                    {
+                                        FileInfo info = new FileInfo(inhalt.quellpfad+inhalt.dateiname);
+                                        logGlobal("Laufwerk Name " + drive.Name + " freie Speicher " + (drive.AvailableFreeSpace / 1024 / 1024 / 1024) + "GB Dateigröße " + (info.Length / 1024 / 1024 / 1024) + "GB");//Für Debug
+
+                                        if (drive.AvailableFreeSpace > info.Length)// Ist genug Speicher da?
+                                        {
+                                            item.quellpfad = inhalt.quellpfad;
+                                            item.dateiname = inhalt.dateiname;
+                                            item.fertig = true;// Sperrt die Datei das dies nun von ausgewählten BW bearbeitet wird 
+                                            inhalt.fertig = true;
+                                            item.BWkopieren.RunWorkerAsync();
+                                            
+                                        }
+                                        else
+                                        {
+                                            logGlobal("Zielpfad hat zu wenig Speicher: " + item.zielpfad);
+                                        }
+                                        abbrechen2 = true;// Es wird kopiert oder der Speicher ist voll. In beiden Fällen muss man raus aus den Schleifen
+                                    }
+                                    if (abbrechen2)
+                                    {
+                                        break;
+                                    }
+                                }              
+                            }
+                            if (abbrechen2)
+                            {
                                 break;
                             }
-
                         }
-
                     }
-
                 }
             }
         }
-
+        /// <summary>
+        /// Startet den Timer für das Kopieren der Dateien
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void KopierenStarten_Click(object sender, EventArgs e)
         {
             if ((quellPfad.Items.Count > 0) && (zielPfadListe.Items.Count > 0))// Stellt sicher das die Quell und Zielverzeichniss eingetragen sind

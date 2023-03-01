@@ -80,6 +80,10 @@ namespace Daten_kopieren_Chia_GPU_Plotter
             }
             //System.IO.File.Move(quellpfad + dateiname, zielpfad + dateiname + endkürzel);//Kopieren vom Plot
             copy(quellpfad + dateiname, zielpfad + dateiname + endkürzel);
+            if (File.Exists(quellpfad + dateiname))// Die alte Datei wird gelöscht
+            {
+                File.Delete(quellpfad + dateiname);
+            }
             System.IO.File.Move(zielpfad + dateiname + endkürzel, zielpfad + dateiname);// Umbenennen
             watch.Stop();
             // Kopiervorgang wird in die Liste als abgeschlossen eingetragen
