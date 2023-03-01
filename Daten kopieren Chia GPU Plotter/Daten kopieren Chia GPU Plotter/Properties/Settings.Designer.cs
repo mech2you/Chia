@@ -85,13 +85,61 @@ namespace Daten_kopieren_Chia_GPU_Plotter.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        [global::System.Configuration.DefaultSettingValueAttribute("1")]
         public int AnzahlPlots {
             get {
                 return ((int)(this["AnzahlPlots"]));
             }
             set {
                 this["AnzahlPlots"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("32")]
+        public string kGröße {
+            get {
+                return ((string)(this["kGröße"]));
+            }
+            set {
+                this["kGröße"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string kompression {
+            get {
+                return ((string)(this["kompression"]));
+            }
+            set {
+                this["kompression"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string PlotterAuswahl {
+            get {
+                return ((string)(this["PlotterAuswahl"]));
+            }
+            set {
+                this["PlotterAuswahl"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1")]
+        public string gpuSharedMemory {
+            get {
+                return ((string)(this["gpuSharedMemory"]));
+            }
+            set {
+                this["gpuSharedMemory"] = value;
             }
         }
     }

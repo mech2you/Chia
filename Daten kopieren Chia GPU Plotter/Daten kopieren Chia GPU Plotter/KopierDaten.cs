@@ -12,6 +12,7 @@ namespace Daten_kopieren_Chia_GPU_Plotter
         public String pfad="";
         public String zielort="";
         public bool kopiert=false;
+        public bool fertig = false;
         public KopierDaten(String _pfad)
         {
            pfad= _pfad;

@@ -56,7 +56,17 @@
             this.Werbelink = new System.Windows.Forms.LinkLabel();
             this.WerbungYouTube = new System.Windows.Forms.LinkLabel();
             this.WerbungSpende = new System.Windows.Forms.LinkLabel();
+            this.PlotterAuswahl = new System.Windows.Forms.ComboBox();
+            this.KLevelAuswahl = new System.Windows.Forms.ComboBox();
+            this.KompressionAuswahl = new System.Windows.Forms.ComboBox();
+            this.GPUGemeinsameSpeicherGUI = new System.Windows.Forms.NumericUpDown();
+            this.InfoGUI = new System.Windows.Forms.RichTextBox();
+            this.label5 = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
+            this.label7 = new System.Windows.Forms.Label();
+            this.label8 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.AnzahlPlots)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.GPUGemeinsameSpeicherGUI)).BeginInit();
             this.SuspendLayout();
             // 
             // Kopieren
@@ -130,11 +140,11 @@
             // 
             // log
             // 
-            this.log.Location = new System.Drawing.Point(559, 164);
+            this.log.Location = new System.Drawing.Point(559, 235);
             this.log.Multiline = true;
             this.log.Name = "log";
             this.log.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.log.Size = new System.Drawing.Size(1820, 504);
+            this.log.Size = new System.Drawing.Size(1820, 433);
             this.log.TabIndex = 7;
             // 
             // LogLöschen
@@ -212,7 +222,7 @@
             // 
             // AnzahlPlots
             // 
-            this.AnzahlPlots.Location = new System.Drawing.Point(1972, 45);
+            this.AnzahlPlots.Location = new System.Drawing.Point(1322, 198);
             this.AnzahlPlots.Maximum = new decimal(new int[] {
             100000000,
             0,
@@ -224,7 +234,7 @@
             0,
             0});
             this.AnzahlPlots.Name = "AnzahlPlots";
-            this.AnzahlPlots.Size = new System.Drawing.Size(180, 31);
+            this.AnzahlPlots.Size = new System.Drawing.Size(124, 31);
             this.AnzahlPlots.TabIndex = 17;
             this.AnzahlPlots.Value = new decimal(new int[] {
             1,
@@ -235,7 +245,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(1857, 47);
+            this.label4.Location = new System.Drawing.Point(1322, 164);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(109, 25);
             this.label4.TabIndex = 18;
@@ -304,7 +314,7 @@
             // PlotsPrüfen
             // 
             this.PlotsPrüfen.AutoSize = true;
-            this.PlotsPrüfen.Location = new System.Drawing.Point(2158, 43);
+            this.PlotsPrüfen.Location = new System.Drawing.Point(1452, 200);
             this.PlotsPrüfen.Name = "PlotsPrüfen";
             this.PlotsPrüfen.Size = new System.Drawing.Size(134, 29);
             this.PlotsPrüfen.TabIndex = 25;
@@ -344,11 +354,141 @@
             this.WerbungSpende.Text = "Unterstüzte den Kanal";
             this.WerbungSpende.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.WerbungSpende_LinkClicked);
             // 
+            // PlotterAuswahl
+            // 
+            this.PlotterAuswahl.FormattingEnabled = true;
+            this.PlotterAuswahl.Items.AddRange(new object[] {
+            "MadMaxGPUPlotter",
+            "MadMaxCPUPlotter",
+            "ChiaGPUPlotter",
+            "ChiaCPUPlotter"});
+            this.PlotterAuswahl.Location = new System.Drawing.Point(749, 196);
+            this.PlotterAuswahl.Name = "PlotterAuswahl";
+            this.PlotterAuswahl.Size = new System.Drawing.Size(219, 33);
+            this.PlotterAuswahl.TabIndex = 29;
+            this.PlotterAuswahl.Text = "wähle den Plotter";
+            // 
+            // KLevelAuswahl
+            // 
+            this.KLevelAuswahl.AutoCompleteCustomSource.AddRange(new string[] {
+            "32",
+            "33",
+            "34"});
+            this.KLevelAuswahl.FormattingEnabled = true;
+            this.KLevelAuswahl.Items.AddRange(new object[] {
+            "32",
+            "33",
+            "34",
+            "35",
+            "36",
+            "37",
+            "38"});
+            this.KLevelAuswahl.Location = new System.Drawing.Point(974, 196);
+            this.KLevelAuswahl.Name = "KLevelAuswahl";
+            this.KLevelAuswahl.Size = new System.Drawing.Size(96, 33);
+            this.KLevelAuswahl.TabIndex = 30;
+            this.KLevelAuswahl.Text = "K Level";
+            // 
+            // KompressionAuswahl
+            // 
+            this.KompressionAuswahl.FormattingEnabled = true;
+            this.KompressionAuswahl.Items.AddRange(new object[] {
+            "0",
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "7",
+            "8",
+            "9"});
+            this.KompressionAuswahl.Location = new System.Drawing.Point(1076, 196);
+            this.KompressionAuswahl.Name = "KompressionAuswahl";
+            this.KompressionAuswahl.Size = new System.Drawing.Size(141, 33);
+            this.KompressionAuswahl.TabIndex = 31;
+            this.KompressionAuswahl.Text = "Kompression";
+            // 
+            // GPUGemeinsameSpeicherGUI
+            // 
+            this.GPUGemeinsameSpeicherGUI.Location = new System.Drawing.Point(1223, 197);
+            this.GPUGemeinsameSpeicherGUI.Maximum = new decimal(new int[] {
+            100000000,
+            0,
+            0,
+            0});
+            this.GPUGemeinsameSpeicherGUI.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.GPUGemeinsameSpeicherGUI.Name = "GPUGemeinsameSpeicherGUI";
+            this.GPUGemeinsameSpeicherGUI.Size = new System.Drawing.Size(84, 31);
+            this.GPUGemeinsameSpeicherGUI.TabIndex = 32;
+            this.GPUGemeinsameSpeicherGUI.Value = new decimal(new int[] {
+            215,
+            0,
+            0,
+            0});
+            // 
+            // InfoGUI
+            // 
+            this.InfoGUI.Location = new System.Drawing.Point(720, 674);
+            this.InfoGUI.Name = "InfoGUI";
+            this.InfoGUI.Size = new System.Drawing.Size(180, 74);
+            this.InfoGUI.TabIndex = 33;
+            this.InfoGUI.Text = "18TB c8 235";
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(749, 164);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(64, 25);
+            this.label5.TabIndex = 34;
+            this.label5.Text = "Plotter";
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(974, 164);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(66, 25);
+            this.label6.TabIndex = 35;
+            this.label6.Text = "K Level";
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(1076, 164);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(116, 25);
+            this.label7.TabIndex = 36;
+            this.label7.Text = "Kompression";
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(1220, 164);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(102, 25);
+            this.label8.TabIndex = 37;
+            this.label8.Text = "SMem GPU";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(2384, 765);
+            this.Controls.Add(this.label8);
+            this.Controls.Add(this.label7);
+            this.Controls.Add(this.label6);
+            this.Controls.Add(this.label5);
+            this.Controls.Add(this.InfoGUI);
+            this.Controls.Add(this.GPUGemeinsameSpeicherGUI);
+            this.Controls.Add(this.KompressionAuswahl);
+            this.Controls.Add(this.KLevelAuswahl);
+            this.Controls.Add(this.PlotterAuswahl);
             this.Controls.Add(this.WerbungSpende);
             this.Controls.Add(this.WerbungYouTube);
             this.Controls.Add(this.Werbelink);
@@ -382,6 +522,7 @@
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.Load += new System.EventHandler(this.Form1_Load);
             ((System.ComponentModel.ISupportInitialize)(this.AnzahlPlots)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.GPUGemeinsameSpeicherGUI)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -417,5 +558,14 @@
         private LinkLabel Werbelink;
         private LinkLabel WerbungYouTube;
         private LinkLabel WerbungSpende;
+        private ComboBox PlotterAuswahl;
+        private ComboBox KLevelAuswahl;
+        private ComboBox KompressionAuswahl;
+        private NumericUpDown GPUGemeinsameSpeicherGUI;
+        private RichTextBox InfoGUI;
+        private Label label5;
+        private Label label6;
+        private Label label7;
+        private Label label8;
     }
 }

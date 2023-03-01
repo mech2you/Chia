@@ -17,11 +17,11 @@ namespace Daten_kopieren_Chia_GPU_Plotter
     {
         String quelle = "";
         String pfadBladBitGPUPlotter = "";
-
-
-
-        List<KopierDaten> Kopierliste= new List<KopierDaten>();
-        List<string> ZielPfad= new List<string>();
+        String kompression = "0";
+        String plotterAuswahl = "";
+        String gpuSharedMemory = "1";
+        public List<KopierDaten> Kopierliste= new List<KopierDaten>();// Quell und Zielpfade
+        List<string> ZielPfad= new List<string>();// Liste mit den Zielpfaden
         BackgroundWorker PSBackgroundWorker =new BackgroundWorker();// Wird für die Powershell verwendet
         
         int i = 0; // Zähler das die Zielpfade gleichmäßig abgewechselt werden
@@ -47,14 +47,29 @@ namespace Daten_kopieren_Chia_GPU_Plotter
         {
             try
             {
-                String argumente = " -n "+Convert.ToString(AnzahlPlots.Value) + " --compress 0 -f " + FarmerKey.Text + " -c "+ PoolKey.Text + " cudaplot "+ quelle;
+                String argumente = "";
                 rückgabePS.Clear();
-                rückgabePS =_ps.AddScript(pfadBladBitGPUPlotter+ argumente).Invoke();
+
+
+                if (plotterAuswahl == "ChiaGPUPlotter")
+                {
+                    argumente = " -n " + Convert.ToString(AnzahlPlots.Value) + " --compress "+ kompression + " -f " + FarmerKey.Text + " -c " + PoolKey.Text + " cudaplot " + quelle;
+                }
+
+                if (plotterAuswahl == "MadMaxGPUPlotter")
+                {
+
+                    //argumente = " -n " + Convert.ToString(AnzahlPlots.Value) + " -M "+ gpuSharedMemory + " -C "+ kompression + " -f " + FarmerKey.Text + " -c " + PoolKey.Text + " -w -2 "+ quelle+ "\\" + " -t " + quelle+"\\";
+                    argumente = " -n " + Convert.ToString(AnzahlPlots.Value) +" -M " + gpuSharedMemory + " -C " + kompression + " -f " + FarmerKey.Text + " -c " + PoolKey.Text + " -w -t " + quelle + "\\";
+                }
+
+                rückgabePS =_ps.AddScript(pfadBladBitGPUPlotter + argumente).Invoke();
                 if (_ps.HadErrors)
                 {
                     foreach (var error in _ps.Streams.Error)
                     {
                         string tmp = error.ToString();
+                        logGlobal(tmp);
                         Console.WriteLine(error.ToString());
                     }
                 }
@@ -98,9 +113,32 @@ namespace Daten_kopieren_Chia_GPU_Plotter
 
                             if (drive.AvailableFreeSpace> info.Length)// Ist genug Speicher da?
                             {
-                                item.RunWorkerAsync(auswahl);// kopiert die Datei
-                                doWork = true;
-                                abbrechen=true;
+                                if (item.IsBusy == false)// Vor den kopieren nochmal abfragen ob der BW frei ist
+                                {
+                                    foreach (KopierDaten inhalt in Kopierliste)// Kopiert gerade ein BW auf diese HDD?
+                                    {
+                                        if (inhalt.fertig == false)// Nur aktive Kopiervorgänge prüfen
+                                        {
+                                            if (inhalt.kopiert == true)// Wir gerade vom BW kopiert?
+                                            {
+                                                if(inhalt.zielort== auswahl.zielort)// Es wird bereis auf die HDD ein Plot geschrieben. 
+                                                {
+                                                    abbrechen = true;
+                                                    auswahl.zielort = "";
+                                                }
+                                            }
+                                        }
+                                        
+
+                                     }
+                                    if (!abbrechen)// Nur kopieren wenn kein weiter Kopiervorgang auf der HDD stattfindet
+                                    {
+                                        item.RunWorkerAsync(auswahl);// kopiert die Datei
+                                        doWork = true;
+                                        abbrechen = true;
+                                    }
+
+                                }
                             }
                             else
                             {
@@ -108,6 +146,10 @@ namespace Daten_kopieren_Chia_GPU_Plotter
                                 auswahl.zielort = "";
                                 doWork = false;
                             }
+                        }
+                        if (abbrechen)
+                        {
+                            break;// Ein freier Kopiersolot wurde gefunden und die Suche kann beendet werden
                         }
                     }
 
@@ -168,9 +210,18 @@ namespace Daten_kopieren_Chia_GPU_Plotter
                     File.Delete(auwahl.zielort + endkürzel);
                 }
                 System.IO.File.Move(auwahl.pfad, auwahl.zielort+ endkürzel);//Kopieren vom Plot
-                watch.Stop();
-                logGlobal("kopieren nach "+ auwahl.zielort + " Dauer: " + watch.Elapsed.TotalSeconds + " s");
                 System.IO.File.Move(auwahl.zielort + endkürzel, auwahl.zielort);// Umbenennen
+                watch.Stop();
+                // Kopiervorgang wird in die Liste als abgeschlossen eingetragen
+                foreach (var item in Kopierliste)
+                {
+                    if (item.zielort== auwahl.zielort&& item.pfad==auwahl.pfad)
+                    {
+                        item.fertig = true; 
+                        break;
+                    }
+                }
+                logGlobal("kopieren nach "+ auwahl.zielort + " Dauer: " + watch.Elapsed.TotalSeconds + " s");
             }
         }
         //Versteckter Button der die Listen für das Kopieren befüllt und den Backgroundworker startet 
@@ -224,11 +275,17 @@ namespace Daten_kopieren_Chia_GPU_Plotter
                 {
                     if (inhalt.zielort=="")//Falls kein Pfad zum kopieren eingetragen ist wird dies nun gemacht
                     {
-                        String ziel = ZielPfad[i % ZielPfad.Count];// über die Modulo Rechnung wird immer der jeweilige nächste Pfad gewählt 
-                        i++;
-                        inhalt.zielort = ziel + System.IO.Path.GetFileName(inhalt.pfad);// Fügt den Zielpfad zum Kopieren ein
                         
-                        //logGlobal("i "+ i);//Für Debug
+                        if (workerList.Count()>3 )
+                        {
+                            String ziel = ZielPfad[i % ZielPfad.Count];// über die Modulo Rechnung wird immer der jeweilige nächste Pfad gewählt 
+                            i++;
+                            inhalt.zielort = ziel + System.IO.Path.GetFileName(inhalt.pfad);// Fügt den Zielpfad zum Kopieren ein
+                            //logGlobal("i "+ i);//Für Debug
+                        }
+
+
+
                     }
                     inhalt.kopiert = datei_kopieren(inhalt);
                 }
@@ -361,8 +418,10 @@ namespace Daten_kopieren_Chia_GPU_Plotter
                     zielPfadListe.Items.Add(separator);
                 }
             }
-
-            
+            PlotterAuswahl.Text = Properties.Settings.Default.PlotterAuswahl;
+            KLevelAuswahl.Text = Properties.Settings.Default.kGröße;
+            KompressionAuswahl.Text= Properties.Settings.Default.kompression;
+            GPUGemeinsameSpeicherGUI.Value = Convert.ToDecimal(Properties.Settings.Default.gpuSharedMemory);
 
         }
 
@@ -406,7 +465,7 @@ namespace Daten_kopieren_Chia_GPU_Plotter
             _ps.Streams.Error.Clear();
             try
             {
-                
+
                 rückgabePS = _ps.AddScript(pfadBladBitGPUPlotter + " --version").Invoke();
                 if (_ps.HadErrors)
                 {
@@ -422,7 +481,12 @@ namespace Daten_kopieren_Chia_GPU_Plotter
             }
             foreach (PSObject zeile in rückgabePS)
             {
-                if (zeile.ToString().IndexOf("3.0.0-alpha1-dev") != -1)// Version Plotter gefunden
+                if (zeile.ToString().IndexOf("3.0.0-alpha1-dev") != -1)// Version Chia GPU Plotter gefunden
+                {
+                    PlotterGefunden.Checked = true;
+                    gefunden = true;
+                }
+                if (zeile.ToString().IndexOf("2.0.0-3e00fa3") != -1)// Version MadMax GPU Plotter gefunden
                 {
                     PlotterGefunden.Checked = true;
                     gefunden = true;
@@ -465,10 +529,13 @@ namespace Daten_kopieren_Chia_GPU_Plotter
                     {
                         if (!PSBackgroundWorker.IsBusy)
                         {
+                            kompression = KompressionAuswahl.SelectedItem.ToString();
+                            plotterAuswahl = PlotterAuswahl.SelectedItem.ToString();
                             PSBackgroundWorker.RunWorkerAsync();
                             StartPlot.Visible = false;
                             StopPlot.Visible = true;
-                            KopierenStarten_Click(null, EventArgs.Empty);// Hält den Kopiervorgang an
+                            gpuSharedMemory = Convert.ToString(GPUGemeinsameSpeicherGUI.Value);
+                            KopierenStarten_Click(null, EventArgs.Empty);// Startet den Kopiervorgang
                         }
                         else
                         {
@@ -573,8 +640,12 @@ namespace Daten_kopieren_Chia_GPU_Plotter
             {
                 Properties.Settings.Default.Zielpfade += item.ToString()+";";
             }
-            
+            Properties.Settings.Default.PlotterAuswahl= PlotterAuswahl.SelectedItem.ToString();
+            Properties.Settings.Default.kGröße= KLevelAuswahl.SelectedItem.ToString() ;
+            Properties.Settings.Default.kompression = KompressionAuswahl.SelectedItem.ToString();
+            Properties.Settings.Default.gpuSharedMemory= GPUGemeinsameSpeicherGUI.Value.ToString();
             Properties.Settings.Default.Save();
+
 
         }
         /// <summary>
@@ -612,5 +683,6 @@ namespace Daten_kopieren_Chia_GPU_Plotter
             }
 
         }
+
     }
 }
