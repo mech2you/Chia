@@ -18,7 +18,25 @@
       <Value Profile="(Default)" />
     </Setting>
     <Setting Name="AnzahlPlots" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">0</Value>
+      <Value Profile="(Default)">1</Value>
+    </Setting>
+    <Setting Name="kGröße" Type="System.String" Scope="User">
+      <Value Profile="(Default)">32</Value>
+    </Setting>
+    <Setting Name="kompression" Type="System.String" Scope="User">
+      <Value Profile="(Default)">7</Value>
+    </Setting>
+    <Setting Name="PlotterAuswahl" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Chia GPU Plotter</Value>
+    </Setting>
+    <Setting Name="gpuSharedMemory" Type="System.String" Scope="User">
+      <Value Profile="(Default)">1</Value>
+    </Setting>
+    <Setting Name="MadMaxTmpOrdner" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="MadMaxRamNutzung" Type="System.String" Scope="User">
+      <Value Profile="(Default)">1</Value>
     </Setting>
   </Settings>
 </SettingsFile>

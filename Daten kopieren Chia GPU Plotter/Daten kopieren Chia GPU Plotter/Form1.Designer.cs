@@ -28,363 +28,566 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.Kopieren = new System.Windows.Forms.Button();
-            this.KopierenStarten = new System.Windows.Forms.Button();
-            this.quellPfad = new System.Windows.Forms.ListBox();
-            this.QuellordnerWählen = new System.Windows.Forms.Button();
-            this.zielPfadListe = new System.Windows.Forms.ListBox();
-            this.ZielverzeichnissEinfügen = new System.Windows.Forms.Button();
-            this.ZielverzeichnissLöschen = new System.Windows.Forms.Button();
-            this.log = new System.Windows.Forms.TextBox();
-            this.LogLöschen = new System.Windows.Forms.Button();
-            this.KopierenAnhalten = new System.Windows.Forms.Button();
-            this.ChiaCudaPlotterWählen = new System.Windows.Forms.Button();
-            this.FarmerKey = new System.Windows.Forms.TextBox();
-            this.PoolKey = new System.Windows.Forms.TextBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
-            this.AnzahlPlots = new System.Windows.Forms.NumericUpDown();
-            this.label4 = new System.Windows.Forms.Label();
-            this.StartPlot = new System.Windows.Forms.Button();
-            this.PlotterGefunden = new System.Windows.Forms.CheckBox();
-            this.StopPlot = new System.Windows.Forms.Button();
-            this.PlotCheck = new System.Windows.Forms.Button();
-            this.SettingsSpeichern = new System.Windows.Forms.Button();
-            this.CudaPlotterPfad = new System.Windows.Forms.TextBox();
-            this.PlotsPrüfen = new System.Windows.Forms.CheckBox();
-            this.Werbelink = new System.Windows.Forms.LinkLabel();
-            this.WerbungYouTube = new System.Windows.Forms.LinkLabel();
-            this.WerbungSpende = new System.Windows.Forms.LinkLabel();
-            ((System.ComponentModel.ISupportInitialize)(this.AnzahlPlots)).BeginInit();
-            this.SuspendLayout();
+            Kopieren = new Button();
+            KopierenStarten = new Button();
+            quellPfad = new ListBox();
+            QuellordnerWählen = new Button();
+            zielPfadListe = new ListBox();
+            ZielverzeichnissEinfügen = new Button();
+            ZielverzeichnissLöschen = new Button();
+            log = new TextBox();
+            LogLöschen = new Button();
+            KopierenAnhalten = new Button();
+            ChiaCudaPlotterWählen = new Button();
+            FarmerKey = new TextBox();
+            PoolKey = new TextBox();
+            label1 = new Label();
+            label2 = new Label();
+            label3 = new Label();
+            AnzahlPlots = new NumericUpDown();
+            label4 = new Label();
+            StartPlot = new Button();
+            PlotterGefunden = new CheckBox();
+            StopPlot = new Button();
+            PlotCheck = new Button();
+            SettingsSpeichern = new Button();
+            CudaPlotterPfad = new TextBox();
+            PlotsPrüfen = new CheckBox();
+            Werbelink = new LinkLabel();
+            WerbungYouTube = new LinkLabel();
+            WerbungSpende = new LinkLabel();
+            PlotterAuswahl = new ComboBox();
+            KLevelAuswahl = new ComboBox();
+            KompressionAuswahl = new ComboBox();
+            GPUGemeinsameSpeicherGUI = new NumericUpDown();
+            InfoGUI = new RichTextBox();
+            label5 = new Label();
+            label6 = new Label();
+            label7 = new Label();
+            label8 = new Label();
+            MadMaxRAMFull = new RadioButton();
+            MadMaxRAMHalb = new RadioButton();
+            MadMaxRAMViertel = new RadioButton();
+            groupBox1 = new GroupBox();
+            MadMaxTmpOrdnerTB = new TextBox();
+            MadMaxTmpOrdnerBT = new Button();
+            ((System.ComponentModel.ISupportInitialize)AnzahlPlots).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)GPUGemeinsameSpeicherGUI).BeginInit();
+            groupBox1.SuspendLayout();
+            SuspendLayout();
             // 
             // Kopieren
             // 
-            this.Kopieren.Location = new System.Drawing.Point(559, 714);
-            this.Kopieren.Name = "Kopieren";
-            this.Kopieren.Size = new System.Drawing.Size(155, 34);
-            this.Kopieren.TabIndex = 0;
-            this.Kopieren.Text = "Kopieren";
-            this.Kopieren.UseVisualStyleBackColor = true;
-            this.Kopieren.Visible = false;
-            this.Kopieren.Click += new System.EventHandler(this.Kopieren_Click);
+            Kopieren.Location = new Point(671, 857);
+            Kopieren.Margin = new Padding(4);
+            Kopieren.Name = "Kopieren";
+            Kopieren.Size = new Size(186, 41);
+            Kopieren.TabIndex = 0;
+            Kopieren.Text = "Kopieren";
+            Kopieren.UseVisualStyleBackColor = true;
+            Kopieren.Visible = false;
+            Kopieren.Click += Kopieren_Click;
             // 
             // KopierenStarten
             // 
-            this.KopierenStarten.Location = new System.Drawing.Point(35, 714);
-            this.KopierenStarten.Name = "KopierenStarten";
-            this.KopierenStarten.Size = new System.Drawing.Size(236, 34);
-            this.KopierenStarten.TabIndex = 1;
-            this.KopierenStarten.Text = "Kopieren starten";
-            this.KopierenStarten.UseVisualStyleBackColor = true;
-            this.KopierenStarten.Click += new System.EventHandler(this.KopierenStarten_Click);
+            KopierenStarten.Location = new Point(42, 857);
+            KopierenStarten.Margin = new Padding(4);
+            KopierenStarten.Name = "KopierenStarten";
+            KopierenStarten.Size = new Size(283, 41);
+            KopierenStarten.TabIndex = 1;
+            KopierenStarten.Text = "Kopieren starten";
+            KopierenStarten.UseVisualStyleBackColor = true;
+            KopierenStarten.Click += KopierenStarten_Click;
             // 
             // quellPfad
             // 
-            this.quellPfad.FormattingEnabled = true;
-            this.quellPfad.ItemHeight = 25;
-            this.quellPfad.Location = new System.Drawing.Point(35, 50);
-            this.quellPfad.Name = "quellPfad";
-            this.quellPfad.Size = new System.Drawing.Size(679, 29);
-            this.quellPfad.TabIndex = 2;
+            quellPfad.FormattingEnabled = true;
+            quellPfad.ItemHeight = 30;
+            quellPfad.Location = new Point(42, 60);
+            quellPfad.Margin = new Padding(4);
+            quellPfad.Name = "quellPfad";
+            quellPfad.Size = new Size(814, 34);
+            quellPfad.TabIndex = 2;
             // 
             // QuellordnerWählen
             // 
-            this.QuellordnerWählen.Location = new System.Drawing.Point(516, 85);
-            this.QuellordnerWählen.Name = "QuellordnerWählen";
-            this.QuellordnerWählen.Size = new System.Drawing.Size(198, 34);
-            this.QuellordnerWählen.TabIndex = 3;
-            this.QuellordnerWählen.Text = "Quellordner wählen";
-            this.QuellordnerWählen.UseVisualStyleBackColor = true;
-            this.QuellordnerWählen.Click += new System.EventHandler(this.QuellordnerWählen_Click);
+            QuellordnerWählen.Location = new Point(619, 102);
+            QuellordnerWählen.Margin = new Padding(4);
+            QuellordnerWählen.Name = "QuellordnerWählen";
+            QuellordnerWählen.Size = new Size(238, 41);
+            QuellordnerWählen.TabIndex = 3;
+            QuellordnerWählen.Text = "Quellordner wählen";
+            QuellordnerWählen.UseVisualStyleBackColor = true;
+            QuellordnerWählen.Click += QuellordnerWählen_Click;
             // 
             // zielPfadListe
             // 
-            this.zielPfadListe.FormattingEnabled = true;
-            this.zielPfadListe.ItemHeight = 25;
-            this.zielPfadListe.Location = new System.Drawing.Point(35, 164);
-            this.zielPfadListe.Name = "zielPfadListe";
-            this.zielPfadListe.Size = new System.Drawing.Size(518, 504);
-            this.zielPfadListe.TabIndex = 4;
+            zielPfadListe.FormattingEnabled = true;
+            zielPfadListe.ItemHeight = 30;
+            zielPfadListe.Location = new Point(42, 197);
+            zielPfadListe.Margin = new Padding(4);
+            zielPfadListe.Name = "zielPfadListe";
+            zielPfadListe.Size = new Size(516, 604);
+            zielPfadListe.TabIndex = 4;
             // 
             // ZielverzeichnissEinfügen
             // 
-            this.ZielverzeichnissEinfügen.Location = new System.Drawing.Point(35, 674);
-            this.ZielverzeichnissEinfügen.Name = "ZielverzeichnissEinfügen";
-            this.ZielverzeichnissEinfügen.Size = new System.Drawing.Size(236, 34);
-            this.ZielverzeichnissEinfügen.TabIndex = 5;
-            this.ZielverzeichnissEinfügen.Text = "Zielverzeichniss einfügen";
-            this.ZielverzeichnissEinfügen.UseVisualStyleBackColor = true;
-            this.ZielverzeichnissEinfügen.Click += new System.EventHandler(this.ZielverzeichnissEinfügen_Click);
+            ZielverzeichnissEinfügen.Location = new Point(42, 809);
+            ZielverzeichnissEinfügen.Margin = new Padding(4);
+            ZielverzeichnissEinfügen.Name = "ZielverzeichnissEinfügen";
+            ZielverzeichnissEinfügen.Size = new Size(283, 41);
+            ZielverzeichnissEinfügen.TabIndex = 5;
+            ZielverzeichnissEinfügen.Text = "Zielverzeichniss einfügen";
+            ZielverzeichnissEinfügen.UseVisualStyleBackColor = true;
+            ZielverzeichnissEinfügen.Click += ZielverzeichnissEinfügen_Click;
             // 
             // ZielverzeichnissLöschen
             // 
-            this.ZielverzeichnissLöschen.Location = new System.Drawing.Point(296, 674);
-            this.ZielverzeichnissLöschen.Name = "ZielverzeichnissLöschen";
-            this.ZielverzeichnissLöschen.Size = new System.Drawing.Size(257, 34);
-            this.ZielverzeichnissLöschen.TabIndex = 6;
-            this.ZielverzeichnissLöschen.Text = "Zielverzeichniss löschen";
-            this.ZielverzeichnissLöschen.UseVisualStyleBackColor = true;
-            this.ZielverzeichnissLöschen.Click += new System.EventHandler(this.ZielverzeichnissLöschen_Click);
+            ZielverzeichnissLöschen.Location = new Point(355, 809);
+            ZielverzeichnissLöschen.Margin = new Padding(4);
+            ZielverzeichnissLöschen.Name = "ZielverzeichnissLöschen";
+            ZielverzeichnissLöschen.Size = new Size(308, 41);
+            ZielverzeichnissLöschen.TabIndex = 6;
+            ZielverzeichnissLöschen.Text = "Zielverzeichniss löschen";
+            ZielverzeichnissLöschen.UseVisualStyleBackColor = true;
+            ZielverzeichnissLöschen.Click += ZielverzeichnissLöschen_Click;
             // 
             // log
             // 
-            this.log.Location = new System.Drawing.Point(559, 164);
-            this.log.Multiline = true;
-            this.log.Name = "log";
-            this.log.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.log.Size = new System.Drawing.Size(1820, 504);
-            this.log.TabIndex = 7;
+            log.Location = new Point(671, 297);
+            log.Margin = new Padding(4);
+            log.Multiline = true;
+            log.Name = "log";
+            log.ScrollBars = ScrollBars.Both;
+            log.Size = new Size(2183, 504);
+            log.TabIndex = 7;
             // 
             // LogLöschen
             // 
-            this.LogLöschen.Location = new System.Drawing.Point(559, 674);
-            this.LogLöschen.Name = "LogLöschen";
-            this.LogLöschen.Size = new System.Drawing.Size(155, 34);
-            this.LogLöschen.TabIndex = 8;
-            this.LogLöschen.Text = "Log löschen";
-            this.LogLöschen.UseVisualStyleBackColor = true;
-            this.LogLöschen.Click += new System.EventHandler(this.LogLöschen_Click);
+            LogLöschen.Location = new Point(671, 809);
+            LogLöschen.Margin = new Padding(4);
+            LogLöschen.Name = "LogLöschen";
+            LogLöschen.Size = new Size(186, 41);
+            LogLöschen.TabIndex = 8;
+            LogLöschen.Text = "Log löschen";
+            LogLöschen.UseVisualStyleBackColor = true;
+            LogLöschen.Click += LogLöschen_Click;
             // 
             // KopierenAnhalten
             // 
-            this.KopierenAnhalten.Location = new System.Drawing.Point(296, 714);
-            this.KopierenAnhalten.Name = "KopierenAnhalten";
-            this.KopierenAnhalten.Size = new System.Drawing.Size(257, 34);
-            this.KopierenAnhalten.TabIndex = 9;
-            this.KopierenAnhalten.Text = "Kopieren anhalten";
-            this.KopierenAnhalten.UseVisualStyleBackColor = true;
-            this.KopierenAnhalten.Click += new System.EventHandler(this.KopierenAnhalten_Click);
+            KopierenAnhalten.Location = new Point(355, 857);
+            KopierenAnhalten.Margin = new Padding(4);
+            KopierenAnhalten.Name = "KopierenAnhalten";
+            KopierenAnhalten.Size = new Size(308, 41);
+            KopierenAnhalten.TabIndex = 9;
+            KopierenAnhalten.Text = "Kopieren anhalten";
+            KopierenAnhalten.UseVisualStyleBackColor = true;
+            KopierenAnhalten.Click += KopierenAnhalten_Click;
             // 
             // ChiaCudaPlotterWählen
             // 
-            this.ChiaCudaPlotterWählen.Location = new System.Drawing.Point(906, 3);
-            this.ChiaCudaPlotterWählen.Name = "ChiaCudaPlotterWählen";
-            this.ChiaCudaPlotterWählen.Size = new System.Drawing.Size(230, 41);
-            this.ChiaCudaPlotterWählen.TabIndex = 10;
-            this.ChiaCudaPlotterWählen.Text = "Chia Cuda Plotter wählen";
-            this.ChiaCudaPlotterWählen.UseVisualStyleBackColor = true;
-            this.ChiaCudaPlotterWählen.Click += new System.EventHandler(this.ChiaCudaPlotterWählen_Click);
+            ChiaCudaPlotterWählen.Location = new Point(1087, 4);
+            ChiaCudaPlotterWählen.Margin = new Padding(4);
+            ChiaCudaPlotterWählen.Name = "ChiaCudaPlotterWählen";
+            ChiaCudaPlotterWählen.Size = new Size(276, 49);
+            ChiaCudaPlotterWählen.TabIndex = 10;
+            ChiaCudaPlotterWählen.Text = "Chia Cuda Plotter wählen";
+            ChiaCudaPlotterWählen.UseVisualStyleBackColor = true;
+            ChiaCudaPlotterWählen.Click += ChiaCudaPlotterWählen_Click;
             // 
             // FarmerKey
             // 
-            this.FarmerKey.Location = new System.Drawing.Point(906, 85);
-            this.FarmerKey.Name = "FarmerKey";
-            this.FarmerKey.Size = new System.Drawing.Size(945, 31);
-            this.FarmerKey.TabIndex = 12;
-            this.FarmerKey.UseSystemPasswordChar = true;
+            FarmerKey.Location = new Point(1087, 102);
+            FarmerKey.Margin = new Padding(4);
+            FarmerKey.Name = "FarmerKey";
+            FarmerKey.Size = new Size(1133, 35);
+            FarmerKey.TabIndex = 12;
+            FarmerKey.UseSystemPasswordChar = true;
             // 
             // PoolKey
             // 
-            this.PoolKey.Location = new System.Drawing.Point(906, 122);
-            this.PoolKey.Name = "PoolKey";
-            this.PoolKey.Size = new System.Drawing.Size(945, 31);
-            this.PoolKey.TabIndex = 13;
-            this.PoolKey.UseSystemPasswordChar = true;
+            PoolKey.Location = new Point(1087, 146);
+            PoolKey.Margin = new Padding(4);
+            PoolKey.Name = "PoolKey";
+            PoolKey.Size = new Size(1133, 35);
+            PoolKey.TabIndex = 13;
+            PoolKey.UseSystemPasswordChar = true;
             // 
             // label1
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(749, 54);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(151, 25);
-            this.label1.TabIndex = 14;
-            this.label1.Text = "Cuda Plotter Pfad";
+            label1.AutoSize = true;
+            label1.Location = new Point(899, 65);
+            label1.Margin = new Padding(4, 0, 4, 0);
+            label1.Name = "label1";
+            label1.Size = new Size(176, 30);
+            label1.TabIndex = 14;
+            label1.Text = "Cuda Plotter Pfad";
             // 
             // label2
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(749, 90);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(99, 25);
-            this.label2.TabIndex = 15;
-            this.label2.Text = "Farmer Key";
+            label2.AutoSize = true;
+            label2.Location = new Point(899, 108);
+            label2.Margin = new Padding(4, 0, 4, 0);
+            label2.Name = "label2";
+            label2.Size = new Size(115, 30);
+            label2.TabIndex = 15;
+            label2.Text = "Farmer Key";
             // 
             // label3
             // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(749, 125);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(80, 25);
-            this.label3.TabIndex = 16;
-            this.label3.Text = "Pool Key";
+            label3.AutoSize = true;
+            label3.Location = new Point(899, 150);
+            label3.Margin = new Padding(4, 0, 4, 0);
+            label3.Name = "label3";
+            label3.Size = new Size(92, 30);
+            label3.TabIndex = 16;
+            label3.Text = "Pool Key";
             // 
             // AnzahlPlots
             // 
-            this.AnzahlPlots.Location = new System.Drawing.Point(1972, 45);
-            this.AnzahlPlots.Maximum = new decimal(new int[] {
-            100000000,
-            0,
-            0,
-            0});
-            this.AnzahlPlots.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.AnzahlPlots.Name = "AnzahlPlots";
-            this.AnzahlPlots.Size = new System.Drawing.Size(180, 31);
-            this.AnzahlPlots.TabIndex = 17;
-            this.AnzahlPlots.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
+            AnzahlPlots.Location = new Point(1586, 238);
+            AnzahlPlots.Margin = new Padding(4);
+            AnzahlPlots.Maximum = new decimal(new int[] { 100000000, 0, 0, 0 });
+            AnzahlPlots.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
+            AnzahlPlots.Name = "AnzahlPlots";
+            AnzahlPlots.Size = new Size(149, 35);
+            AnzahlPlots.TabIndex = 17;
+            AnzahlPlots.Value = new decimal(new int[] { 1, 0, 0, 0 });
             // 
             // label4
             // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(1857, 47);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(109, 25);
-            this.label4.TabIndex = 18;
-            this.label4.Text = "Anzahl Plots";
+            label4.AutoSize = true;
+            label4.Location = new Point(1586, 197);
+            label4.Margin = new Padding(4, 0, 4, 0);
+            label4.Name = "label4";
+            label4.Size = new Size(128, 30);
+            label4.TabIndex = 18;
+            label4.Text = "Anzahl Plots";
             // 
             // StartPlot
             // 
-            this.StartPlot.Location = new System.Drawing.Point(1857, 82);
-            this.StartPlot.Name = "StartPlot";
-            this.StartPlot.Size = new System.Drawing.Size(295, 68);
-            this.StartPlot.TabIndex = 19;
-            this.StartPlot.Text = "Start Plot";
-            this.StartPlot.UseVisualStyleBackColor = true;
-            this.StartPlot.Click += new System.EventHandler(this.StartPlot_Click);
+            StartPlot.Location = new Point(2228, 98);
+            StartPlot.Margin = new Padding(4);
+            StartPlot.Name = "StartPlot";
+            StartPlot.Size = new Size(354, 82);
+            StartPlot.TabIndex = 19;
+            StartPlot.Text = "Start Plot";
+            StartPlot.UseVisualStyleBackColor = true;
+            StartPlot.Click += StartPlot_Click;
             // 
             // PlotterGefunden
             // 
-            this.PlotterGefunden.AllowDrop = true;
-            this.PlotterGefunden.AutoCheck = false;
-            this.PlotterGefunden.AutoSize = true;
-            this.PlotterGefunden.Location = new System.Drawing.Point(1162, 10);
-            this.PlotterGefunden.Name = "PlotterGefunden";
-            this.PlotterGefunden.Size = new System.Drawing.Size(171, 29);
-            this.PlotterGefunden.TabIndex = 20;
-            this.PlotterGefunden.TabStop = false;
-            this.PlotterGefunden.Text = "Plotter gefunden";
-            this.PlotterGefunden.UseVisualStyleBackColor = true;
+            PlotterGefunden.AllowDrop = true;
+            PlotterGefunden.AutoCheck = false;
+            PlotterGefunden.AutoSize = true;
+            PlotterGefunden.Location = new Point(1394, 12);
+            PlotterGefunden.Margin = new Padding(4);
+            PlotterGefunden.Name = "PlotterGefunden";
+            PlotterGefunden.Size = new Size(195, 34);
+            PlotterGefunden.TabIndex = 20;
+            PlotterGefunden.TabStop = false;
+            PlotterGefunden.Text = "Plotter gefunden";
+            PlotterGefunden.UseVisualStyleBackColor = true;
             // 
             // StopPlot
             // 
-            this.StopPlot.Location = new System.Drawing.Point(1857, 82);
-            this.StopPlot.Name = "StopPlot";
-            this.StopPlot.Size = new System.Drawing.Size(295, 68);
-            this.StopPlot.TabIndex = 21;
-            this.StopPlot.Text = "Stop Plot";
-            this.StopPlot.UseVisualStyleBackColor = true;
-            this.StopPlot.Click += new System.EventHandler(this.StopPlot_Click);
+            StopPlot.Location = new Point(2228, 98);
+            StopPlot.Margin = new Padding(4);
+            StopPlot.Name = "StopPlot";
+            StopPlot.Size = new Size(354, 82);
+            StopPlot.TabIndex = 21;
+            StopPlot.Text = "Stop Plot";
+            StopPlot.UseVisualStyleBackColor = true;
+            StopPlot.Click += StopPlot_Click;
             // 
             // PlotCheck
             // 
-            this.PlotCheck.Location = new System.Drawing.Point(2158, 82);
-            this.PlotCheck.Name = "PlotCheck";
-            this.PlotCheck.Size = new System.Drawing.Size(221, 68);
-            this.PlotCheck.TabIndex = 22;
-            this.PlotCheck.Text = "Plot Check";
-            this.PlotCheck.UseVisualStyleBackColor = true;
-            this.PlotCheck.Click += new System.EventHandler(this.PlotCheck_Click);
+            PlotCheck.Location = new Point(2590, 98);
+            PlotCheck.Margin = new Padding(4);
+            PlotCheck.Name = "PlotCheck";
+            PlotCheck.Size = new Size(265, 82);
+            PlotCheck.TabIndex = 22;
+            PlotCheck.Text = "Plot Check";
+            PlotCheck.UseVisualStyleBackColor = true;
+            PlotCheck.Click += PlotCheck_Click;
             // 
             // SettingsSpeichern
             // 
-            this.SettingsSpeichern.Location = new System.Drawing.Point(2158, 3);
-            this.SettingsSpeichern.Name = "SettingsSpeichern";
-            this.SettingsSpeichern.Size = new System.Drawing.Size(221, 34);
-            this.SettingsSpeichern.TabIndex = 23;
-            this.SettingsSpeichern.Text = "Settings speichern";
-            this.SettingsSpeichern.UseVisualStyleBackColor = true;
-            this.SettingsSpeichern.Click += new System.EventHandler(this.SettingsSpeichern_Click);
+            SettingsSpeichern.Location = new Point(2590, 4);
+            SettingsSpeichern.Margin = new Padding(4);
+            SettingsSpeichern.Name = "SettingsSpeichern";
+            SettingsSpeichern.Size = new Size(265, 41);
+            SettingsSpeichern.TabIndex = 23;
+            SettingsSpeichern.Text = "Settings speichern";
+            SettingsSpeichern.UseVisualStyleBackColor = true;
+            SettingsSpeichern.Click += SettingsSpeichern_Click;
             // 
             // CudaPlotterPfad
             // 
-            this.CudaPlotterPfad.Location = new System.Drawing.Point(906, 47);
-            this.CudaPlotterPfad.Name = "CudaPlotterPfad";
-            this.CudaPlotterPfad.Size = new System.Drawing.Size(945, 31);
-            this.CudaPlotterPfad.TabIndex = 24;
+            CudaPlotterPfad.Location = new Point(1087, 56);
+            CudaPlotterPfad.Margin = new Padding(4);
+            CudaPlotterPfad.Name = "CudaPlotterPfad";
+            CudaPlotterPfad.Size = new Size(1133, 35);
+            CudaPlotterPfad.TabIndex = 24;
             // 
             // PlotsPrüfen
             // 
-            this.PlotsPrüfen.AutoSize = true;
-            this.PlotsPrüfen.Location = new System.Drawing.Point(2158, 43);
-            this.PlotsPrüfen.Name = "PlotsPrüfen";
-            this.PlotsPrüfen.Size = new System.Drawing.Size(134, 29);
-            this.PlotsPrüfen.TabIndex = 25;
-            this.PlotsPrüfen.Text = "Plots prüfen";
-            this.PlotsPrüfen.UseVisualStyleBackColor = true;
+            PlotsPrüfen.AutoSize = true;
+            PlotsPrüfen.Location = new Point(2590, 56);
+            PlotsPrüfen.Margin = new Padding(4);
+            PlotsPrüfen.Name = "PlotsPrüfen";
+            PlotsPrüfen.Size = new Size(151, 34);
+            PlotsPrüfen.TabIndex = 25;
+            PlotsPrüfen.Text = "Plots prüfen";
+            PlotsPrüfen.UseVisualStyleBackColor = true;
             // 
             // Werbelink
             // 
-            this.Werbelink.AutoSize = true;
-            this.Werbelink.Location = new System.Drawing.Point(225, 14);
-            this.Werbelink.Name = "Werbelink";
-            this.Werbelink.Size = new System.Drawing.Size(217, 25);
-            this.Werbelink.TabIndex = 26;
-            this.Werbelink.TabStop = true;
-            this.Werbelink.Text = "Werbung mech2you.shop";
-            this.Werbelink.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.Werbelink_LinkClicked);
+            Werbelink.AutoSize = true;
+            Werbelink.Location = new Point(270, 17);
+            Werbelink.Margin = new Padding(4, 0, 4, 0);
+            Werbelink.Name = "Werbelink";
+            Werbelink.Size = new Size(250, 30);
+            Werbelink.TabIndex = 26;
+            Werbelink.TabStop = true;
+            Werbelink.Text = "Werbung mech2you.shop";
+            Werbelink.LinkClicked += Werbelink_LinkClicked;
             // 
             // WerbungYouTube
             // 
-            this.WerbungYouTube.AutoSize = true;
-            this.WerbungYouTube.Location = new System.Drawing.Point(448, 14);
-            this.WerbungYouTube.Name = "WerbungYouTube";
-            this.WerbungYouTube.Size = new System.Drawing.Size(158, 25);
-            this.WerbungYouTube.TabIndex = 27;
-            this.WerbungYouTube.TabStop = true;
-            this.WerbungYouTube.Text = "Werbung YouTube";
-            this.WerbungYouTube.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.WerbungYouTube_LinkClicked);
+            WerbungYouTube.AutoSize = true;
+            WerbungYouTube.Location = new Point(538, 17);
+            WerbungYouTube.Margin = new Padding(4, 0, 4, 0);
+            WerbungYouTube.Name = "WerbungYouTube";
+            WerbungYouTube.Size = new Size(184, 30);
+            WerbungYouTube.TabIndex = 27;
+            WerbungYouTube.TabStop = true;
+            WerbungYouTube.Text = "Werbung YouTube";
+            WerbungYouTube.LinkClicked += WerbungYouTube_LinkClicked;
             // 
             // WerbungSpende
             // 
-            this.WerbungSpende.AutoSize = true;
-            this.WerbungSpende.Location = new System.Drawing.Point(35, 14);
-            this.WerbungSpende.Name = "WerbungSpende";
-            this.WerbungSpende.Size = new System.Drawing.Size(184, 25);
-            this.WerbungSpende.TabIndex = 28;
-            this.WerbungSpende.TabStop = true;
-            this.WerbungSpende.Text = "Unterstüzte den Kanal";
-            this.WerbungSpende.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.WerbungSpende_LinkClicked);
+            WerbungSpende.AutoSize = true;
+            WerbungSpende.Location = new Point(42, 17);
+            WerbungSpende.Margin = new Padding(4, 0, 4, 0);
+            WerbungSpende.Name = "WerbungSpende";
+            WerbungSpende.Size = new Size(218, 30);
+            WerbungSpende.TabIndex = 28;
+            WerbungSpende.TabStop = true;
+            WerbungSpende.Text = "Unterstüzte den Kanal";
+            WerbungSpende.LinkClicked += WerbungSpende_LinkClicked;
+            // 
+            // PlotterAuswahl
+            // 
+            PlotterAuswahl.FormattingEnabled = true;
+            PlotterAuswahl.Items.AddRange(new object[] { "MadMax GPU Plotter", "Chia GPU Plotter" });
+            PlotterAuswahl.Location = new Point(899, 235);
+            PlotterAuswahl.Margin = new Padding(4);
+            PlotterAuswahl.Name = "PlotterAuswahl";
+            PlotterAuswahl.Size = new Size(262, 38);
+            PlotterAuswahl.TabIndex = 29;
+            PlotterAuswahl.Text = "wähle den Plotter";
+            // 
+            // KLevelAuswahl
+            // 
+            KLevelAuswahl.AutoCompleteCustomSource.AddRange(new string[] { "32", "33", "34" });
+            KLevelAuswahl.FormattingEnabled = true;
+            KLevelAuswahl.Items.AddRange(new object[] { "32", "33", "34", "35", "36", "37", "38" });
+            KLevelAuswahl.Location = new Point(1169, 235);
+            KLevelAuswahl.Margin = new Padding(4);
+            KLevelAuswahl.Name = "KLevelAuswahl";
+            KLevelAuswahl.Size = new Size(114, 38);
+            KLevelAuswahl.TabIndex = 30;
+            KLevelAuswahl.Text = "K Level";
+            // 
+            // KompressionAuswahl
+            // 
+            KompressionAuswahl.FormattingEnabled = true;
+            KompressionAuswahl.Items.AddRange(new object[] { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9" });
+            KompressionAuswahl.Location = new Point(1291, 235);
+            KompressionAuswahl.Margin = new Padding(4);
+            KompressionAuswahl.Name = "KompressionAuswahl";
+            KompressionAuswahl.Size = new Size(168, 38);
+            KompressionAuswahl.TabIndex = 31;
+            KompressionAuswahl.Text = "Kompression";
+            // 
+            // GPUGemeinsameSpeicherGUI
+            // 
+            GPUGemeinsameSpeicherGUI.Location = new Point(1468, 236);
+            GPUGemeinsameSpeicherGUI.Margin = new Padding(4);
+            GPUGemeinsameSpeicherGUI.Maximum = new decimal(new int[] { 100000000, 0, 0, 0 });
+            GPUGemeinsameSpeicherGUI.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
+            GPUGemeinsameSpeicherGUI.Name = "GPUGemeinsameSpeicherGUI";
+            GPUGemeinsameSpeicherGUI.Size = new Size(101, 35);
+            GPUGemeinsameSpeicherGUI.TabIndex = 32;
+            GPUGemeinsameSpeicherGUI.Value = new decimal(new int[] { 215, 0, 0, 0 });
+            // 
+            // InfoGUI
+            // 
+            InfoGUI.Location = new Point(864, 809);
+            InfoGUI.Margin = new Padding(4);
+            InfoGUI.Name = "InfoGUI";
+            InfoGUI.Size = new Size(215, 88);
+            InfoGUI.TabIndex = 33;
+            InfoGUI.Text = "18TB c8 235";
+            // 
+            // label5
+            // 
+            label5.AutoSize = true;
+            label5.Location = new Point(899, 197);
+            label5.Margin = new Padding(4, 0, 4, 0);
+            label5.Name = "label5";
+            label5.Size = new Size(74, 30);
+            label5.TabIndex = 34;
+            label5.Text = "Plotter";
+            // 
+            // label6
+            // 
+            label6.AutoSize = true;
+            label6.Location = new Point(1169, 197);
+            label6.Margin = new Padding(4, 0, 4, 0);
+            label6.Name = "label6";
+            label6.Size = new Size(78, 30);
+            label6.TabIndex = 35;
+            label6.Text = "K Level";
+            // 
+            // label7
+            // 
+            label7.AutoSize = true;
+            label7.Location = new Point(1291, 197);
+            label7.Margin = new Padding(4, 0, 4, 0);
+            label7.Name = "label7";
+            label7.Size = new Size(131, 30);
+            label7.TabIndex = 36;
+            label7.Text = "Kompression";
+            // 
+            // label8
+            // 
+            label8.AutoSize = true;
+            label8.Location = new Point(1464, 197);
+            label8.Margin = new Padding(4, 0, 4, 0);
+            label8.Name = "label8";
+            label8.Size = new Size(118, 30);
+            label8.TabIndex = 37;
+            label8.Text = "SMem GPU";
+            // 
+            // MadMaxRAMFull
+            // 
+            MadMaxRAMFull.AutoSize = true;
+            MadMaxRAMFull.Location = new Point(6, 34);
+            MadMaxRAMFull.Name = "MadMaxRAMFull";
+            MadMaxRAMFull.Size = new Size(102, 34);
+            MadMaxRAMFull.TabIndex = 38;
+            MadMaxRAMFull.Text = "Full GB";
+            MadMaxRAMFull.UseVisualStyleBackColor = true;
+            // 
+            // MadMaxRAMHalb
+            // 
+            MadMaxRAMHalb.AutoSize = true;
+            MadMaxRAMHalb.Location = new Point(109, 34);
+            MadMaxRAMHalb.Name = "MadMaxRAMHalb";
+            MadMaxRAMHalb.Size = new Size(100, 34);
+            MadMaxRAMHalb.TabIndex = 39;
+            MadMaxRAMHalb.Text = "1/2 GB";
+            MadMaxRAMHalb.UseVisualStyleBackColor = true;
+            // 
+            // MadMaxRAMViertel
+            // 
+            MadMaxRAMViertel.AutoSize = true;
+            MadMaxRAMViertel.Location = new Point(212, 34);
+            MadMaxRAMViertel.Name = "MadMaxRAMViertel";
+            MadMaxRAMViertel.Size = new Size(100, 34);
+            MadMaxRAMViertel.TabIndex = 40;
+            MadMaxRAMViertel.Text = "1/4 GB";
+            MadMaxRAMViertel.UseVisualStyleBackColor = true;
+            // 
+            // groupBox1
+            // 
+            groupBox1.Controls.Add(MadMaxRAMViertel);
+            groupBox1.Controls.Add(MadMaxRAMHalb);
+            groupBox1.Controls.Add(MadMaxRAMFull);
+            groupBox1.Location = new Point(1742, 188);
+            groupBox1.Name = "groupBox1";
+            groupBox1.Size = new Size(311, 87);
+            groupBox1.TabIndex = 41;
+            groupBox1.TabStop = false;
+            groupBox1.Text = "MadMax RAM verfügbar";
+            // 
+            // MadMaxTmpOrdnerTB
+            // 
+            MadMaxTmpOrdnerTB.Location = new Point(2061, 254);
+            MadMaxTmpOrdnerTB.Margin = new Padding(4);
+            MadMaxTmpOrdnerTB.Name = "MadMaxTmpOrdnerTB";
+            MadMaxTmpOrdnerTB.Size = new Size(793, 35);
+            MadMaxTmpOrdnerTB.TabIndex = 41;
+            // 
+            // MadMaxTmpOrdnerBT
+            // 
+            MadMaxTmpOrdnerBT.Location = new Point(2061, 197);
+            MadMaxTmpOrdnerBT.Margin = new Padding(4);
+            MadMaxTmpOrdnerBT.Name = "MadMaxTmpOrdnerBT";
+            MadMaxTmpOrdnerBT.Size = new Size(276, 49);
+            MadMaxTmpOrdnerBT.TabIndex = 42;
+            MadMaxTmpOrdnerBT.Text = "MadMax Tmp Ordner";
+            MadMaxTmpOrdnerBT.UseVisualStyleBackColor = true;
+            MadMaxTmpOrdnerBT.Click += MadMaxTmpOrdnerBT_Click;
             // 
             // Form1
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(2384, 765);
-            this.Controls.Add(this.WerbungSpende);
-            this.Controls.Add(this.WerbungYouTube);
-            this.Controls.Add(this.Werbelink);
-            this.Controls.Add(this.PlotsPrüfen);
-            this.Controls.Add(this.CudaPlotterPfad);
-            this.Controls.Add(this.SettingsSpeichern);
-            this.Controls.Add(this.PlotCheck);
-            this.Controls.Add(this.StopPlot);
-            this.Controls.Add(this.PlotterGefunden);
-            this.Controls.Add(this.StartPlot);
-            this.Controls.Add(this.label4);
-            this.Controls.Add(this.AnzahlPlots);
-            this.Controls.Add(this.label3);
-            this.Controls.Add(this.label2);
-            this.Controls.Add(this.label1);
-            this.Controls.Add(this.PoolKey);
-            this.Controls.Add(this.FarmerKey);
-            this.Controls.Add(this.ChiaCudaPlotterWählen);
-            this.Controls.Add(this.KopierenAnhalten);
-            this.Controls.Add(this.LogLöschen);
-            this.Controls.Add(this.log);
-            this.Controls.Add(this.ZielverzeichnissLöschen);
-            this.Controls.Add(this.ZielverzeichnissEinfügen);
-            this.Controls.Add(this.zielPfadListe);
-            this.Controls.Add(this.QuellordnerWählen);
-            this.Controls.Add(this.quellPfad);
-            this.Controls.Add(this.KopierenStarten);
-            this.Controls.Add(this.Kopieren);
-            this.Name = "Form1";
-            this.Text = "mech2youDV v1.0.0";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
-            this.Load += new System.EventHandler(this.Form1_Load);
-            ((System.ComponentModel.ISupportInitialize)(this.AnzahlPlots)).EndInit();
-            this.ResumeLayout(false);
-            this.PerformLayout();
-
+            AutoScaleDimensions = new SizeF(12F, 30F);
+            AutoScaleMode = AutoScaleMode.Font;
+            ClientSize = new Size(2861, 918);
+            Controls.Add(MadMaxTmpOrdnerBT);
+            Controls.Add(MadMaxTmpOrdnerTB);
+            Controls.Add(groupBox1);
+            Controls.Add(label8);
+            Controls.Add(label7);
+            Controls.Add(label6);
+            Controls.Add(label5);
+            Controls.Add(InfoGUI);
+            Controls.Add(GPUGemeinsameSpeicherGUI);
+            Controls.Add(KompressionAuswahl);
+            Controls.Add(KLevelAuswahl);
+            Controls.Add(PlotterAuswahl);
+            Controls.Add(WerbungSpende);
+            Controls.Add(WerbungYouTube);
+            Controls.Add(Werbelink);
+            Controls.Add(PlotsPrüfen);
+            Controls.Add(CudaPlotterPfad);
+            Controls.Add(SettingsSpeichern);
+            Controls.Add(PlotCheck);
+            Controls.Add(StopPlot);
+            Controls.Add(PlotterGefunden);
+            Controls.Add(StartPlot);
+            Controls.Add(label4);
+            Controls.Add(AnzahlPlots);
+            Controls.Add(label3);
+            Controls.Add(label2);
+            Controls.Add(label1);
+            Controls.Add(PoolKey);
+            Controls.Add(FarmerKey);
+            Controls.Add(ChiaCudaPlotterWählen);
+            Controls.Add(KopierenAnhalten);
+            Controls.Add(LogLöschen);
+            Controls.Add(log);
+            Controls.Add(ZielverzeichnissLöschen);
+            Controls.Add(ZielverzeichnissEinfügen);
+            Controls.Add(zielPfadListe);
+            Controls.Add(QuellordnerWählen);
+            Controls.Add(quellPfad);
+            Controls.Add(KopierenStarten);
+            Controls.Add(Kopieren);
+            Margin = new Padding(4);
+            Name = "Form1";
+            Text = "mech2youDV v1.0.1";
+            FormClosing += Form1_FormClosing;
+            Load += Form1_Load;
+            ((System.ComponentModel.ISupportInitialize)AnzahlPlots).EndInit();
+            ((System.ComponentModel.ISupportInitialize)GPUGemeinsameSpeicherGUI).EndInit();
+            groupBox1.ResumeLayout(false);
+            groupBox1.PerformLayout();
+            ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
@@ -417,5 +620,20 @@
         private LinkLabel Werbelink;
         private LinkLabel WerbungYouTube;
         private LinkLabel WerbungSpende;
+        private ComboBox PlotterAuswahl;
+        private ComboBox KLevelAuswahl;
+        private ComboBox KompressionAuswahl;
+        private NumericUpDown GPUGemeinsameSpeicherGUI;
+        private RichTextBox InfoGUI;
+        private Label label5;
+        private Label label6;
+        private Label label7;
+        private Label label8;
+        private RadioButton MadMaxRAMFull;
+        private RadioButton MadMaxRAMHalb;
+        private RadioButton MadMaxRAMViertel;
+        private GroupBox groupBox1;
+        private TextBox MadMaxTmpOrdnerTB;
+        private Button MadMaxTmpOrdnerBT;
     }
 }

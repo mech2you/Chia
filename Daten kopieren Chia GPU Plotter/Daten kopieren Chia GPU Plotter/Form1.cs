@@ -10,6 +10,8 @@ using System.Collections.Generic;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.Menu;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using System.Security.Policy;
+using System;
+using Namotion.Reflection;
 
 namespace Daten_kopieren_Chia_GPU_Plotter
 {
@@ -17,17 +19,25 @@ namespace Daten_kopieren_Chia_GPU_Plotter
     {
         String quelle = "";
         String pfadBladBitGPUPlotter = "";
+        String kompression = "0";
+        String plotterAuswahl = "";
+        String gpuSharedMemory = "1";
+        String tmpOrdner = "";
 
 
+        public void LogKopiervorgang(object sendere, String _log)
+        {
+            logGlobal(_log);
+        }
 
-        List<KopierDaten> Kopierliste= new List<KopierDaten>();
-        List<string> ZielPfad= new List<string>();
-        BackgroundWorker PSBackgroundWorker =new BackgroundWorker();// Wird für die Powershell verwendet
-        
-        int i = 0; // Zähler das die Zielpfade gleichmäßig abgewechselt werden
-        List<BackgroundWorker> workerList = new List<BackgroundWorker>();
-        
-        private static System.Timers.Timer aTimer = new System.Timers.Timer(2000);
+        List<Kopiervorgang> DatenKopierer = new List<Kopiervorgang>();// Jedes Ziellaufwerk erhält einen kopierer
+
+
+        public List<KopierDaten> Kopierliste = new List<KopierDaten>();// Quelldatei und Zustand
+        private static System.Timers.Timer aTimer = new System.Timers.Timer(2000);// In welchen Abstand in ms soll nach neuen Plots gesucht werden
+
+        BackgroundWorker PSBackgroundWorker = new BackgroundWorker();// Wird für die Powershell verwendet      
+
         public static readonly PowerShell _ps = PowerShell.Create();
         Collection<PSObject> rückgabePS = new Collection<PSObject>();
 
@@ -37,6 +47,7 @@ namespace Daten_kopieren_Chia_GPU_Plotter
             InitializeComponent();
             PSBackgroundWorker.DoWork += PSBackgroundWorker_DoWork;
             PSBackgroundWorker.WorkerSupportsCancellation = true;
+
         }
         /// <summary>
         /// Wird verwendet um den Cuda Plotter mit den jeweiligen Paramtern zu starten
@@ -47,14 +58,41 @@ namespace Daten_kopieren_Chia_GPU_Plotter
         {
             try
             {
-                String argumente = " -n "+Convert.ToString(AnzahlPlots.Value) + " --compress 0 -f " + FarmerKey.Text + " -c "+ PoolKey.Text + " cudaplot "+ quelle;
+                String argumente = "";
                 rückgabePS.Clear();
-                rückgabePS =_ps.AddScript(pfadBladBitGPUPlotter+ argumente).Invoke();
+
+
+                if (plotterAuswahl == "Chia GPU Plotter")
+                {
+                    argumente = " -n " + Convert.ToString(AnzahlPlots.Value) + " --compress " + kompression + " -f " + FarmerKey.Text + " -c " + PoolKey.Text + " cudaplot " + quelle;
+                }
+
+                if (plotterAuswahl == "MadMax GPU Plotter")
+                {
+                    if (MadMaxRAMViertel.Checked == true)
+                    {
+                        argumente = " -n " + Convert.ToString(AnzahlPlots.Value) + " -M " + gpuSharedMemory + " -C " + kompression + " -f " + FarmerKey.Text + " -c " + PoolKey.Text + " -w -3 " + tmpOrdner + " -t " + quelle;
+                    }
+
+                    if (MadMaxRAMHalb.Checked == true)
+                    {
+                        argumente = " -n " + Convert.ToString(AnzahlPlots.Value) + " -M " + gpuSharedMemory + " -C " + kompression + " -f " + FarmerKey.Text + " -c " + PoolKey.Text + " -w -2 " + tmpOrdner + " -t " + quelle;
+                    }
+                    if (MadMaxRAMFull.Checked==true)
+                    {
+                        argumente = " -n " + Convert.ToString(AnzahlPlots.Value) + " -M " + gpuSharedMemory + " -C " + kompression + " -f " + FarmerKey.Text + " -c " + PoolKey.Text + " -w -t " + quelle;
+                    }
+                   
+                }
+
+                rückgabePS = _ps.AddScript(pfadBladBitGPUPlotter + argumente).Invoke();
                 if (_ps.HadErrors)
                 {
                     foreach (var error in _ps.Streams.Error)
                     {
+                        // Manchmal Fehler WritePark(): ans_length (859) > max_ans_length (858) (y = 1, i = 6283)
                         string tmp = error.ToString();
+                        logGlobal(tmp);
                         Console.WriteLine(error.ToString());
                     }
                 }
@@ -68,11 +106,12 @@ namespace Daten_kopieren_Chia_GPU_Plotter
                 Console.WriteLine(ex.Message);
             }
         }
-
+        /// <summary>
+        /// Prüft alle Zeitspanne ob neue Plots im Quellverzeichniss da sind
+        /// </summary>
         private void SetTimer()
         {
-
-            // Hook up the Elapsed event for the timer. 
+            // Timer Event
             aTimer.Elapsed += OnTimedEvent;
             aTimer.AutoReset = true;
             aTimer.Enabled = true;
@@ -80,45 +119,6 @@ namespace Daten_kopieren_Chia_GPU_Plotter
         private void OnTimedEvent(Object source, ElapsedEventArgs e)
         {
             Kopieren_Click(null, EventArgs.Empty);
-        }
-        public bool datei_kopieren(KopierDaten auswahl)
-        {
-            bool doWork= false;// Wenn eine Arbeit an den BW vergeben worden ist dann wird true zurückgegeben. Damit ist der BW beschäftigt
-            bool abbrechen=false;
-            foreach (BackgroundWorker item in workerList) {
-                if (item.IsBusy==false)
-                {
-                    DriveInfo[] allDrives = DriveInfo.GetDrives();
-                    foreach (DriveInfo drive in allDrives)
-                    {
-                        if (auswahl.zielort.IndexOf(drive.Name) != -1)//Ist der Datenträger im Zielpfad?
-                        {
-                            FileInfo info = new FileInfo(auswahl.pfad);
-                            logGlobal("Laufwerk Name " + drive.Name + " freie Speicher " + (drive.AvailableFreeSpace / 1024 / 1024 / 1024) + "GB Dateigröße " + (info.Length / 1024 / 1024 / 1024) + "GB");//Für Debug
-
-                            if (drive.AvailableFreeSpace> info.Length)// Ist genug Speicher da?
-                            {
-                                item.RunWorkerAsync(auswahl);// kopiert die Datei
-                                doWork = true;
-                                abbrechen=true;
-                            }
-                            else
-                            {
-                                logGlobal("Zielpfad hat zu wenig Speicher: " + auswahl.zielort);
-                                auswahl.zielort = "";
-                                doWork = false;
-                            }
-                        }
-                    }
-
-                    if (abbrechen)
-                    {
-                        break;// Ein freier Kopiersolot wurde gefunden und die Suche kann beendet werden
-                    }
-                    
-                }
-            }
-            return doWork;
         }
         /// <summary>
         /// Zuständig um den Log in die Logbox zu schreiben
@@ -132,151 +132,179 @@ namespace Daten_kopieren_Chia_GPU_Plotter
                 {
                     log.Invoke(new Action(() =>
                     {
-                        log.AppendText(message+Environment.NewLine);
+                        log.AppendText(message + Environment.NewLine);
 
                     }));
                 }
                 else
                 {
-                    log.Text += message+ Environment.NewLine;
+                    log.Text += message + Environment.NewLine;
                     log.SelectionStart = log.Text.Length;
                     log.ScrollToCaret();
                 }
             }
 
         }
+        /// <summary>
+        /// Entfernt das Laufwerk aus allen Variablen und auch aus der GUI
+        /// </summary>
+        /// <param name="_pfad"></param>
+        public void LaufwerkEntfernen(String _pfad)
+        {
+            if (zielPfadListe.Items.Count > 0)// Es muss ein Element oder mehere Element vorhanden sein
+            {
+                int index = zielPfadListe.FindString(_pfad);// Suchen nach dem Pfad
+                if (index != -1)
+                {
+                    zielPfadListe.Invoke((MethodInvoker)delegate
+                    {
+                        zielPfadListe.Items.RemoveAt(index);// Löscht das Laufwerk
+                    });
+                    int i = 0;
+                    int w = 0;
+                    foreach (Kopiervorgang item in DatenKopierer)// Löscht alle Prozentbalken aus der GUI (Vieleicht gibt es eine besser Lösung für diesen Teil)
+                    {
+                        this.Invoke((MethodInvoker)delegate// Wegen threadübergreifender zugriff auf steuerelement mus das so gelöst werden
+                        {
+                            this.Controls.Remove(item.Kopierstatus); //Löscht alle GUI Prozentbalken
+                        });
+                        if(item.quellpfad== _pfad)
+                        {
+                            w = i;
+                        }
+                        i++;
+                    }
+                    DatenKopierer.RemoveAt(w);
+
+                        this.Invoke((MethodInvoker)delegate// Wegen threadübergreifender zugriff auf steuerelement mus das so gelöst werden
+                        {
+                            for (int k = 0; k < DatenKopierer.Count; k++)// Fügt alle Prozentbalken der GUI wieder hinzu
+                            {
+                                this.Controls.Add(DatenKopierer[k].Kopierstatus);//Fügt alle GUI Prozentbalken hinzu
+                                int tmpX = zielPfadListe.Location.X;
+                                int tmpY = zielPfadListe.Location.Y;
+                                DatenKopierer[k].Kopierstatus.Location = new Point(tmpX + zielPfadListe.Width, tmpY + (k) * (DatenKopierer[k].Kopierstatus.Height + 8));
+                            }
+                        });
+
+                    
+                }
+            }
+        }
 
         /// <summary>
-        /// Wird verwendet um die Dateien von A nach B zu verschieben
+        /// Versteckter Button der die Listen für das Kopieren befüllt und den Backgroundworker starte.
         /// </summary>
         /// <param name="sender"></param>
-        /// <param name="e">beinahltet (KopierDaten)e.Argument ziel und quellstring</param>
-        private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
-        {
-            KopierDaten auwahl = (KopierDaten)e.Argument;
-            if (auwahl != null)
-            {
-                DateTime zeit = DateTime.Now;
-                String endkürzel = ".tmp";
-                logGlobal("kopieren von " + auwahl.pfad);
-                logGlobal("nach " + auwahl.zielort + endkürzel+ " Uhrzeit: " + zeit.ToShortTimeString());
-                Stopwatch watch = new Stopwatch();
-                watch.Start();
-                //Thread.Sleep(20000);// Wird zum testen verwendet
-                if (File.Exists( auwahl.zielort + endkürzel))// Die temp Datei ist bereits vorhanden und kann gelöscht werden
-                {
-                    File.Delete(auwahl.zielort + endkürzel);
-                }
-                System.IO.File.Move(auwahl.pfad, auwahl.zielort+ endkürzel);//Kopieren vom Plot
-                watch.Stop();
-                logGlobal("kopieren nach "+ auwahl.zielort + " Dauer: " + watch.Elapsed.TotalSeconds + " s");
-                System.IO.File.Move(auwahl.zielort + endkürzel, auwahl.zielort);// Umbenennen
-            }
-        }
-        //Versteckter Button der die Listen für das Kopieren befüllt und den Backgroundworker startet 
+        /// <param name="e"></param>
         private void Kopieren_Click(object sender, EventArgs e)
         {
-            bool abbrechen= false;
-            if(PlotsPrüfen.Checked==true)// Prüft ob die Plots valide sind und löscht sie gegebenfalls
+            bool abbrechen = false;
+            if (PlotsPrüfen.Checked == true)// Prüft ob die Plots valide sind und löscht sie gegebenfalls
             {
-                abbrechen=PlotsQuellePrüfen();
+                abbrechen = PlotsQuellePrüfen();
             }
-            if (abbrechen)
+            if (!abbrechen)
             {
-
-            }
-            string[] dateien = Directory.GetFiles(quelle);
-            foreach (string datei in dateien)
-            {
-                if (datei.Substring(datei.Length-4) =="plot")
+                string[] dateien = Directory.GetFiles(quelle);
+                foreach (string dateiname in dateien)
                 {
-                    if(File.Exists(datei))// Nur wenn die Datei existiert geht es weiter
+                    if (dateiname.Substring(dateiname.Length - 4) == "plot")// handelt es sich um einen fertigen Plot
                     {
-                        // wenn die Liste leer ist füge ein Element hinzu
-                        if (Kopierliste.Count == 0)
+                        if (File.Exists(dateiname))// Nur wenn die Datei existiert geht es weiter
                         {
-                            Kopierliste.Add(new KopierDaten(datei));
-                        }
-                        else
-                        {
-                            bool gefunden = true;
-                            // fügt die Datei nur zum Kopieren hinzu wenn diese nicht auf der Liste ist
-                            foreach (KopierDaten inhalt in Kopierliste)
+                            // wenn die Liste leer ist füge ein Element hinzu
+                            if (Kopierliste.Count == 0)
                             {
-                                if (datei == inhalt.pfad)
-                                {
-                                    gefunden = false;
-                                }
+                                Kopierliste.Add(new KopierDaten(quelle, Path.GetFileName(dateiname)));
                             }
-                            if (gefunden)
+                            else
                             {
-                                Kopierliste.Add(new KopierDaten(datei));
+                                bool gefunden = false;
+                                // fügt die Datei nur zum Kopieren hinzu wenn diese nicht auf der Liste ist
+                                foreach (KopierDaten inhalt in Kopierliste)
+                                {
+                                    if ((inhalt.quellpfad + inhalt.dateiname) == dateiname)
+                                    {
+                                        gefunden = true;
+                                    }
+                                }
+                                if (!gefunden)// Dateiname ist noch nicht vorhanden und muss auf die Liste
+                                {
+                                    Kopierliste.Add(new KopierDaten(quelle, Path.GetFileName(dateiname)));
+                                }
                             }
                         }
                     }
                 }
-            }
-            
-            foreach (KopierDaten inhalt in Kopierliste)
-            {
-                // Daten werden kopiert falls noch nicht
-                if (inhalt.kopiert==false)
+                bool abbrechen2=false;
+                for (int i = 0; i < DatenKopierer.Count; i++)// foreach kann nicht verwendet werden da wir Elemente löschen
                 {
-                    if (inhalt.zielort=="")//Falls kein Pfad zum kopieren eingetragen ist wird dies nun gemacht
+
+                    if (DatenKopierer[i].BWkopieren.IsBusy == false)// Ein Laufwerk wird ausgewählt wo der BW nicht beschäftigt mit kopieren ist
                     {
-                        String ziel = ZielPfad[i % ZielPfad.Count];// über die Modulo Rechnung wird immer der jeweilige nächste Pfad gewählt 
-                        i++;
-                        inhalt.zielort = ziel + System.IO.Path.GetFileName(inhalt.pfad);// Fügt den Zielpfad zum Kopieren ein
-                        
-                        //logGlobal("i "+ i);//Für Debug
+                        foreach (KopierDaten inhalt in Kopierliste)//  File wird ausgewählt die kopiert werden soll
+                        {
+                            if (inhalt.fertig == false)// Datei wird nicht bereits kopiert
+                            {
+
+                                DriveInfo[] allDrives = DriveInfo.GetDrives();
+                                foreach (DriveInfo drive in allDrives)
+                                {
+                                    if (DatenKopierer[i].zielpfad.IndexOf(drive.Name) != -1)//Ist der Datenträger im Zielpfad?
+                                    {
+                                        FileInfo info = new FileInfo(inhalt.quellpfad+inhalt.dateiname);
+                                        logGlobal("Laufwerk Name " + drive.Name + " freie Speicher " + (drive.AvailableFreeSpace / 1024 / 1024 / 1024) + "GB Dateigröße " + (info.Length / 1024 / 1024 / 1024) + "GB");//Für Debug
+
+                                        if (drive.AvailableFreeSpace > info.Length)// Ist genug Speicher da?
+                                        {
+                                            DatenKopierer[i].quellpfad = inhalt.quellpfad;
+                                            DatenKopierer[i].dateiname = inhalt.dateiname;
+                                            DatenKopierer[i].fertig = true;// Sperrt die Datei das dies nun von ausgewählten BW bearbeitet wird 
+                                            inhalt.fertig = true;
+                                            DatenKopierer[i].BWkopieren.RunWorkerAsync();
+                                            
+                                        }
+                                        else
+                                        {
+                                            logGlobal("Zielpfad hat zu wenig Speicher: " + DatenKopierer[i].zielpfad);
+                                            LaufwerkEntfernen(DatenKopierer[i].zielpfad.ToString());
+                                        }
+                                        abbrechen2 = true;// Es wird kopiert oder der Speicher ist voll. In beiden Fällen muss man raus aus den Schleifen
+                                    }
+                                    if (abbrechen2)
+                                    {
+                                        break;
+                                    }
+                                }              
+                            }
+                            if (abbrechen2)
+                            {
+                                break;
+                            }
+                        }
                     }
-                    inhalt.kopiert = datei_kopieren(inhalt);
+                    if (abbrechen2)
+                    {
+                        break;
+                    }
                 }
             }
         }
         /// <summary>
-        /// Setzt alle Variablen für die Funkttionalität zurück
+        /// Startet den Timer für das Kopieren der Dateien
         /// </summary>
-        void reset()
-        {
-            ZielPfad.Clear();
-            workerList.Clear();
-
-            foreach (String pfad in zielPfadListe.Items)
-            {
-                ZielPfad.Add(pfad + "\\");// Ziellaufwerke
-            }
-            foreach (var item in Kopierliste)
-            {
-                if (item.kopiert == false)
-                {
-                    foreach (var pfad in ZielPfad)
-                    {
-                        if (item.zielort == pfad) {
-                            item.zielort = "";
-                        } 
-                    }
-                }
-            }
-            for (int k = 0; k < ZielPfad.Count(); k++)
-            {
-                workerList.Add(new BackgroundWorker());
-                workerList[k].WorkerSupportsCancellation = true;
-                workerList[k].DoWork += new DoWorkEventHandler(backgroundWorker1_DoWork);
-            }
-            Console.WriteLine("test");
-        }
-
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void KopierenStarten_Click(object sender, EventArgs e)
         {
-            if ((quellPfad.Items.Count>0)&& (zielPfadListe.Items.Count>0))// Stellt sicher das die Quell und Zielverzeichniss eingetragen sind
+            if ((quellPfad.Items.Count > 0) && (zielPfadListe.Items.Count > 0))// Stellt sicher das die Quell und Zielverzeichniss eingetragen sind
             {
-                reset();
                 SetTimer();
                 KopierenAnhalten.Visible = true;
                 KopierenStarten.Visible = false;
             }
-           
+
         }
         /// <summary>
         /// Auswahl des Quellordners
@@ -292,10 +320,9 @@ namespace Daten_kopieren_Chia_GPU_Plotter
 
                 if (result == System.Windows.Forms.DialogResult.OK)
                 {
-                    quelle = dialog.SelectedPath;
+                    quelle = dialog.SelectedPath + "\\";
                     quellPfad.Items.Clear();
                     quellPfad.Items.Add(quelle);
-                    KopierenAnhalten_Click(null, EventArgs.Empty);// Hält den Kopiervorgang an
                 }
 
             }
@@ -310,9 +337,17 @@ namespace Daten_kopieren_Chia_GPU_Plotter
 
                 if (result == System.Windows.Forms.DialogResult.OK)
                 {
-                    zielPfadListe.Items.Add(dialog.SelectedPath);
-                    KopierenAnhalten_Click(null, EventArgs.Empty);// Hält den Kopiervorgang an
-                    reset();
+                    // Pfad wird eingetragen in die HDD liste und ein neues Obejkt Kopiervorgang wird gleichzeitig in die DatenKopierer Liste eingetragen.
+                    // Damit sorgt man das jeder Zielpfad immer einen Kopierer hat
+                    zielPfadListe.Items.Add(dialog.SelectedPath + "\\");
+                    DatenKopierer.Add(new Kopiervorgang(dialog.SelectedPath.ToString() + "\\"));
+                    DatenKopierer[DatenKopierer.Count - 1].neuerLog += LogKopiervorgang;
+                    // Prozessvortschrittsanzeige einfügen bei einen neuen Zielpfad
+                    this.Controls.Add(DatenKopierer[DatenKopierer.Count - 1].Kopierstatus);
+                    int tmpX = zielPfadListe.Location.X;
+                    int tmpY = zielPfadListe.Location.Y;
+                    DatenKopierer[DatenKopierer.Count - 1].Kopierstatus.Location = new Point(tmpX + zielPfadListe.Width, tmpY + (DatenKopierer.Count - 1) * (DatenKopierer[DatenKopierer.Count - 1].Kopierstatus.Height + 8));
+
                 }
             }
         }
@@ -321,17 +356,23 @@ namespace Daten_kopieren_Chia_GPU_Plotter
         {
             // Beim starten Laufwerke laden
             quellPfad.Items.Clear();
-            
+
             zielPfadListe.Items.Clear();
 
-            StopPlot.Visible= false;
+            StopPlot.Visible = false;
             StartPlot.Visible = true;
 
             KopierenAnhalten.Visible = false;
             KopierenStarten.Visible = true;
 
+            //Felder als erstes auswählen danach die Variablen laden 
+
+            PlotterAuswahl.SelectedIndex = 0;
+            KLevelAuswahl.SelectedIndex = 0;
+            KompressionAuswahl.SelectedIndex = 0;
+            MadMaxRAMFull.Checked=true;
             // Läd alle gespeicherten Werte in die GUI
-            if (Properties.Settings.Default.AnzahlPlots>0)// Verhindert Fehler bei Release exe
+            if (Properties.Settings.Default.AnzahlPlots > 0)// Verhindert Fehler bei Release exe
             {
                 AnzahlPlots.Value = Properties.Settings.Default.AnzahlPlots;
             }
@@ -339,9 +380,9 @@ namespace Daten_kopieren_Chia_GPU_Plotter
             {
                 AnzahlPlots.Value = 1;
             }
-            FarmerKey.Text=Properties.Settings.Default.FarmerKey ;
+            FarmerKey.Text = Properties.Settings.Default.FarmerKey;
 
-            PoolKey.Text=Properties.Settings.Default.PoolKey;
+            PoolKey.Text = Properties.Settings.Default.PoolKey;
             if (Directory.Exists(Properties.Settings.Default.QuellPfad))
             {
                 quellPfad.Items.Add(Properties.Settings.Default.QuellPfad);
@@ -350,36 +391,68 @@ namespace Daten_kopieren_Chia_GPU_Plotter
             if (File.Exists(Properties.Settings.Default.CudaPlotterPfad))
             {
                 CudaPlotterPfad.Text = Properties.Settings.Default.CudaPlotterPfad;
-                pfadBladBitGPUPlotter= Properties.Settings.Default.CudaPlotterPfad;
+                pfadBladBitGPUPlotter = Properties.Settings.Default.CudaPlotterPfad;
                 CudaPlotterCheck();
             }
+            // Teilt die Strings mit ; auf und fügt jeweils die Eventhandler + BackgroundWorker ein 
             string[] stringSeparators = Properties.Settings.Default.Zielpfade.Split(';');
-            foreach(string separator in stringSeparators)
+            foreach (string separator in stringSeparators)
             {
                 if (Directory.Exists(separator))
                 {
                     zielPfadListe.Items.Add(separator);
+                    DatenKopierer.Add(new Kopiervorgang(separator.ToString()));
+                    DatenKopierer[DatenKopierer.Count - 1].neuerLog += LogKopiervorgang;
+
+
+                    // Prozessvortschrittsanzeige einfügen bei einen neuen Zielpfad
+                    this.Controls.Add(DatenKopierer[DatenKopierer.Count - 1].Kopierstatus);
+                    int tmpX = zielPfadListe.Location.X;
+                    int tmpY = zielPfadListe.Location.Y;
+                    DatenKopierer[DatenKopierer.Count - 1].Kopierstatus.Location = new Point(tmpX + zielPfadListe.Width, tmpY + (DatenKopierer.Count - 1) * (DatenKopierer[DatenKopierer.Count - 1].Kopierstatus.Height + 8));
                 }
             }
+            if (Properties.Settings.Default.PlotterAuswahl != "")
+            {
+                PlotterAuswahl.Text = Properties.Settings.Default.PlotterAuswahl;
+            }
+            if (Properties.Settings.Default.kompression != "")
+            {
+                KompressionAuswahl.Text = Properties.Settings.Default.kompression;
+            }
+            KLevelAuswahl.Text = Properties.Settings.Default.kGröße;
 
-            
+            GPUGemeinsameSpeicherGUI.Value = Convert.ToDecimal(Properties.Settings.Default.gpuSharedMemory);
 
+
+            MadMaxTmpOrdnerTB.Text=Properties.Settings.Default.MadMaxTmpOrdner;
+            switch (Properties.Settings.Default.MadMaxRamNutzung)
+            {
+                case "Full":
+                    MadMaxRAMFull.Checked = true;
+                    break;
+                case "1/2":
+                    MadMaxRAMHalb.Checked = true;
+                    break;
+                case "1/4":
+                    MadMaxRAMViertel.Checked = true;
+                    break;
+            }
         }
-
+        /// <summary>
+        /// Dient zum löschen von Pfaden in der Liste
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ZielverzeichnissLöschen_Click(object sender, EventArgs e)
         {
-            KopierenAnhalten_Click(null, EventArgs.Empty);// Hält den Kopiervorgang an
-            if (zielPfadListe.Items.Count!=0)
+            if (zielPfadListe.Items.Count > 0)// Es muss ein Element oder mehere Element vorhanden sein
             {
-                if (zielPfadListe.SelectedItem != null)
+                if (zielPfadListe.SelectedItem != null)// Es muss ein Element gewählt sein
                 {
                     string curItem = zielPfadListe.SelectedItem.ToString();
                     // Find the string in ListBox2.
-                    int index = zielPfadListe.FindString(curItem);
-                    zielPfadListe.Items.RemoveAt(index);
-                    reset();
-
-
+                    LaufwerkEntfernen(curItem.ToString());
                 }
             }
         }
@@ -401,12 +474,12 @@ namespace Daten_kopieren_Chia_GPU_Plotter
         /// <returns></returns>
         private bool CudaPlotterCheck()
         {
-            bool gefunden=false;
+            bool gefunden = false;
             rückgabePS.Clear();
             _ps.Streams.Error.Clear();
             try
             {
-                
+
                 rückgabePS = _ps.AddScript(pfadBladBitGPUPlotter + " --version").Invoke();
                 if (_ps.HadErrors)
                 {
@@ -422,7 +495,12 @@ namespace Daten_kopieren_Chia_GPU_Plotter
             }
             foreach (PSObject zeile in rückgabePS)
             {
-                if (zeile.ToString().IndexOf("3.0.0-alpha1-dev") != -1)// Version Plotter gefunden
+                if (zeile.ToString().IndexOf("3.0.0-alpha1-dev") != -1)// Version Chia GPU Plotter gefunden
+                {
+                    PlotterGefunden.Checked = true;
+                    gefunden = true;
+                }
+                if (zeile.ToString().IndexOf("2.0.0-3e00fa3") != -1)// Version MadMax GPU Plotter gefunden
                 {
                     PlotterGefunden.Checked = true;
                     gefunden = true;
@@ -457,30 +535,36 @@ namespace Daten_kopieren_Chia_GPU_Plotter
 
         private void StartPlot_Click(object sender, EventArgs e)
         {
-            if (pfadBladBitGPUPlotter!="")
+            if (pfadBladBitGPUPlotter != "")
             {
-                if(File.Exists(pfadBladBitGPUPlotter))
+                if (File.Exists(pfadBladBitGPUPlotter))
                 {
-                    if (PlotterGefunden.Checked==true)
+                    if (PlotterGefunden.Checked == true)
                     {
                         if (!PSBackgroundWorker.IsBusy)
                         {
+                            kompression = KompressionAuswahl.SelectedItem.ToString();
+                            plotterAuswahl = PlotterAuswahl.SelectedItem.ToString();
                             PSBackgroundWorker.RunWorkerAsync();
                             StartPlot.Visible = false;
                             StopPlot.Visible = true;
-                            KopierenStarten_Click(null, EventArgs.Empty);// Hält den Kopiervorgang an
+                            gpuSharedMemory = Convert.ToString(GPUGemeinsameSpeicherGUI.Value);
+                            KopierenStarten_Click(null, EventArgs.Empty);// Startet den Kopiervorgang
                         }
                         else
                         {
                             logGlobal("Fehler Bladebit Cuda läuft bereits");
                         }
-                        
+
 
                     }
                 }
             }
         }
-
+        public void FortschrittsbalkenNeuLaden()
+        {
+           
+        }
         private void StopPlot_Click(object sender, EventArgs e)
         {
             _ps.Stop();
@@ -493,9 +577,9 @@ namespace Daten_kopieren_Chia_GPU_Plotter
         /// <returns>Wenn true dann ist ein Fehler bei einen Plot aufgetaucht</returns>
         private bool PlotsQuellePrüfen()
         {
-        PowerShell _psPlotCheck = PowerShell.Create();
-        Collection<PSObject> rückgabePSPlotCheck = new Collection<PSObject>();
-        bool fehler = false;
+            PowerShell _psPlotCheck = PowerShell.Create();
+            Collection<PSObject> rückgabePSPlotCheck = new Collection<PSObject>();
+            bool fehler = false;
             rückgabePSPlotCheck.Clear();
             try
             {
@@ -525,7 +609,7 @@ namespace Daten_kopieren_Chia_GPU_Plotter
                                     {
                                         File.Delete(datei);
                                         logGlobal("Plot war fehlerhaft und wurde gelöscht -> " + datei);
-                                        fehler =true;
+                                        fehler = true;
                                         break;
                                     }
                                 }
@@ -559,26 +643,56 @@ namespace Daten_kopieren_Chia_GPU_Plotter
         private void SettingsSpeichern_Click(object sender, EventArgs e)
         {
             Properties.Settings.Default.AnzahlPlots = Convert.ToInt32(AnzahlPlots.Value);
-            Properties.Settings.Default.FarmerKey=FarmerKey.Text;
+            Properties.Settings.Default.FarmerKey = FarmerKey.Text;
 
-            Properties.Settings.Default.PoolKey=PoolKey.Text;
-            if (quellPfad.Items.Count>0)
+            Properties.Settings.Default.PoolKey = PoolKey.Text;
+            if (quellPfad.Items.Count > 0)
             {
                 Properties.Settings.Default.QuellPfad = quellPfad.Items[0].ToString();
             }
-            
+
             Properties.Settings.Default.CudaPlotterPfad = CudaPlotterPfad.Text;
             Properties.Settings.Default.Zielpfade = "";
             foreach (var item in zielPfadListe.Items)
             {
-                Properties.Settings.Default.Zielpfade += item.ToString()+";";
+                Properties.Settings.Default.Zielpfade += item.ToString() + ";";
             }
-            
+            Properties.Settings.Default.PlotterAuswahl = PlotterAuswahl.SelectedItem.ToString();
+            Properties.Settings.Default.kGröße = KLevelAuswahl.SelectedItem.ToString();
+            Properties.Settings.Default.kompression = KompressionAuswahl.SelectedItem.ToString();
+            Properties.Settings.Default.gpuSharedMemory = GPUGemeinsameSpeicherGUI.Value.ToString();
+            Properties.Settings.Default.MadMaxTmpOrdner = MadMaxTmpOrdnerTB.Text;
+            if (MadMaxRAMFull.Checked==true)
+            {
+                Properties.Settings.Default.MadMaxRamNutzung = "Full";
+            }
+            if (MadMaxRAMHalb.Checked == true)
+            {
+                Properties.Settings.Default.MadMaxRamNutzung = "1/2";
+            }
+            if (MadMaxRAMViertel.Checked == true)
+            {
+                Properties.Settings.Default.MadMaxRamNutzung = "1/4";
+            }
             Properties.Settings.Default.Save();
+            
 
         }
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            _ps.Stop();
+            PSBackgroundWorker.CancelAsync();
+
+            //Bricht alle Kopiervorgänge ab
+            foreach (var item in DatenKopierer)
+            {
+                item.BWkopieren.CancelAsync();
+            }
+        }
+
+
         /// <summary>
-        /// Werbung!!!
+        /// Werbung!!! 
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -586,7 +700,7 @@ namespace Daten_kopieren_Chia_GPU_Plotter
         {
             string target = "https://www.mech2you.shop/";
             Process.Start(new ProcessStartInfo() { FileName = target, UseShellExecute = true });
-           
+
         }
 
         private void WerbungYouTube_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
@@ -601,16 +715,20 @@ namespace Daten_kopieren_Chia_GPU_Plotter
             Process.Start(new ProcessStartInfo() { FileName = target, UseShellExecute = true });
         }
 
-        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        private void MadMaxTmpOrdnerBT_Click(object sender, EventArgs e)
         {
-            _ps.Stop();
-            PSBackgroundWorker.CancelAsync();
-
-            foreach (var item in workerList)
+            using (FolderBrowserDialog dialog = new System.Windows.Forms.FolderBrowserDialog())
             {
-                item.CancelAsync();
-            }
 
+                System.Windows.Forms.DialogResult result = dialog.ShowDialog();
+
+                if (result == System.Windows.Forms.DialogResult.OK)
+                {
+                    MadMaxTmpOrdnerTB.Text = dialog.SelectedPath + "\\";
+                    tmpOrdner = MadMaxTmpOrdnerTB.Text;
+                }
+
+            }
         }
     }
 }
