@@ -11,6 +11,7 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement.Menu;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using System.Security.Policy;
 using System;
+using Namotion.Reflection;
 
 namespace Daten_kopieren_Chia_GPU_Plotter
 {
@@ -24,7 +25,7 @@ namespace Daten_kopieren_Chia_GPU_Plotter
         String tmpOrdner = "";
 
 
-        public void logKopiervorgang(object sendere, String _log)
+        public void LogKopiervorgang(object sendere, String _log)
         {
             logGlobal(_log);
         }
@@ -144,7 +145,52 @@ namespace Daten_kopieren_Chia_GPU_Plotter
             }
 
         }
+        /// <summary>
+        /// Entfernt das Laufwerk aus allen Variablen und auch aus der GUI
+        /// </summary>
+        /// <param name="_pfad"></param>
+        public void LaufwerkEntfernen(String _pfad)
+        {
+            if (zielPfadListe.Items.Count > 0)// Es muss ein Element oder mehere Element vorhanden sein
+            {
+                int index = zielPfadListe.FindString(_pfad);// Suchen nach dem Pfad
+                if (index != -1)
+                {
+                    zielPfadListe.Invoke((MethodInvoker)delegate
+                    {
+                        zielPfadListe.Items.RemoveAt(index);// Löscht das Laufwerk
+                    });
+                    int i = 0;
+                    int w = 0;
+                    foreach (Kopiervorgang item in DatenKopierer)// Löscht alle Prozentbalken aus der GUI (Vieleicht gibt es eine besser Lösung für diesen Teil)
+                    {
+                        this.Invoke((MethodInvoker)delegate// Wegen threadübergreifender zugriff auf steuerelement mus das so gelöst werden
+                        {
+                            this.Controls.Remove(item.Kopierstatus); //Löscht alle GUI Prozentbalken
+                        });
+                        if(item.quellpfad== _pfad)
+                        {
+                            w = i;
+                        }
+                        i++;
+                    }
+                    DatenKopierer.RemoveAt(w);
 
+                        this.Invoke((MethodInvoker)delegate// Wegen threadübergreifender zugriff auf steuerelement mus das so gelöst werden
+                        {
+                            for (int k = 0; k < DatenKopierer.Count; k++)// Fügt alle Prozentbalken der GUI wieder hinzu
+                            {
+                                this.Controls.Add(DatenKopierer[k].Kopierstatus);//Fügt alle GUI Prozentbalken hinzu
+                                int tmpX = zielPfadListe.Location.X;
+                                int tmpY = zielPfadListe.Location.Y;
+                                DatenKopierer[k].Kopierstatus.Location = new Point(tmpX + zielPfadListe.Width, tmpY + (k) * (DatenKopierer[k].Kopierstatus.Height + 8));
+                            }
+                        });
+
+                    
+                }
+            }
+        }
 
         /// <summary>
         /// Versteckter Button der die Listen für das Kopieren befüllt und den Backgroundworker starte.
@@ -192,9 +238,10 @@ namespace Daten_kopieren_Chia_GPU_Plotter
                     }
                 }
                 bool abbrechen2=false;
-                foreach (var item in DatenKopierer)
+                for (int i = 0; i < DatenKopierer.Count; i++)// foreach kann nicht verwendet werden da wir Elemente löschen
                 {
-                    if (item.BWkopieren.IsBusy == false)// Ein Laufwerk wird ausgewählt wo der BW nicht beschäftigt mit kopieren ist
+
+                    if (DatenKopierer[i].BWkopieren.IsBusy == false)// Ein Laufwerk wird ausgewählt wo der BW nicht beschäftigt mit kopieren ist
                     {
                         foreach (KopierDaten inhalt in Kopierliste)//  File wird ausgewählt die kopiert werden soll
                         {
@@ -204,23 +251,24 @@ namespace Daten_kopieren_Chia_GPU_Plotter
                                 DriveInfo[] allDrives = DriveInfo.GetDrives();
                                 foreach (DriveInfo drive in allDrives)
                                 {
-                                    if (item.zielpfad.IndexOf(drive.Name) != -1)//Ist der Datenträger im Zielpfad?
+                                    if (DatenKopierer[i].zielpfad.IndexOf(drive.Name) != -1)//Ist der Datenträger im Zielpfad?
                                     {
                                         FileInfo info = new FileInfo(inhalt.quellpfad+inhalt.dateiname);
                                         logGlobal("Laufwerk Name " + drive.Name + " freie Speicher " + (drive.AvailableFreeSpace / 1024 / 1024 / 1024) + "GB Dateigröße " + (info.Length / 1024 / 1024 / 1024) + "GB");//Für Debug
 
                                         if (drive.AvailableFreeSpace > info.Length)// Ist genug Speicher da?
                                         {
-                                            item.quellpfad = inhalt.quellpfad;
-                                            item.dateiname = inhalt.dateiname;
-                                            item.fertig = true;// Sperrt die Datei das dies nun von ausgewählten BW bearbeitet wird 
+                                            DatenKopierer[i].quellpfad = inhalt.quellpfad;
+                                            DatenKopierer[i].dateiname = inhalt.dateiname;
+                                            DatenKopierer[i].fertig = true;// Sperrt die Datei das dies nun von ausgewählten BW bearbeitet wird 
                                             inhalt.fertig = true;
-                                            item.BWkopieren.RunWorkerAsync();
+                                            DatenKopierer[i].BWkopieren.RunWorkerAsync();
                                             
                                         }
                                         else
                                         {
-                                            logGlobal("Zielpfad hat zu wenig Speicher: " + item.zielpfad);
+                                            logGlobal("Zielpfad hat zu wenig Speicher: " + DatenKopierer[i].zielpfad);
+                                            LaufwerkEntfernen(DatenKopierer[i].zielpfad.ToString());
                                         }
                                         abbrechen2 = true;// Es wird kopiert oder der Speicher ist voll. In beiden Fällen muss man raus aus den Schleifen
                                     }
@@ -235,6 +283,10 @@ namespace Daten_kopieren_Chia_GPU_Plotter
                                 break;
                             }
                         }
+                    }
+                    if (abbrechen2)
+                    {
+                        break;
                     }
                 }
             }
@@ -289,7 +341,7 @@ namespace Daten_kopieren_Chia_GPU_Plotter
                     // Damit sorgt man das jeder Zielpfad immer einen Kopierer hat
                     zielPfadListe.Items.Add(dialog.SelectedPath + "\\");
                     DatenKopierer.Add(new Kopiervorgang(dialog.SelectedPath.ToString() + "\\"));
-                    DatenKopierer[DatenKopierer.Count - 1].neuerLog += logKopiervorgang;
+                    DatenKopierer[DatenKopierer.Count - 1].neuerLog += LogKopiervorgang;
                     // Prozessvortschrittsanzeige einfügen bei einen neuen Zielpfad
                     this.Controls.Add(DatenKopierer[DatenKopierer.Count - 1].Kopierstatus);
                     int tmpX = zielPfadListe.Location.X;
@@ -350,7 +402,7 @@ namespace Daten_kopieren_Chia_GPU_Plotter
                 {
                     zielPfadListe.Items.Add(separator);
                     DatenKopierer.Add(new Kopiervorgang(separator.ToString()));
-                    DatenKopierer[DatenKopierer.Count - 1].neuerLog += logKopiervorgang;
+                    DatenKopierer[DatenKopierer.Count - 1].neuerLog += LogKopiervorgang;
 
 
                     // Prozessvortschrittsanzeige einfügen bei einen neuen Zielpfad
@@ -400,20 +452,7 @@ namespace Daten_kopieren_Chia_GPU_Plotter
                 {
                     string curItem = zielPfadListe.SelectedItem.ToString();
                     // Find the string in ListBox2.
-                    int index = zielPfadListe.FindString(curItem);
-                    zielPfadListe.Items.RemoveAt(index);
-                    int w = 0;
-                    foreach (Kopiervorgang item in DatenKopierer)
-                    {
-                        if (item.quellpfad == curItem.ToString())
-                        {
-                            break;
-                        }
-                        w++;
-                    }
-                    this.Controls.Remove(DatenKopierer[DatenKopierer.Count - 1].Kopierstatus);
-                    DatenKopierer.RemoveAt(w - 1);
-
+                    LaufwerkEntfernen(curItem.ToString());
                 }
             }
         }
@@ -522,7 +561,10 @@ namespace Daten_kopieren_Chia_GPU_Plotter
                 }
             }
         }
-
+        public void FortschrittsbalkenNeuLaden()
+        {
+           
+        }
         private void StopPlot_Click(object sender, EventArgs e)
         {
             _ps.Stop();
@@ -675,7 +717,7 @@ namespace Daten_kopieren_Chia_GPU_Plotter
 
         private void MadMaxTmpOrdnerBT_Click(object sender, EventArgs e)
         {
-            using (var dialog = new System.Windows.Forms.FolderBrowserDialog())
+            using (FolderBrowserDialog dialog = new System.Windows.Forms.FolderBrowserDialog())
             {
 
                 System.Windows.Forms.DialogResult result = dialog.ShowDialog();
