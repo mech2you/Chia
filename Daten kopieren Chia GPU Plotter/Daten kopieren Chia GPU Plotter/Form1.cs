@@ -555,10 +555,10 @@ namespace Daten_kopieren_Chia_GPU_Plotter
                             StartPlot.Visible = false;
                             StopPlot.Visible = true;
                             gpuSharedMemory = Convert.ToString(GPUGemeinsameSpeicherGUI.Value);
-                            if(KopierenStarten.Visible == true)// Starte das Kopieren wenn nicht bereits es an ist
+                            if (KopierenStarten.Visible == true)// Starte das Kopieren wenn nicht bereits es an ist
                             {
                                 KopierenStarten_Click(null, EventArgs.Empty);// Startet den Kopiervorgang
-                            } 
+                            }
                         }
                         else
                         {

@@ -103,12 +103,12 @@
             quellPfad.ItemHeight = 25;
             quellPfad.Location = new Point(35, 50);
             quellPfad.Name = "quellPfad";
-            quellPfad.Size = new Size(679, 29);
+            quellPfad.Size = new Size(571, 29);
             quellPfad.TabIndex = 2;
             // 
             // QuellordnerWählen
             // 
-            QuellordnerWählen.Location = new Point(516, 85);
+            QuellordnerWählen.Location = new Point(408, 83);
             QuellordnerWählen.Name = "QuellordnerWählen";
             QuellordnerWählen.Size = new Size(198, 34);
             QuellordnerWählen.TabIndex = 3;
@@ -203,7 +203,7 @@
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(749, 54);
+            label1.Location = new Point(720, 48);
             label1.Name = "label1";
             label1.Size = new Size(151, 25);
             label1.TabIndex = 14;
@@ -212,20 +212,20 @@
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(749, 90);
+            label2.Location = new Point(720, 88);
             label2.Name = "label2";
-            label2.Size = new Size(99, 25);
+            label2.Size = new Size(151, 25);
             label2.TabIndex = 15;
-            label2.Text = "Farmer Key";
+            label2.Text = "Farmer public key";
             // 
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(749, 125);
+            label3.Location = new Point(720, 125);
             label3.Name = "label3";
-            label3.Size = new Size(80, 25);
+            label3.Size = new Size(183, 25);
             label3.TabIndex = 16;
-            label3.Text = "Pool Key";
+            label3.Text = "Pool contract address";
             // 
             // AnzahlPlots
             // 
@@ -438,7 +438,7 @@
             // 
             MadMaxRAMFull.AutoSize = true;
             MadMaxRAMFull.Location = new Point(5, 28);
-            MadMaxRAMFull.Margin = new Padding(2, 2, 2, 2);
+            MadMaxRAMFull.Margin = new Padding(2);
             MadMaxRAMFull.Name = "MadMaxRAMFull";
             MadMaxRAMFull.Size = new Size(91, 29);
             MadMaxRAMFull.TabIndex = 38;
@@ -449,7 +449,7 @@
             // 
             MadMaxRAMHalb.AutoSize = true;
             MadMaxRAMHalb.Location = new Point(91, 28);
-            MadMaxRAMHalb.Margin = new Padding(2, 2, 2, 2);
+            MadMaxRAMHalb.Margin = new Padding(2);
             MadMaxRAMHalb.Name = "MadMaxRAMHalb";
             MadMaxRAMHalb.Size = new Size(91, 29);
             MadMaxRAMHalb.TabIndex = 39;
@@ -460,7 +460,7 @@
             // 
             MadMaxRAMViertel.AutoSize = true;
             MadMaxRAMViertel.Location = new Point(177, 28);
-            MadMaxRAMViertel.Margin = new Padding(2, 2, 2, 2);
+            MadMaxRAMViertel.Margin = new Padding(2);
             MadMaxRAMViertel.Name = "MadMaxRAMViertel";
             MadMaxRAMViertel.Size = new Size(91, 29);
             MadMaxRAMViertel.TabIndex = 40;
@@ -473,9 +473,9 @@
             groupBox1.Controls.Add(MadMaxRAMHalb);
             groupBox1.Controls.Add(MadMaxRAMFull);
             groupBox1.Location = new Point(1452, 157);
-            groupBox1.Margin = new Padding(2, 2, 2, 2);
+            groupBox1.Margin = new Padding(2);
             groupBox1.Name = "groupBox1";
-            groupBox1.Padding = new Padding(2, 2, 2, 2);
+            groupBox1.Padding = new Padding(2);
             groupBox1.Size = new Size(259, 72);
             groupBox1.TabIndex = 41;
             groupBox1.TabStop = false;
@@ -544,7 +544,7 @@
             Controls.Add(KopierenStarten);
             Controls.Add(Kopieren);
             Name = "Form1";
-            Text = "mech2youDV v1.0.1";
+            Text = "mech2youDV v1.0.2";
             FormClosing += Form1_FormClosing;
             Load += Form1_Load;
             ((System.ComponentModel.ISupportInitialize)AnzahlPlots).EndInit();
