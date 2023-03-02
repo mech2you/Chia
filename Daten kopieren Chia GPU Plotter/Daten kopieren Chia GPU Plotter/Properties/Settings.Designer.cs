@@ -146,12 +146,12 @@ namespace Daten_kopieren_Chia_GPU_Plotter.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string MadMaxTmpOrdner {
+        public string MadMaxTmp2Ordner {
             get {
-                return ((string)(this["MadMaxTmpOrdner"]));
+                return ((string)(this["MadMaxTmp2Ordner"]));
             }
             set {
-                this["MadMaxTmpOrdner"] = value;
+                this["MadMaxTmp2Ordner"] = value;
             }
         }
         
@@ -164,6 +164,18 @@ namespace Daten_kopieren_Chia_GPU_Plotter.Properties {
             }
             set {
                 this["MadMaxRamNutzung"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string MadMaxTmp3Ordner {
+            get {
+                return ((string)(this["MadMaxTmp3Ordner"]));
+            }
+            set {
+                this["MadMaxTmp3Ordner"] = value;
             }
         }
     }

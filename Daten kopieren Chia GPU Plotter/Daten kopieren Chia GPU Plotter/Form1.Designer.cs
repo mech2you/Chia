@@ -69,8 +69,10 @@
             MadMaxRAMHalb = new RadioButton();
             MadMaxRAMViertel = new RadioButton();
             groupBox1 = new GroupBox();
-            MadMaxTmpOrdnerTB = new TextBox();
-            MadMaxTmpOrdnerBT = new Button();
+            MadMaxTmp2OrdnerTB = new TextBox();
+            MadMaxTmp2OrdnerBT = new Button();
+            MadMaxTmp3OrdnerTB = new TextBox();
+            MadMaxTmp3OrdnerBT = new Button();
             ((System.ComponentModel.ISupportInitialize)AnzahlPlots).BeginInit();
             ((System.ComponentModel.ISupportInitialize)GPUGemeinsameSpeicherGUI).BeginInit();
             groupBox1.SuspendLayout();
@@ -147,11 +149,11 @@
             // 
             // log
             // 
-            log.Location = new Point(598, 248);
+            log.Location = new Point(598, 306);
             log.Multiline = true;
             log.Name = "log";
             log.ScrollBars = ScrollBars.Both;
-            log.Size = new Size(1781, 421);
+            log.Size = new Size(1781, 363);
             log.TabIndex = 7;
             // 
             // LogLöschen
@@ -481,30 +483,49 @@
             groupBox1.TabStop = false;
             groupBox1.Text = "MadMax RAM verfügbar";
             // 
-            // MadMaxTmpOrdnerTB
+            // MadMaxTmp2OrdnerTB
             // 
-            MadMaxTmpOrdnerTB.Location = new Point(1718, 212);
-            MadMaxTmpOrdnerTB.Name = "MadMaxTmpOrdnerTB";
-            MadMaxTmpOrdnerTB.Size = new Size(662, 31);
-            MadMaxTmpOrdnerTB.TabIndex = 41;
+            MadMaxTmp2OrdnerTB.Location = new Point(1947, 212);
+            MadMaxTmp2OrdnerTB.Name = "MadMaxTmp2OrdnerTB";
+            MadMaxTmp2OrdnerTB.Size = new Size(433, 31);
+            MadMaxTmp2OrdnerTB.TabIndex = 41;
             // 
-            // MadMaxTmpOrdnerBT
+            // MadMaxTmp2OrdnerBT
             // 
-            MadMaxTmpOrdnerBT.Location = new Point(1718, 164);
-            MadMaxTmpOrdnerBT.Name = "MadMaxTmpOrdnerBT";
-            MadMaxTmpOrdnerBT.Size = new Size(230, 41);
-            MadMaxTmpOrdnerBT.TabIndex = 42;
-            MadMaxTmpOrdnerBT.Text = "MadMax Tmp Ordner";
-            MadMaxTmpOrdnerBT.UseVisualStyleBackColor = true;
-            MadMaxTmpOrdnerBT.Click += MadMaxTmpOrdnerBT_Click;
+            MadMaxTmp2OrdnerBT.Location = new Point(1716, 212);
+            MadMaxTmp2OrdnerBT.Name = "MadMaxTmp2OrdnerBT";
+            MadMaxTmp2OrdnerBT.Size = new Size(214, 31);
+            MadMaxTmp2OrdnerBT.TabIndex = 42;
+            MadMaxTmp2OrdnerBT.Text = "MadMax Tmp2 Ordner";
+            MadMaxTmp2OrdnerBT.UseVisualStyleBackColor = true;
+            MadMaxTmp2OrdnerBT.Click += MadMaxTmpOrdnerBT_Click;
+            // 
+            // MadMaxTmp3OrdnerTB
+            // 
+            MadMaxTmp3OrdnerTB.Location = new Point(1947, 249);
+            MadMaxTmp3OrdnerTB.Name = "MadMaxTmp3OrdnerTB";
+            MadMaxTmp3OrdnerTB.Size = new Size(433, 31);
+            MadMaxTmp3OrdnerTB.TabIndex = 43;
+            // 
+            // MadMaxTmp3OrdnerBT
+            // 
+            MadMaxTmp3OrdnerBT.Location = new Point(1716, 249);
+            MadMaxTmp3OrdnerBT.Name = "MadMaxTmp3OrdnerBT";
+            MadMaxTmp3OrdnerBT.Size = new Size(214, 31);
+            MadMaxTmp3OrdnerBT.TabIndex = 44;
+            MadMaxTmp3OrdnerBT.Text = "MadMax Tmp3 Ordner";
+            MadMaxTmp3OrdnerBT.UseVisualStyleBackColor = true;
+            MadMaxTmp3OrdnerBT.Click += MadMaxTmp3OrdnerBT_Click;
             // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(2384, 765);
-            Controls.Add(MadMaxTmpOrdnerBT);
-            Controls.Add(MadMaxTmpOrdnerTB);
+            Controls.Add(MadMaxTmp3OrdnerBT);
+            Controls.Add(MadMaxTmp3OrdnerTB);
+            Controls.Add(MadMaxTmp2OrdnerBT);
+            Controls.Add(MadMaxTmp2OrdnerTB);
             Controls.Add(groupBox1);
             Controls.Add(label8);
             Controls.Add(label7);
@@ -544,7 +565,7 @@
             Controls.Add(KopierenStarten);
             Controls.Add(Kopieren);
             Name = "Form1";
-            Text = "mech2youDV v1.0.2";
+            Text = "mech2youDV v1.0.3";
             FormClosing += Form1_FormClosing;
             Load += Form1_Load;
             ((System.ComponentModel.ISupportInitialize)AnzahlPlots).EndInit();
@@ -598,7 +619,9 @@
         private RadioButton MadMaxRAMHalb;
         private RadioButton MadMaxRAMViertel;
         private GroupBox groupBox1;
-        private TextBox MadMaxTmpOrdnerTB;
-        private Button MadMaxTmpOrdnerBT;
+        private TextBox MadMaxTmp2OrdnerTB;
+        private Button MadMaxTmp2OrdnerBT;
+        private TextBox MadMaxTmp3OrdnerTB;
+        private Button MadMaxTmp3OrdnerBT;
     }
 }

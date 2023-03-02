@@ -22,7 +22,8 @@ namespace Daten_kopieren_Chia_GPU_Plotter
         String kompression = "0";
         String plotterAuswahl = "";
         String gpuSharedMemory = "1";
-        String tmpOrdner = "";
+        String tmp2Ordner = "";
+        String tmp3Ordner = "";
 
         /// <summary>
         /// Für den Event Handler Log
@@ -75,12 +76,12 @@ namespace Daten_kopieren_Chia_GPU_Plotter
                 {
                     if (MadMaxRAMViertel.Checked == true)
                     {
-                        argumente = " -n " + Convert.ToString(AnzahlPlots.Value) + " -M " + gpuSharedMemory + " -C " + kompression + " -f " + FarmerKey.Text + " -c " + PoolKey.Text + " -w -3 " + tmpOrdner + " -t " + quelle;
+                        argumente = " -n " + Convert.ToString(AnzahlPlots.Value) + " -M " + gpuSharedMemory + " -C " + kompression + " -f " + FarmerKey.Text + " -c " + PoolKey.Text + " -w -2 " + tmp2Ordner + " -3 " + tmp3Ordner + " -t " + quelle;
                     }
 
                     if (MadMaxRAMHalb.Checked == true)
                     {
-                        argumente = " -n " + Convert.ToString(AnzahlPlots.Value) + " -M " + gpuSharedMemory + " -C " + kompression + " -f " + FarmerKey.Text + " -c " + PoolKey.Text + " -w -2 " + tmpOrdner + " -t " + quelle;
+                        argumente = " -n " + Convert.ToString(AnzahlPlots.Value) + " -M " + gpuSharedMemory + " -C " + kompression + " -f " + FarmerKey.Text + " -c " + PoolKey.Text + " -w -2 " + tmp2Ordner + " -t " + quelle;
                     }
                     if (MadMaxRAMFull.Checked == true)
                     {
@@ -431,7 +432,12 @@ namespace Daten_kopieren_Chia_GPU_Plotter
             GPUGemeinsameSpeicherGUI.Value = Convert.ToDecimal(Properties.Settings.Default.gpuSharedMemory);
 
 
-            MadMaxTmpOrdnerTB.Text = Properties.Settings.Default.MadMaxTmpOrdner;
+            MadMaxTmp2OrdnerTB.Text = Properties.Settings.Default.MadMaxTmp2Ordner;
+            tmp2Ordner = Properties.Settings.Default.MadMaxTmp2Ordner;
+
+            MadMaxTmp3OrdnerTB.Text = Properties.Settings.Default.MadMaxTmp3Ordner;
+            tmp3Ordner = Properties.Settings.Default.MadMaxTmp3Ordner;
+
             switch (Properties.Settings.Default.MadMaxRamNutzung)
             {
                 case "Full":
@@ -670,7 +676,8 @@ namespace Daten_kopieren_Chia_GPU_Plotter
             Properties.Settings.Default.kGröße = KLevelAuswahl.SelectedItem.ToString();
             Properties.Settings.Default.kompression = KompressionAuswahl.SelectedItem.ToString();
             Properties.Settings.Default.gpuSharedMemory = GPUGemeinsameSpeicherGUI.Value.ToString();
-            Properties.Settings.Default.MadMaxTmpOrdner = MadMaxTmpOrdnerTB.Text;
+            Properties.Settings.Default.MadMaxTmp2Ordner = MadMaxTmp2OrdnerTB.Text;
+            Properties.Settings.Default.MadMaxTmp3Ordner = MadMaxTmp3OrdnerTB.Text;
             if (MadMaxRAMFull.Checked == true)
             {
                 Properties.Settings.Default.MadMaxRamNutzung = "Full";
@@ -733,8 +740,24 @@ namespace Daten_kopieren_Chia_GPU_Plotter
 
                 if (result == System.Windows.Forms.DialogResult.OK)
                 {
-                    MadMaxTmpOrdnerTB.Text = dialog.SelectedPath + "\\";
-                    tmpOrdner = MadMaxTmpOrdnerTB.Text;
+                    MadMaxTmp2OrdnerTB.Text = dialog.SelectedPath + "\\";
+                    tmp2Ordner = MadMaxTmp2OrdnerTB.Text;
+                }
+
+            }
+        }
+
+        private void MadMaxTmp3OrdnerBT_Click(object sender, EventArgs e)
+        {
+            using (FolderBrowserDialog dialog = new System.Windows.Forms.FolderBrowserDialog())
+            {
+
+                System.Windows.Forms.DialogResult result = dialog.ShowDialog();
+
+                if (result == System.Windows.Forms.DialogResult.OK)
+                {
+                    MadMaxTmp3OrdnerTB.Text = dialog.SelectedPath + "\\";
+                    tmp3Ordner = MadMaxTmp3OrdnerTB.Text;
                 }
 
             }
