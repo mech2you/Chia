@@ -70,7 +70,7 @@ namespace Daten_kopieren_Chia_GPU_Plotter
         private void BWkopiervorgang_starten(object sender, DoWorkEventArgs e)
         {
             DateTime zeit = DateTime.Now;// für die StartZeit
-            Log("kopieren von " + quellpfad+dateiname + "nach " + zielpfad + dateiname + endkürzel + " Uhrzeit: " + zeit.ToShortTimeString());
+            Log("kopieren von " + quellpfad+dateiname + " nach " + zielpfad + dateiname + endkürzel + " Uhrzeit: " + zeit.ToShortTimeString());
             Stopwatch watch = new Stopwatch();
             watch.Start();
             Thread.Sleep(5000);// Wird zum testen verwendet

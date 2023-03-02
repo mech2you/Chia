@@ -78,10 +78,9 @@
             // 
             // Kopieren
             // 
-            Kopieren.Location = new Point(671, 857);
-            Kopieren.Margin = new Padding(4);
+            Kopieren.Location = new Point(559, 714);
             Kopieren.Name = "Kopieren";
-            Kopieren.Size = new Size(186, 41);
+            Kopieren.Size = new Size(155, 34);
             Kopieren.TabIndex = 0;
             Kopieren.Text = "Kopieren";
             Kopieren.UseVisualStyleBackColor = true;
@@ -90,10 +89,9 @@
             // 
             // KopierenStarten
             // 
-            KopierenStarten.Location = new Point(42, 857);
-            KopierenStarten.Margin = new Padding(4);
+            KopierenStarten.Location = new Point(35, 714);
             KopierenStarten.Name = "KopierenStarten";
-            KopierenStarten.Size = new Size(283, 41);
+            KopierenStarten.Size = new Size(236, 34);
             KopierenStarten.TabIndex = 1;
             KopierenStarten.Text = "Kopieren starten";
             KopierenStarten.UseVisualStyleBackColor = true;
@@ -102,19 +100,17 @@
             // quellPfad
             // 
             quellPfad.FormattingEnabled = true;
-            quellPfad.ItemHeight = 30;
-            quellPfad.Location = new Point(42, 60);
-            quellPfad.Margin = new Padding(4);
+            quellPfad.ItemHeight = 25;
+            quellPfad.Location = new Point(35, 50);
             quellPfad.Name = "quellPfad";
-            quellPfad.Size = new Size(814, 34);
+            quellPfad.Size = new Size(679, 29);
             quellPfad.TabIndex = 2;
             // 
             // QuellordnerWählen
             // 
-            QuellordnerWählen.Location = new Point(619, 102);
-            QuellordnerWählen.Margin = new Padding(4);
+            QuellordnerWählen.Location = new Point(516, 85);
             QuellordnerWählen.Name = "QuellordnerWählen";
-            QuellordnerWählen.Size = new Size(238, 41);
+            QuellordnerWählen.Size = new Size(198, 34);
             QuellordnerWählen.TabIndex = 3;
             QuellordnerWählen.Text = "Quellordner wählen";
             QuellordnerWählen.UseVisualStyleBackColor = true;
@@ -123,19 +119,17 @@
             // zielPfadListe
             // 
             zielPfadListe.FormattingEnabled = true;
-            zielPfadListe.ItemHeight = 30;
-            zielPfadListe.Location = new Point(42, 197);
-            zielPfadListe.Margin = new Padding(4);
+            zielPfadListe.ItemHeight = 25;
+            zielPfadListe.Location = new Point(35, 164);
             zielPfadListe.Name = "zielPfadListe";
-            zielPfadListe.Size = new Size(516, 604);
+            zielPfadListe.Size = new Size(431, 504);
             zielPfadListe.TabIndex = 4;
             // 
             // ZielverzeichnissEinfügen
             // 
-            ZielverzeichnissEinfügen.Location = new Point(42, 809);
-            ZielverzeichnissEinfügen.Margin = new Padding(4);
+            ZielverzeichnissEinfügen.Location = new Point(35, 674);
             ZielverzeichnissEinfügen.Name = "ZielverzeichnissEinfügen";
-            ZielverzeichnissEinfügen.Size = new Size(283, 41);
+            ZielverzeichnissEinfügen.Size = new Size(236, 34);
             ZielverzeichnissEinfügen.TabIndex = 5;
             ZielverzeichnissEinfügen.Text = "Zielverzeichniss einfügen";
             ZielverzeichnissEinfügen.UseVisualStyleBackColor = true;
@@ -143,10 +137,9 @@
             // 
             // ZielverzeichnissLöschen
             // 
-            ZielverzeichnissLöschen.Location = new Point(355, 809);
-            ZielverzeichnissLöschen.Margin = new Padding(4);
+            ZielverzeichnissLöschen.Location = new Point(296, 674);
             ZielverzeichnissLöschen.Name = "ZielverzeichnissLöschen";
-            ZielverzeichnissLöschen.Size = new Size(308, 41);
+            ZielverzeichnissLöschen.Size = new Size(257, 34);
             ZielverzeichnissLöschen.TabIndex = 6;
             ZielverzeichnissLöschen.Text = "Zielverzeichniss löschen";
             ZielverzeichnissLöschen.UseVisualStyleBackColor = true;
@@ -154,20 +147,18 @@
             // 
             // log
             // 
-            log.Location = new Point(671, 297);
-            log.Margin = new Padding(4);
+            log.Location = new Point(598, 248);
             log.Multiline = true;
             log.Name = "log";
             log.ScrollBars = ScrollBars.Both;
-            log.Size = new Size(2183, 504);
+            log.Size = new Size(1781, 421);
             log.TabIndex = 7;
             // 
             // LogLöschen
             // 
-            LogLöschen.Location = new Point(671, 809);
-            LogLöschen.Margin = new Padding(4);
+            LogLöschen.Location = new Point(559, 674);
             LogLöschen.Name = "LogLöschen";
-            LogLöschen.Size = new Size(186, 41);
+            LogLöschen.Size = new Size(155, 34);
             LogLöschen.TabIndex = 8;
             LogLöschen.Text = "Log löschen";
             LogLöschen.UseVisualStyleBackColor = true;
@@ -175,10 +166,9 @@
             // 
             // KopierenAnhalten
             // 
-            KopierenAnhalten.Location = new Point(355, 857);
-            KopierenAnhalten.Margin = new Padding(4);
+            KopierenAnhalten.Location = new Point(296, 714);
             KopierenAnhalten.Name = "KopierenAnhalten";
-            KopierenAnhalten.Size = new Size(308, 41);
+            KopierenAnhalten.Size = new Size(257, 34);
             KopierenAnhalten.TabIndex = 9;
             KopierenAnhalten.Text = "Kopieren anhalten";
             KopierenAnhalten.UseVisualStyleBackColor = true;
@@ -186,10 +176,9 @@
             // 
             // ChiaCudaPlotterWählen
             // 
-            ChiaCudaPlotterWählen.Location = new Point(1087, 4);
-            ChiaCudaPlotterWählen.Margin = new Padding(4);
+            ChiaCudaPlotterWählen.Location = new Point(906, 3);
             ChiaCudaPlotterWählen.Name = "ChiaCudaPlotterWählen";
-            ChiaCudaPlotterWählen.Size = new Size(276, 49);
+            ChiaCudaPlotterWählen.Size = new Size(230, 41);
             ChiaCudaPlotterWählen.TabIndex = 10;
             ChiaCudaPlotterWählen.Text = "Chia Cuda Plotter wählen";
             ChiaCudaPlotterWählen.UseVisualStyleBackColor = true;
@@ -197,79 +186,71 @@
             // 
             // FarmerKey
             // 
-            FarmerKey.Location = new Point(1087, 102);
-            FarmerKey.Margin = new Padding(4);
+            FarmerKey.Location = new Point(906, 85);
             FarmerKey.Name = "FarmerKey";
-            FarmerKey.Size = new Size(1133, 35);
+            FarmerKey.Size = new Size(945, 31);
             FarmerKey.TabIndex = 12;
             FarmerKey.UseSystemPasswordChar = true;
             // 
             // PoolKey
             // 
-            PoolKey.Location = new Point(1087, 146);
-            PoolKey.Margin = new Padding(4);
+            PoolKey.Location = new Point(906, 122);
             PoolKey.Name = "PoolKey";
-            PoolKey.Size = new Size(1133, 35);
+            PoolKey.Size = new Size(945, 31);
             PoolKey.TabIndex = 13;
             PoolKey.UseSystemPasswordChar = true;
             // 
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(899, 65);
-            label1.Margin = new Padding(4, 0, 4, 0);
+            label1.Location = new Point(749, 54);
             label1.Name = "label1";
-            label1.Size = new Size(176, 30);
+            label1.Size = new Size(151, 25);
             label1.TabIndex = 14;
             label1.Text = "Cuda Plotter Pfad";
             // 
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(899, 108);
-            label2.Margin = new Padding(4, 0, 4, 0);
+            label2.Location = new Point(749, 90);
             label2.Name = "label2";
-            label2.Size = new Size(115, 30);
+            label2.Size = new Size(99, 25);
             label2.TabIndex = 15;
             label2.Text = "Farmer Key";
             // 
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(899, 150);
-            label3.Margin = new Padding(4, 0, 4, 0);
+            label3.Location = new Point(749, 125);
             label3.Name = "label3";
-            label3.Size = new Size(92, 30);
+            label3.Size = new Size(80, 25);
             label3.TabIndex = 16;
             label3.Text = "Pool Key";
             // 
             // AnzahlPlots
             // 
-            AnzahlPlots.Location = new Point(1586, 238);
-            AnzahlPlots.Margin = new Padding(4);
+            AnzahlPlots.Location = new Point(1322, 198);
             AnzahlPlots.Maximum = new decimal(new int[] { 100000000, 0, 0, 0 });
             AnzahlPlots.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
             AnzahlPlots.Name = "AnzahlPlots";
-            AnzahlPlots.Size = new Size(149, 35);
+            AnzahlPlots.Size = new Size(124, 31);
             AnzahlPlots.TabIndex = 17;
             AnzahlPlots.Value = new decimal(new int[] { 1, 0, 0, 0 });
             // 
             // label4
             // 
             label4.AutoSize = true;
-            label4.Location = new Point(1586, 197);
-            label4.Margin = new Padding(4, 0, 4, 0);
+            label4.Location = new Point(1322, 164);
             label4.Name = "label4";
-            label4.Size = new Size(128, 30);
+            label4.Size = new Size(109, 25);
             label4.TabIndex = 18;
             label4.Text = "Anzahl Plots";
             // 
             // StartPlot
             // 
-            StartPlot.Location = new Point(2228, 98);
-            StartPlot.Margin = new Padding(4);
+            StartPlot.Location = new Point(1857, 82);
             StartPlot.Name = "StartPlot";
-            StartPlot.Size = new Size(354, 82);
+            StartPlot.Size = new Size(295, 68);
             StartPlot.TabIndex = 19;
             StartPlot.Text = "Start Plot";
             StartPlot.UseVisualStyleBackColor = true;
@@ -280,10 +261,9 @@
             PlotterGefunden.AllowDrop = true;
             PlotterGefunden.AutoCheck = false;
             PlotterGefunden.AutoSize = true;
-            PlotterGefunden.Location = new Point(1394, 12);
-            PlotterGefunden.Margin = new Padding(4);
+            PlotterGefunden.Location = new Point(1162, 10);
             PlotterGefunden.Name = "PlotterGefunden";
-            PlotterGefunden.Size = new Size(195, 34);
+            PlotterGefunden.Size = new Size(171, 29);
             PlotterGefunden.TabIndex = 20;
             PlotterGefunden.TabStop = false;
             PlotterGefunden.Text = "Plotter gefunden";
@@ -291,10 +271,9 @@
             // 
             // StopPlot
             // 
-            StopPlot.Location = new Point(2228, 98);
-            StopPlot.Margin = new Padding(4);
+            StopPlot.Location = new Point(1857, 82);
             StopPlot.Name = "StopPlot";
-            StopPlot.Size = new Size(354, 82);
+            StopPlot.Size = new Size(295, 68);
             StopPlot.TabIndex = 21;
             StopPlot.Text = "Stop Plot";
             StopPlot.UseVisualStyleBackColor = true;
@@ -302,10 +281,9 @@
             // 
             // PlotCheck
             // 
-            PlotCheck.Location = new Point(2590, 98);
-            PlotCheck.Margin = new Padding(4);
+            PlotCheck.Location = new Point(2158, 82);
             PlotCheck.Name = "PlotCheck";
-            PlotCheck.Size = new Size(265, 82);
+            PlotCheck.Size = new Size(221, 68);
             PlotCheck.TabIndex = 22;
             PlotCheck.Text = "Plot Check";
             PlotCheck.UseVisualStyleBackColor = true;
@@ -313,10 +291,9 @@
             // 
             // SettingsSpeichern
             // 
-            SettingsSpeichern.Location = new Point(2590, 4);
-            SettingsSpeichern.Margin = new Padding(4);
+            SettingsSpeichern.Location = new Point(2158, 3);
             SettingsSpeichern.Name = "SettingsSpeichern";
-            SettingsSpeichern.Size = new Size(265, 41);
+            SettingsSpeichern.Size = new Size(221, 34);
             SettingsSpeichern.TabIndex = 23;
             SettingsSpeichern.Text = "Settings speichern";
             SettingsSpeichern.UseVisualStyleBackColor = true;
@@ -324,19 +301,17 @@
             // 
             // CudaPlotterPfad
             // 
-            CudaPlotterPfad.Location = new Point(1087, 56);
-            CudaPlotterPfad.Margin = new Padding(4);
+            CudaPlotterPfad.Location = new Point(906, 47);
             CudaPlotterPfad.Name = "CudaPlotterPfad";
-            CudaPlotterPfad.Size = new Size(1133, 35);
+            CudaPlotterPfad.Size = new Size(945, 31);
             CudaPlotterPfad.TabIndex = 24;
             // 
             // PlotsPrüfen
             // 
             PlotsPrüfen.AutoSize = true;
-            PlotsPrüfen.Location = new Point(2590, 56);
-            PlotsPrüfen.Margin = new Padding(4);
+            PlotsPrüfen.Location = new Point(2158, 47);
             PlotsPrüfen.Name = "PlotsPrüfen";
-            PlotsPrüfen.Size = new Size(151, 34);
+            PlotsPrüfen.Size = new Size(134, 29);
             PlotsPrüfen.TabIndex = 25;
             PlotsPrüfen.Text = "Plots prüfen";
             PlotsPrüfen.UseVisualStyleBackColor = true;
@@ -344,10 +319,9 @@
             // Werbelink
             // 
             Werbelink.AutoSize = true;
-            Werbelink.Location = new Point(270, 17);
-            Werbelink.Margin = new Padding(4, 0, 4, 0);
+            Werbelink.Location = new Point(225, 14);
             Werbelink.Name = "Werbelink";
-            Werbelink.Size = new Size(250, 30);
+            Werbelink.Size = new Size(217, 25);
             Werbelink.TabIndex = 26;
             Werbelink.TabStop = true;
             Werbelink.Text = "Werbung mech2you.shop";
@@ -356,10 +330,9 @@
             // WerbungYouTube
             // 
             WerbungYouTube.AutoSize = true;
-            WerbungYouTube.Location = new Point(538, 17);
-            WerbungYouTube.Margin = new Padding(4, 0, 4, 0);
+            WerbungYouTube.Location = new Point(448, 14);
             WerbungYouTube.Name = "WerbungYouTube";
-            WerbungYouTube.Size = new Size(184, 30);
+            WerbungYouTube.Size = new Size(158, 25);
             WerbungYouTube.TabIndex = 27;
             WerbungYouTube.TabStop = true;
             WerbungYouTube.Text = "Werbung YouTube";
@@ -368,10 +341,9 @@
             // WerbungSpende
             // 
             WerbungSpende.AutoSize = true;
-            WerbungSpende.Location = new Point(42, 17);
-            WerbungSpende.Margin = new Padding(4, 0, 4, 0);
+            WerbungSpende.Location = new Point(35, 14);
             WerbungSpende.Name = "WerbungSpende";
-            WerbungSpende.Size = new Size(218, 30);
+            WerbungSpende.Size = new Size(184, 25);
             WerbungSpende.TabIndex = 28;
             WerbungSpende.TabStop = true;
             WerbungSpende.Text = "Unterstüzte den Kanal";
@@ -381,10 +353,9 @@
             // 
             PlotterAuswahl.FormattingEnabled = true;
             PlotterAuswahl.Items.AddRange(new object[] { "MadMax GPU Plotter", "Chia GPU Plotter" });
-            PlotterAuswahl.Location = new Point(899, 235);
-            PlotterAuswahl.Margin = new Padding(4);
+            PlotterAuswahl.Location = new Point(749, 196);
             PlotterAuswahl.Name = "PlotterAuswahl";
-            PlotterAuswahl.Size = new Size(262, 38);
+            PlotterAuswahl.Size = new Size(219, 33);
             PlotterAuswahl.TabIndex = 29;
             PlotterAuswahl.Text = "wähle den Plotter";
             // 
@@ -393,10 +364,9 @@
             KLevelAuswahl.AutoCompleteCustomSource.AddRange(new string[] { "32", "33", "34" });
             KLevelAuswahl.FormattingEnabled = true;
             KLevelAuswahl.Items.AddRange(new object[] { "32", "33", "34", "35", "36", "37", "38" });
-            KLevelAuswahl.Location = new Point(1169, 235);
-            KLevelAuswahl.Margin = new Padding(4);
+            KLevelAuswahl.Location = new Point(974, 196);
             KLevelAuswahl.Name = "KLevelAuswahl";
-            KLevelAuswahl.Size = new Size(114, 38);
+            KLevelAuswahl.Size = new Size(96, 33);
             KLevelAuswahl.TabIndex = 30;
             KLevelAuswahl.Text = "K Level";
             // 
@@ -404,79 +374,73 @@
             // 
             KompressionAuswahl.FormattingEnabled = true;
             KompressionAuswahl.Items.AddRange(new object[] { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9" });
-            KompressionAuswahl.Location = new Point(1291, 235);
-            KompressionAuswahl.Margin = new Padding(4);
+            KompressionAuswahl.Location = new Point(1076, 196);
             KompressionAuswahl.Name = "KompressionAuswahl";
-            KompressionAuswahl.Size = new Size(168, 38);
+            KompressionAuswahl.Size = new Size(141, 33);
             KompressionAuswahl.TabIndex = 31;
             KompressionAuswahl.Text = "Kompression";
             // 
             // GPUGemeinsameSpeicherGUI
             // 
-            GPUGemeinsameSpeicherGUI.Location = new Point(1468, 236);
-            GPUGemeinsameSpeicherGUI.Margin = new Padding(4);
+            GPUGemeinsameSpeicherGUI.Location = new Point(1223, 197);
             GPUGemeinsameSpeicherGUI.Maximum = new decimal(new int[] { 100000000, 0, 0, 0 });
             GPUGemeinsameSpeicherGUI.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
             GPUGemeinsameSpeicherGUI.Name = "GPUGemeinsameSpeicherGUI";
-            GPUGemeinsameSpeicherGUI.Size = new Size(101, 35);
+            GPUGemeinsameSpeicherGUI.Size = new Size(84, 31);
             GPUGemeinsameSpeicherGUI.TabIndex = 32;
             GPUGemeinsameSpeicherGUI.Value = new decimal(new int[] { 215, 0, 0, 0 });
             // 
             // InfoGUI
             // 
-            InfoGUI.Location = new Point(864, 809);
-            InfoGUI.Margin = new Padding(4);
+            InfoGUI.Location = new Point(720, 674);
             InfoGUI.Name = "InfoGUI";
-            InfoGUI.Size = new Size(215, 88);
+            InfoGUI.Size = new Size(180, 74);
             InfoGUI.TabIndex = 33;
             InfoGUI.Text = "18TB c8 235";
             // 
             // label5
             // 
             label5.AutoSize = true;
-            label5.Location = new Point(899, 197);
-            label5.Margin = new Padding(4, 0, 4, 0);
+            label5.Location = new Point(749, 164);
             label5.Name = "label5";
-            label5.Size = new Size(74, 30);
+            label5.Size = new Size(64, 25);
             label5.TabIndex = 34;
             label5.Text = "Plotter";
             // 
             // label6
             // 
             label6.AutoSize = true;
-            label6.Location = new Point(1169, 197);
-            label6.Margin = new Padding(4, 0, 4, 0);
+            label6.Location = new Point(974, 164);
             label6.Name = "label6";
-            label6.Size = new Size(78, 30);
+            label6.Size = new Size(66, 25);
             label6.TabIndex = 35;
             label6.Text = "K Level";
             // 
             // label7
             // 
             label7.AutoSize = true;
-            label7.Location = new Point(1291, 197);
-            label7.Margin = new Padding(4, 0, 4, 0);
+            label7.Location = new Point(1076, 164);
             label7.Name = "label7";
-            label7.Size = new Size(131, 30);
+            label7.Size = new Size(116, 25);
             label7.TabIndex = 36;
             label7.Text = "Kompression";
             // 
             // label8
             // 
             label8.AutoSize = true;
-            label8.Location = new Point(1464, 197);
-            label8.Margin = new Padding(4, 0, 4, 0);
+            label8.Location = new Point(1220, 164);
             label8.Name = "label8";
-            label8.Size = new Size(118, 30);
+            label8.Size = new Size(102, 25);
             label8.TabIndex = 37;
             label8.Text = "SMem GPU";
             // 
             // MadMaxRAMFull
             // 
             MadMaxRAMFull.AutoSize = true;
-            MadMaxRAMFull.Location = new Point(6, 34);
+            MadMaxRAMFull.Location = new Point(5, 28);
+            MadMaxRAMFull.Margin = new Padding(2, 2, 2, 2);
             MadMaxRAMFull.Name = "MadMaxRAMFull";
-            MadMaxRAMFull.Size = new Size(102, 34);
+            MadMaxRAMFull.Size = new Size(91, 29);
             MadMaxRAMFull.TabIndex = 38;
             MadMaxRAMFull.Text = "Full GB";
             MadMaxRAMFull.UseVisualStyleBackColor = true;
@@ -484,9 +448,10 @@
             // MadMaxRAMHalb
             // 
             MadMaxRAMHalb.AutoSize = true;
-            MadMaxRAMHalb.Location = new Point(109, 34);
+            MadMaxRAMHalb.Location = new Point(91, 28);
+            MadMaxRAMHalb.Margin = new Padding(2, 2, 2, 2);
             MadMaxRAMHalb.Name = "MadMaxRAMHalb";
-            MadMaxRAMHalb.Size = new Size(100, 34);
+            MadMaxRAMHalb.Size = new Size(91, 29);
             MadMaxRAMHalb.TabIndex = 39;
             MadMaxRAMHalb.Text = "1/2 GB";
             MadMaxRAMHalb.UseVisualStyleBackColor = true;
@@ -494,9 +459,10 @@
             // MadMaxRAMViertel
             // 
             MadMaxRAMViertel.AutoSize = true;
-            MadMaxRAMViertel.Location = new Point(212, 34);
+            MadMaxRAMViertel.Location = new Point(177, 28);
+            MadMaxRAMViertel.Margin = new Padding(2, 2, 2, 2);
             MadMaxRAMViertel.Name = "MadMaxRAMViertel";
-            MadMaxRAMViertel.Size = new Size(100, 34);
+            MadMaxRAMViertel.Size = new Size(91, 29);
             MadMaxRAMViertel.TabIndex = 40;
             MadMaxRAMViertel.Text = "1/4 GB";
             MadMaxRAMViertel.UseVisualStyleBackColor = true;
@@ -506,27 +472,27 @@
             groupBox1.Controls.Add(MadMaxRAMViertel);
             groupBox1.Controls.Add(MadMaxRAMHalb);
             groupBox1.Controls.Add(MadMaxRAMFull);
-            groupBox1.Location = new Point(1742, 188);
+            groupBox1.Location = new Point(1452, 157);
+            groupBox1.Margin = new Padding(2, 2, 2, 2);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(311, 87);
+            groupBox1.Padding = new Padding(2, 2, 2, 2);
+            groupBox1.Size = new Size(259, 72);
             groupBox1.TabIndex = 41;
             groupBox1.TabStop = false;
             groupBox1.Text = "MadMax RAM verfügbar";
             // 
             // MadMaxTmpOrdnerTB
             // 
-            MadMaxTmpOrdnerTB.Location = new Point(2061, 254);
-            MadMaxTmpOrdnerTB.Margin = new Padding(4);
+            MadMaxTmpOrdnerTB.Location = new Point(1718, 212);
             MadMaxTmpOrdnerTB.Name = "MadMaxTmpOrdnerTB";
-            MadMaxTmpOrdnerTB.Size = new Size(793, 35);
+            MadMaxTmpOrdnerTB.Size = new Size(662, 31);
             MadMaxTmpOrdnerTB.TabIndex = 41;
             // 
             // MadMaxTmpOrdnerBT
             // 
-            MadMaxTmpOrdnerBT.Location = new Point(2061, 197);
-            MadMaxTmpOrdnerBT.Margin = new Padding(4);
+            MadMaxTmpOrdnerBT.Location = new Point(1718, 164);
             MadMaxTmpOrdnerBT.Name = "MadMaxTmpOrdnerBT";
-            MadMaxTmpOrdnerBT.Size = new Size(276, 49);
+            MadMaxTmpOrdnerBT.Size = new Size(230, 41);
             MadMaxTmpOrdnerBT.TabIndex = 42;
             MadMaxTmpOrdnerBT.Text = "MadMax Tmp Ordner";
             MadMaxTmpOrdnerBT.UseVisualStyleBackColor = true;
@@ -534,9 +500,9 @@
             // 
             // Form1
             // 
-            AutoScaleDimensions = new SizeF(12F, 30F);
+            AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(2861, 918);
+            ClientSize = new Size(2384, 765);
             Controls.Add(MadMaxTmpOrdnerBT);
             Controls.Add(MadMaxTmpOrdnerTB);
             Controls.Add(groupBox1);
@@ -577,7 +543,6 @@
             Controls.Add(quellPfad);
             Controls.Add(KopierenStarten);
             Controls.Add(Kopieren);
-            Margin = new Padding(4);
             Name = "Form1";
             Text = "mech2youDV v1.0.1";
             FormClosing += Form1_FormClosing;

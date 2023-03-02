@@ -24,7 +24,11 @@ namespace Daten_kopieren_Chia_GPU_Plotter
         String gpuSharedMemory = "1";
         String tmpOrdner = "";
 
-
+        /// <summary>
+        /// Für den Event Handler Log
+        /// </summary>
+        /// <param name="sendere"></param>
+        /// <param name="_log"></param>
         public void LogKopiervorgang(object sendere, String _log)
         {
             logGlobal(_log);
@@ -78,11 +82,11 @@ namespace Daten_kopieren_Chia_GPU_Plotter
                     {
                         argumente = " -n " + Convert.ToString(AnzahlPlots.Value) + " -M " + gpuSharedMemory + " -C " + kompression + " -f " + FarmerKey.Text + " -c " + PoolKey.Text + " -w -2 " + tmpOrdner + " -t " + quelle;
                     }
-                    if (MadMaxRAMFull.Checked==true)
+                    if (MadMaxRAMFull.Checked == true)
                     {
                         argumente = " -n " + Convert.ToString(AnzahlPlots.Value) + " -M " + gpuSharedMemory + " -C " + kompression + " -f " + FarmerKey.Text + " -c " + PoolKey.Text + " -w -t " + quelle;
                     }
-                   
+
                 }
 
                 rückgabePS = _ps.AddScript(pfadBladBitGPUPlotter + argumente).Invoke();
@@ -168,7 +172,7 @@ namespace Daten_kopieren_Chia_GPU_Plotter
                         {
                             this.Controls.Remove(item.Kopierstatus); //Löscht alle GUI Prozentbalken
                         });
-                        if(item.quellpfad== _pfad)
+                        if (item.quellpfad == _pfad)
                         {
                             w = i;
                         }
@@ -176,18 +180,18 @@ namespace Daten_kopieren_Chia_GPU_Plotter
                     }
                     DatenKopierer.RemoveAt(w);
 
-                        this.Invoke((MethodInvoker)delegate// Wegen threadübergreifender zugriff auf steuerelement mus das so gelöst werden
+                    this.Invoke((MethodInvoker)delegate// Wegen threadübergreifender zugriff auf steuerelement mus das so gelöst werden
+                    {
+                        for (int k = 0; k < DatenKopierer.Count; k++)// Fügt alle Prozentbalken der GUI wieder hinzu
                         {
-                            for (int k = 0; k < DatenKopierer.Count; k++)// Fügt alle Prozentbalken der GUI wieder hinzu
-                            {
-                                this.Controls.Add(DatenKopierer[k].Kopierstatus);//Fügt alle GUI Prozentbalken hinzu
-                                int tmpX = zielPfadListe.Location.X;
-                                int tmpY = zielPfadListe.Location.Y;
-                                DatenKopierer[k].Kopierstatus.Location = new Point(tmpX + zielPfadListe.Width, tmpY + (k) * (DatenKopierer[k].Kopierstatus.Height + 8));
-                            }
-                        });
+                            this.Controls.Add(DatenKopierer[k].Kopierstatus);//Fügt alle GUI Prozentbalken hinzu
+                            int tmpX = zielPfadListe.Location.X;
+                            int tmpY = zielPfadListe.Location.Y;
+                            DatenKopierer[k].Kopierstatus.Location = new Point(tmpX + zielPfadListe.Width, tmpY + (k) * (DatenKopierer[k].Kopierstatus.Height + 8));
+                        }
+                    });
 
-                    
+
                 }
             }
         }
@@ -237,10 +241,9 @@ namespace Daten_kopieren_Chia_GPU_Plotter
                         }
                     }
                 }
-                bool abbrechen2=false;
+                bool abbrechen2 = false;
                 for (int i = 0; i < DatenKopierer.Count; i++)// foreach kann nicht verwendet werden da wir Elemente löschen
                 {
-
                     if (DatenKopierer[i].BWkopieren.IsBusy == false)// Ein Laufwerk wird ausgewählt wo der BW nicht beschäftigt mit kopieren ist
                     {
                         foreach (KopierDaten inhalt in Kopierliste)//  File wird ausgewählt die kopiert werden soll
@@ -253,17 +256,20 @@ namespace Daten_kopieren_Chia_GPU_Plotter
                                 {
                                     if (DatenKopierer[i].zielpfad.IndexOf(drive.Name) != -1)//Ist der Datenträger im Zielpfad?
                                     {
-                                        FileInfo info = new FileInfo(inhalt.quellpfad+inhalt.dateiname);
-                                        logGlobal("Laufwerk Name " + drive.Name + " freie Speicher " + (drive.AvailableFreeSpace / 1024 / 1024 / 1024) + "GB Dateigröße " + (info.Length / 1024 / 1024 / 1024) + "GB");//Für Debug
+                                        FileInfo info = new FileInfo(inhalt.quellpfad + inhalt.dateiname);
+                                        //logGlobal("Laufwerk Name " + drive.Name + " freie Speicher " + (drive.AvailableFreeSpace / 1024 / 1024 / 1024) + "GB Dateigröße " + (info.Length / 1024 / 1024 / 1024) + "GB");//Für Debug
 
                                         if (drive.AvailableFreeSpace > info.Length)// Ist genug Speicher da?
                                         {
-                                            DatenKopierer[i].quellpfad = inhalt.quellpfad;
-                                            DatenKopierer[i].dateiname = inhalt.dateiname;
-                                            DatenKopierer[i].fertig = true;// Sperrt die Datei das dies nun von ausgewählten BW bearbeitet wird 
-                                            inhalt.fertig = true;
-                                            DatenKopierer[i].BWkopieren.RunWorkerAsync();
-                                            
+                                            if (DatenKopierer[i].BWkopieren.IsBusy == false)// Ist BW noch frei?
+                                            {
+                                                DatenKopierer[i].quellpfad = inhalt.quellpfad;
+                                                DatenKopierer[i].dateiname = inhalt.dateiname;
+                                                DatenKopierer[i].fertig = true;// Sperrt die Datei das dies nun von ausgewählten BW bearbeitet wird 
+                                                inhalt.fertig = true;
+                                                DatenKopierer[i].BWkopieren.RunWorkerAsync();
+                                            }
+
                                         }
                                         else
                                         {
@@ -276,7 +282,7 @@ namespace Daten_kopieren_Chia_GPU_Plotter
                                     {
                                         break;
                                     }
-                                }              
+                                }
                             }
                             if (abbrechen2)
                             {
@@ -370,7 +376,7 @@ namespace Daten_kopieren_Chia_GPU_Plotter
             PlotterAuswahl.SelectedIndex = 0;
             KLevelAuswahl.SelectedIndex = 0;
             KompressionAuswahl.SelectedIndex = 0;
-            MadMaxRAMFull.Checked=true;
+            MadMaxRAMFull.Checked = true;
             // Läd alle gespeicherten Werte in die GUI
             if (Properties.Settings.Default.AnzahlPlots > 0)// Verhindert Fehler bei Release exe
             {
@@ -425,7 +431,7 @@ namespace Daten_kopieren_Chia_GPU_Plotter
             GPUGemeinsameSpeicherGUI.Value = Convert.ToDecimal(Properties.Settings.Default.gpuSharedMemory);
 
 
-            MadMaxTmpOrdnerTB.Text=Properties.Settings.Default.MadMaxTmpOrdner;
+            MadMaxTmpOrdnerTB.Text = Properties.Settings.Default.MadMaxTmpOrdner;
             switch (Properties.Settings.Default.MadMaxRamNutzung)
             {
                 case "Full":
@@ -549,7 +555,10 @@ namespace Daten_kopieren_Chia_GPU_Plotter
                             StartPlot.Visible = false;
                             StopPlot.Visible = true;
                             gpuSharedMemory = Convert.ToString(GPUGemeinsameSpeicherGUI.Value);
-                            KopierenStarten_Click(null, EventArgs.Empty);// Startet den Kopiervorgang
+                            if(KopierenStarten.Visible == true)// Starte das Kopieren wenn nicht bereits es an ist
+                            {
+                                KopierenStarten_Click(null, EventArgs.Empty);// Startet den Kopiervorgang
+                            } 
                         }
                         else
                         {
@@ -563,7 +572,7 @@ namespace Daten_kopieren_Chia_GPU_Plotter
         }
         public void FortschrittsbalkenNeuLaden()
         {
-           
+
         }
         private void StopPlot_Click(object sender, EventArgs e)
         {
@@ -662,7 +671,7 @@ namespace Daten_kopieren_Chia_GPU_Plotter
             Properties.Settings.Default.kompression = KompressionAuswahl.SelectedItem.ToString();
             Properties.Settings.Default.gpuSharedMemory = GPUGemeinsameSpeicherGUI.Value.ToString();
             Properties.Settings.Default.MadMaxTmpOrdner = MadMaxTmpOrdnerTB.Text;
-            if (MadMaxRAMFull.Checked==true)
+            if (MadMaxRAMFull.Checked == true)
             {
                 Properties.Settings.Default.MadMaxRamNutzung = "Full";
             }
@@ -675,7 +684,7 @@ namespace Daten_kopieren_Chia_GPU_Plotter
                 Properties.Settings.Default.MadMaxRamNutzung = "1/4";
             }
             Properties.Settings.Default.Save();
-            
+
 
         }
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
