@@ -173,7 +173,7 @@ namespace Daten_kopieren_Chia_GPU_Plotter
                         {
                             this.Controls.Remove(item.Kopierstatus); //Löscht alle GUI Prozentbalken
                         });
-                        if (item.quellpfad == _pfad)
+                        if (item.zielpfad == _pfad)
                         {
                             w = i;
                         }
@@ -181,7 +181,7 @@ namespace Daten_kopieren_Chia_GPU_Plotter
                     }
                     DatenKopierer.RemoveAt(w);
 
-                    this.Invoke((MethodInvoker)delegate// Wegen threadübergreifender zugriff auf steuerelement mus das so gelöst werden
+                    this.Invoke((MethodInvoker)delegate// Wegen threadübergreifender zugriff auf steuerelement muss das so gelöst werden
                     {
                         for (int k = 0; k < DatenKopierer.Count; k++)// Fügt alle Prozentbalken der GUI wieder hinzu
                         {
