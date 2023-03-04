@@ -597,16 +597,19 @@ namespace Daten_kopieren_Chia_GPU_Plotter
                 {
                     PlotterGefunden.Checked = true;
                     gefunden = true;
+                    logGlobal("Chia GPU Plotter gefunden");
                 }
                 if (zeile.ToString().IndexOf("2.0.0-3e00fa3") != -1)// Version MadMax GPU Plotter gefunden
                 {
                     PlotterGefunden.Checked = true;
                     gefunden = true;
+                    logGlobal("MadMax GPU Plotter gefunden");
                 }
                 if (zeile.ToString().IndexOf("2.0.0-16eca1f") != -1)// Version MadMax CPU Plotter gefunden
                 {
                     PlotterGefunden.Checked = true;
                     gefunden = true;
+                    logGlobal("Version MadMax CPU gefunden");
                 }
             }
             return gefunden;
