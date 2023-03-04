@@ -48,6 +48,33 @@ namespace Daten_kopieren_Chia_GPU_Plotter
                
         }
 
+        /// <summary>
+        /// Wird verwendet um auf eine Netzwerk Freigabe zu kopieren z.B. \\IP\pfad\
+        /// Gerade ist noch ein Bug das der RAM Speicher zu sehr genutzt wird beim kopiervorgang... 
+        /// </summary>
+        /// <param name="_quelldatei"></param>
+        /// <param name="_zieldatei"></param>
+        void copyNetwork(string _quelldatei, string _zieldatei)
+        {
+            FileOptions FileFlagNoBuffering = (FileOptions)0x20000000;
+            FileStream fsout = new FileStream(_zieldatei, FileMode.Create, FileAccess.Write, FileShare.None, 8, FileFlagNoBuffering | FileOptions.Asynchronous);
+            FileStream fsin = new FileStream(_quelldatei, FileMode.Open, FileAccess.Read, FileShare.None, 8, FileFlagNoBuffering | FileOptions.Asynchronous);
+            byte[] data = new byte[1048576];//in MiB
+            int readbyte;
+            while ((readbyte = fsin.Read(data, 0, data.Length)) > 0)
+            {
+                fsout.Write(data, 0, readbyte);
+                BWkopieren.ReportProgress((int)(fsin.Position * 100 / fsin.Length));
+            }
+            fsin.Close();
+            fsout.Close();
+        }
+
+        /// <summary>
+        /// Kopiert die Datei auf ein Laufwerk
+        /// </summary>
+        /// <param name="_quelldatei"></param>
+        /// <param name="_zieldatei"></param>
         public void copy (String _quelldatei, String _zieldatei)
         {
             FileStream fsout = new FileStream(_zieldatei, FileMode.Create);
@@ -79,7 +106,17 @@ namespace Daten_kopieren_Chia_GPU_Plotter
                 File.Delete(zielpfad + dateiname + endkürzel);
             }
             //System.IO.File.Move(quellpfad + dateiname, zielpfad + dateiname + endkürzel);//Kopieren vom Plot
-            copy(quellpfad + dateiname, zielpfad + dateiname + endkürzel);
+            if (zielpfad.IndexOf("\\\\")!=-1)//handelt es sich um einen Netzwerkfreigabe?
+            {
+                copyNetwork(quellpfad + dateiname, zielpfad + dateiname + endkürzel);
+            }
+            else// Ein Laufwerk auf den PC 
+            {
+                copy(quellpfad + dateiname, zielpfad + dateiname + endkürzel);
+            }
+            
+
+
             if (File.Exists(quellpfad + dateiname))// Die alte Datei wird gelöscht
             {
                 File.Delete(quellpfad + dateiname);
