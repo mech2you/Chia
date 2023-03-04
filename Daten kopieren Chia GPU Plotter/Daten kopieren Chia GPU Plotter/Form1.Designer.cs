@@ -40,7 +40,7 @@
             KopierenAnhalten = new Button();
             ChiaCudaPlotterWählen = new Button();
             FarmerKey = new TextBox();
-            PoolKey = new TextBox();
+            PoolContractAdresse = new TextBox();
             label1 = new Label();
             label2 = new Label();
             label3 = new Label();
@@ -73,9 +73,23 @@
             MadMaxTmp2OrdnerBT = new Button();
             MadMaxTmp3OrdnerTB = new TextBox();
             MadMaxTmp3OrdnerBT = new Button();
+            WakeUpHDD = new CheckBox();
+            label9 = new Label();
+            ThreadsND = new NumericUpDown();
+            label10 = new Label();
+            BucketsND = new NumericUpDown();
+            label11 = new Label();
+            Buckets3ND = new NumericUpDown();
+            WaitForCopyCB = new CheckBox();
+            label12 = new Label();
+            ThreadmultiplierforP2ND = new NumericUpDown();
             ((System.ComponentModel.ISupportInitialize)AnzahlPlots).BeginInit();
             ((System.ComponentModel.ISupportInitialize)GPUGemeinsameSpeicherGUI).BeginInit();
             groupBox1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)ThreadsND).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)BucketsND).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)Buckets3ND).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)ThreadmultiplierforP2ND).BeginInit();
             SuspendLayout();
             // 
             // Kopieren
@@ -194,13 +208,13 @@
             FarmerKey.TabIndex = 12;
             FarmerKey.UseSystemPasswordChar = true;
             // 
-            // PoolKey
+            // PoolContractAdresse
             // 
-            PoolKey.Location = new Point(906, 122);
-            PoolKey.Name = "PoolKey";
-            PoolKey.Size = new Size(945, 31);
-            PoolKey.TabIndex = 13;
-            PoolKey.UseSystemPasswordChar = true;
+            PoolContractAdresse.Location = new Point(906, 122);
+            PoolContractAdresse.Name = "PoolContractAdresse";
+            PoolContractAdresse.Size = new Size(945, 31);
+            PoolContractAdresse.TabIndex = 13;
+            PoolContractAdresse.UseSystemPasswordChar = true;
             // 
             // label1
             // 
@@ -231,7 +245,7 @@
             // 
             // AnzahlPlots
             // 
-            AnzahlPlots.Location = new Point(1322, 198);
+            AnzahlPlots.Location = new Point(1170, 199);
             AnzahlPlots.Maximum = new decimal(new int[] { 100000000, 0, 0, 0 });
             AnzahlPlots.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
             AnzahlPlots.Name = "AnzahlPlots";
@@ -242,7 +256,7 @@
             // label4
             // 
             label4.AutoSize = true;
-            label4.Location = new Point(1322, 164);
+            label4.Location = new Point(1170, 165);
             label4.Name = "label4";
             label4.Size = new Size(109, 25);
             label4.TabIndex = 18;
@@ -354,8 +368,8 @@
             // PlotterAuswahl
             // 
             PlotterAuswahl.FormattingEnabled = true;
-            PlotterAuswahl.Items.AddRange(new object[] { "MadMax GPU Plotter", "Chia GPU Plotter" });
-            PlotterAuswahl.Location = new Point(749, 196);
+            PlotterAuswahl.Items.AddRange(new object[] { "Chia GPU Plotter", "MadMax CPU Plotter", "MadMax GPU Plotter" });
+            PlotterAuswahl.Location = new Point(597, 197);
             PlotterAuswahl.Name = "PlotterAuswahl";
             PlotterAuswahl.Size = new Size(219, 33);
             PlotterAuswahl.TabIndex = 29;
@@ -366,7 +380,7 @@
             KLevelAuswahl.AutoCompleteCustomSource.AddRange(new string[] { "32", "33", "34" });
             KLevelAuswahl.FormattingEnabled = true;
             KLevelAuswahl.Items.AddRange(new object[] { "32", "33", "34", "35", "36", "37", "38" });
-            KLevelAuswahl.Location = new Point(974, 196);
+            KLevelAuswahl.Location = new Point(822, 197);
             KLevelAuswahl.Name = "KLevelAuswahl";
             KLevelAuswahl.Size = new Size(96, 33);
             KLevelAuswahl.TabIndex = 30;
@@ -376,7 +390,7 @@
             // 
             KompressionAuswahl.FormattingEnabled = true;
             KompressionAuswahl.Items.AddRange(new object[] { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9" });
-            KompressionAuswahl.Location = new Point(1076, 196);
+            KompressionAuswahl.Location = new Point(924, 197);
             KompressionAuswahl.Name = "KompressionAuswahl";
             KompressionAuswahl.Size = new Size(141, 33);
             KompressionAuswahl.TabIndex = 31;
@@ -384,7 +398,7 @@
             // 
             // GPUGemeinsameSpeicherGUI
             // 
-            GPUGemeinsameSpeicherGUI.Location = new Point(1223, 197);
+            GPUGemeinsameSpeicherGUI.Location = new Point(1071, 198);
             GPUGemeinsameSpeicherGUI.Maximum = new decimal(new int[] { 100000000, 0, 0, 0 });
             GPUGemeinsameSpeicherGUI.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
             GPUGemeinsameSpeicherGUI.Name = "GPUGemeinsameSpeicherGUI";
@@ -403,7 +417,7 @@
             // label5
             // 
             label5.AutoSize = true;
-            label5.Location = new Point(749, 164);
+            label5.Location = new Point(597, 165);
             label5.Name = "label5";
             label5.Size = new Size(64, 25);
             label5.TabIndex = 34;
@@ -412,7 +426,7 @@
             // label6
             // 
             label6.AutoSize = true;
-            label6.Location = new Point(974, 164);
+            label6.Location = new Point(822, 165);
             label6.Name = "label6";
             label6.Size = new Size(66, 25);
             label6.TabIndex = 35;
@@ -421,7 +435,7 @@
             // label7
             // 
             label7.AutoSize = true;
-            label7.Location = new Point(1076, 164);
+            label7.Location = new Point(924, 165);
             label7.Name = "label7";
             label7.Size = new Size(116, 25);
             label7.TabIndex = 36;
@@ -430,7 +444,7 @@
             // label8
             // 
             label8.AutoSize = true;
-            label8.Location = new Point(1220, 164);
+            label8.Location = new Point(1068, 165);
             label8.Name = "label8";
             label8.Size = new Size(102, 25);
             label8.TabIndex = 37;
@@ -474,7 +488,7 @@
             groupBox1.Controls.Add(MadMaxRAMViertel);
             groupBox1.Controls.Add(MadMaxRAMHalb);
             groupBox1.Controls.Add(MadMaxRAMFull);
-            groupBox1.Location = new Point(1452, 157);
+            groupBox1.Location = new Point(1300, 158);
             groupBox1.Margin = new Padding(2);
             groupBox1.Name = "groupBox1";
             groupBox1.Padding = new Padding(2);
@@ -517,11 +531,119 @@
             MadMaxTmp3OrdnerBT.UseVisualStyleBackColor = true;
             MadMaxTmp3OrdnerBT.Click += MadMaxTmp3OrdnerBT_Click;
             // 
+            // WakeUpHDD
+            // 
+            WakeUpHDD.AutoSize = true;
+            WakeUpHDD.Location = new Point(1999, 44);
+            WakeUpHDD.Name = "WakeUpHDD";
+            WakeUpHDD.Size = new Size(153, 29);
+            WakeUpHDD.TabIndex = 45;
+            WakeUpHDD.Text = "Wake Up HDD";
+            WakeUpHDD.UseVisualStyleBackColor = true;
+            WakeUpHDD.CheckStateChanged += WakeUpHDD_CheckStateChanged;
+            // 
+            // label9
+            // 
+            label9.AutoSize = true;
+            label9.Location = new Point(598, 233);
+            label9.Name = "label9";
+            label9.Size = new Size(74, 25);
+            label9.TabIndex = 47;
+            label9.Text = "Threads";
+            // 
+            // ThreadsND
+            // 
+            ThreadsND.Location = new Point(597, 261);
+            ThreadsND.Maximum = new decimal(new int[] { 100000000, 0, 0, 0 });
+            ThreadsND.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
+            ThreadsND.Name = "ThreadsND";
+            ThreadsND.Size = new Size(124, 31);
+            ThreadsND.TabIndex = 46;
+            ThreadsND.Value = new decimal(new int[] { 4, 0, 0, 0 });
+            // 
+            // label10
+            // 
+            label10.AutoSize = true;
+            label10.Location = new Point(734, 233);
+            label10.Name = "label10";
+            label10.Size = new Size(72, 25);
+            label10.TabIndex = 49;
+            label10.Text = "Buckets";
+            // 
+            // BucketsND
+            // 
+            BucketsND.Location = new Point(733, 261);
+            BucketsND.Maximum = new decimal(new int[] { 100000000, 0, 0, 0 });
+            BucketsND.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
+            BucketsND.Name = "BucketsND";
+            BucketsND.Size = new Size(124, 31);
+            BucketsND.TabIndex = 48;
+            BucketsND.Value = new decimal(new int[] { 256, 0, 0, 0 });
+            // 
+            // label11
+            // 
+            label11.AutoSize = true;
+            label11.Location = new Point(871, 233);
+            label11.Name = "label11";
+            label11.Size = new Size(87, 25);
+            label11.TabIndex = 51;
+            label11.Text = "Buckets 3";
+            // 
+            // Buckets3ND
+            // 
+            Buckets3ND.Location = new Point(870, 261);
+            Buckets3ND.Maximum = new decimal(new int[] { 100000000, 0, 0, 0 });
+            Buckets3ND.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
+            Buckets3ND.Name = "Buckets3ND";
+            Buckets3ND.Size = new Size(124, 31);
+            Buckets3ND.TabIndex = 50;
+            Buckets3ND.Value = new decimal(new int[] { 256, 0, 0, 0 });
+            // 
+            // WaitForCopyCB
+            // 
+            WaitForCopyCB.AutoSize = true;
+            WaitForCopyCB.Location = new Point(1000, 263);
+            WaitForCopyCB.Name = "WaitForCopyCB";
+            WaitForCopyCB.Size = new Size(183, 29);
+            WaitForCopyCB.TabIndex = 52;
+            WaitForCopyCB.Text = "Warten bis kopiert";
+            WaitForCopyCB.UseVisualStyleBackColor = true;
+            WaitForCopyCB.CheckedChanged += WaitForCopyCB_CheckedChanged;
+            // 
+            // label12
+            // 
+            label12.AutoSize = true;
+            label12.Location = new Point(1190, 233);
+            label12.Name = "label12";
+            label12.Size = new Size(170, 25);
+            label12.TabIndex = 54;
+            label12.Text = "Thread multiplier P2";
+            // 
+            // ThreadmultiplierforP2ND
+            // 
+            ThreadmultiplierforP2ND.Location = new Point(1189, 261);
+            ThreadmultiplierforP2ND.Maximum = new decimal(new int[] { 100000000, 0, 0, 0 });
+            ThreadmultiplierforP2ND.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
+            ThreadmultiplierforP2ND.Name = "ThreadmultiplierforP2ND";
+            ThreadmultiplierforP2ND.Size = new Size(124, 31);
+            ThreadmultiplierforP2ND.TabIndex = 53;
+            ThreadmultiplierforP2ND.Value = new decimal(new int[] { 1, 0, 0, 0 });
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(2384, 765);
+            Controls.Add(label12);
+            Controls.Add(ThreadmultiplierforP2ND);
+            Controls.Add(WaitForCopyCB);
+            Controls.Add(label11);
+            Controls.Add(Buckets3ND);
+            Controls.Add(label10);
+            Controls.Add(BucketsND);
+            Controls.Add(label9);
+            Controls.Add(ThreadsND);
+            Controls.Add(WakeUpHDD);
             Controls.Add(MadMaxTmp3OrdnerBT);
             Controls.Add(MadMaxTmp3OrdnerTB);
             Controls.Add(MadMaxTmp2OrdnerBT);
@@ -551,7 +673,7 @@
             Controls.Add(label3);
             Controls.Add(label2);
             Controls.Add(label1);
-            Controls.Add(PoolKey);
+            Controls.Add(PoolContractAdresse);
             Controls.Add(FarmerKey);
             Controls.Add(ChiaCudaPlotterWählen);
             Controls.Add(KopierenAnhalten);
@@ -565,13 +687,17 @@
             Controls.Add(KopierenStarten);
             Controls.Add(Kopieren);
             Name = "Form1";
-            Text = "mech2youDV v1.0.3";
+            Text = "mech2youDV v1.0.4";
             FormClosing += Form1_FormClosing;
             Load += Form1_Load;
             ((System.ComponentModel.ISupportInitialize)AnzahlPlots).EndInit();
             ((System.ComponentModel.ISupportInitialize)GPUGemeinsameSpeicherGUI).EndInit();
             groupBox1.ResumeLayout(false);
             groupBox1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)ThreadsND).EndInit();
+            ((System.ComponentModel.ISupportInitialize)BucketsND).EndInit();
+            ((System.ComponentModel.ISupportInitialize)Buckets3ND).EndInit();
+            ((System.ComponentModel.ISupportInitialize)ThreadmultiplierforP2ND).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -590,7 +716,7 @@
         private Button KopierenAnhalten;
         private Button ChiaCudaPlotterWählen;
         private TextBox FarmerKey;
-        private TextBox PoolKey;
+        private TextBox PoolContractAdresse;
         private Label label1;
         private Label label2;
         private Label label3;
@@ -623,5 +749,15 @@
         private Button MadMaxTmp2OrdnerBT;
         private TextBox MadMaxTmp3OrdnerTB;
         private Button MadMaxTmp3OrdnerBT;
+        private CheckBox WakeUpHDD;
+        private Label label9;
+        private NumericUpDown ThreadsND;
+        private Label label10;
+        private NumericUpDown BucketsND;
+        private Label label11;
+        private NumericUpDown Buckets3ND;
+        private CheckBox WaitForCopyCB;
+        private Label label12;
+        private NumericUpDown ThreadmultiplierforP2ND;
     }
 }
