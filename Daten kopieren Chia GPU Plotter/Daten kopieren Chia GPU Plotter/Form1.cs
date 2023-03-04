@@ -35,6 +35,7 @@ namespace Daten_kopieren_Chia_GPU_Plotter
         String buckets3 = "";
         String waitforcopy = "";
         String threadmultiplierforP2 = "";
+        String pfadWakeUpHDD = "";
         /// <summary>
         /// Für den Event Handler Log
         /// </summary>
@@ -74,27 +75,33 @@ namespace Daten_kopieren_Chia_GPU_Plotter
         private void HHD_BW_DoWork(object? sender, DoWorkEventArgs e)
         {
             BackgroundWorker worker = (BackgroundWorker)sender;
-
-            string[] pfade = Directory.GetDirectories("C:\\Chia\\");
-            foreach (string pfad in pfade)
-            {
-                if (!File.Exists(pfad + "\\" + hddWakeUp))// Erstellt eine Datei falls diese nicht vorhanden ist
-                {
-                    File.Create(pfad + hddWakeUp);
-                }
-            }
-            logGlobal("HDD Ping");
-            while (worker.CancellationPending != true)// Bricht das WakeUp für die HDD´s ab
-            {
+            if (Directory.Exists(pfadWakeUpHDD)) {
+                string[] pfade = Directory.GetDirectories(pfadWakeUpHDD);
                 foreach (string pfad in pfade)
                 {
-                    string[] lines = { "Test" };
-                    File.WriteAllLinesAsync(pfad + "\\" + hddWakeUp, lines);
+                    if (!File.Exists(pfad + "\\" + hddWakeUp))// Erstellt eine Datei falls diese nicht vorhanden ist
+                    {
+                        File.Create(pfad + hddWakeUp);
+                    }
                 }
+                logGlobal("HDD Wake Up start");
+                while (worker.CancellationPending != true)// Bricht das WakeUp für die HDD´s ab
+                {
+                    foreach (string pfad in pfade)
+                    {
+                        string[] lines = { "Test" };
+                        File.WriteAllLinesAsync(pfad + "\\" + hddWakeUp, lines);
+                    }
 
-                Thread.Sleep(50000);
+                    Thread.Sleep(50000);
+                }
+                logGlobal("HDD Wake Up stop");
             }
-            logGlobal("HDD Ping stop");
+            else
+            {
+                logGlobal("HDD Wake Up Pfade nicht vorhanden");
+            }
+            
 
         }
         /// <summary>
@@ -219,7 +226,7 @@ namespace Daten_kopieren_Chia_GPU_Plotter
                         {
                             this.Controls.Remove(item.Kopierstatus); //Löscht alle GUI Prozentbalken
                         });
-                        if (item.zielpfad == _pfad)
+                        if (item.quellpfad == _pfad)
                         {
                             w = i;
                         }
@@ -227,7 +234,7 @@ namespace Daten_kopieren_Chia_GPU_Plotter
                     }
                     DatenKopierer.RemoveAt(w);
 
-                    this.Invoke((MethodInvoker)delegate// Wegen threadübergreifender zugriff auf steuerelement muss das so gelöst werden
+                    this.Invoke((MethodInvoker)delegate// Wegen threadübergreifender zugriff auf steuerelement mus das so gelöst werden
                     {
                         for (int k = 0; k < DatenKopierer.Count; k++)// Fügt alle Prozentbalken der GUI wieder hinzu
                         {
@@ -263,7 +270,7 @@ namespace Daten_kopieren_Chia_GPU_Plotter
         private void Kopieren_Click(object sender, EventArgs e)
         {
             bool abbrechen = false;
-            if (PlotsPrüfen.Checked == true)// Prüft ob die Plots valide sind und löscht sie gegebenfalls
+            if (PlotsPrüfenCB.Checked == true)// Prüft ob die Plots valide sind und löscht sie gegebenfalls
             {
                 abbrechen = PlotsQuellePrüfen();
             }
@@ -536,6 +543,38 @@ namespace Daten_kopieren_Chia_GPU_Plotter
                     MadMaxRAMViertel.Checked = true;
                     break;
             }
+            ThreadsND.Value = Convert.ToDecimal(Properties.Settings.Default.Threads);
+            BucketsND.Value = Convert.ToDecimal(Properties.Settings.Default.Buckets);
+            Buckets3ND.Value = Convert.ToDecimal(Properties.Settings.Default.Buckets3);
+
+            if (Properties.Settings.Default.WaitForCopy)
+            {
+                WaitForCopyCB.Checked = true;
+            }
+            else
+            {
+                WaitForCopyCB.Checked = false;
+            }
+            ThreadmultiplierforP2ND.Value = Convert.ToDecimal(Properties.Settings.Default.ThreadmultiplierforP2);
+            if (Properties.Settings.Default.PlotsPrüfen)
+            {
+                PlotsPrüfenCB.Checked = true;
+            }
+            else
+            {
+                PlotsPrüfenCB.Checked = false;
+            }
+            if (Properties.Settings.Default.WakeUpHDD)
+            {
+                WakeUpHDDCB.Checked = true;
+            }
+            else
+            {
+                WakeUpHDDCB.Checked = false;
+            }
+            WakeUpHddsTB.Text=Properties.Settings.Default.pfadWakeUpHDD ;
+            pfadWakeUpHDD = WakeUpHddsTB.Text;
+
         }
         /// <summary>
         /// Dient zum löschen von Pfaden in der Liste
@@ -623,7 +662,7 @@ namespace Daten_kopieren_Chia_GPU_Plotter
         {
             using (OpenFileDialog openFileDialog = new OpenFileDialog())
             {
-                openFileDialog.InitialDirectory = "C:\\Users\\micro\\Documents\\GitHub\\bladebit\\";
+                openFileDialog.InitialDirectory = "C:\\";
                 openFileDialog.Filter = "Chia Cuda Plotter (*.exe)|*.exe";
                 openFileDialog.FilterIndex = 1;
                 openFileDialog.RestoreDirectory = true;
@@ -798,6 +837,37 @@ namespace Daten_kopieren_Chia_GPU_Plotter
             {
                 Properties.Settings.Default.MadMaxRamNutzung = "1/4";
             }
+            Properties.Settings.Default.Threads = ThreadsND.Value.ToString();
+            Properties.Settings.Default.Buckets = BucketsND.Value.ToString();
+            Properties.Settings.Default.Buckets3 = Buckets3ND.Value.ToString();
+            if (WaitForCopyCB.Checked == true)
+            {
+                Properties.Settings.Default.WaitForCopy = true;
+            }
+            else
+            {
+                Properties.Settings.Default.WaitForCopy = false;
+            }
+            Properties.Settings.Default.ThreadmultiplierforP2 = ThreadmultiplierforP2ND.Value.ToString();
+            if (PlotsPrüfenCB.Checked == true)
+            {
+                Properties.Settings.Default.PlotsPrüfen = true;
+            }
+            else
+            {
+                Properties.Settings.Default.PlotsPrüfen = false;
+            }
+            if (WakeUpHDDCB.Checked == true)
+            {
+                Properties.Settings.Default.WakeUpHDD = true;
+            }
+            else
+            {
+                Properties.Settings.Default.WakeUpHDD = false;
+            }
+            Properties.Settings.Default.pfadWakeUpHDD = WakeUpHddsTB.Text;
+       
+
             Properties.Settings.Default.Save();
 
 
@@ -873,7 +943,7 @@ namespace Daten_kopieren_Chia_GPU_Plotter
 
         private void WakeUpHDD_CheckStateChanged(object sender, EventArgs e)
         {
-            if (WakeUpHDD.Checked == true)
+            if (WakeUpHDDCB.Checked == true)
             {
                 HHD_BW.RunWorkerAsync();
             }
@@ -883,9 +953,21 @@ namespace Daten_kopieren_Chia_GPU_Plotter
             }
         }
 
-        private void WaitForCopyCB_CheckedChanged(object sender, EventArgs e)
+        private void WakeUpHddsB_Click(object sender, EventArgs e)
         {
+            using (var dialog = new System.Windows.Forms.FolderBrowserDialog())
+            {
 
+                System.Windows.Forms.DialogResult result = dialog.ShowDialog();
+
+                if (result == System.Windows.Forms.DialogResult.OK)
+                {
+                    WakeUpHddsTB.Text= dialog.SelectedPath + "\\";
+                    pfadWakeUpHDD = WakeUpHddsTB.Text;
+
+                }
+
+            }
         }
     }
 }

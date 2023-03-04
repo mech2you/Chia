@@ -178,5 +178,101 @@ namespace Daten_kopieren_Chia_GPU_Plotter.Properties {
                 this["MadMaxTmp3Ordner"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("4")]
+        public string Threads {
+            get {
+                return ((string)(this["Threads"]));
+            }
+            set {
+                this["Threads"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("256")]
+        public string Buckets {
+            get {
+                return ((string)(this["Buckets"]));
+            }
+            set {
+                this["Buckets"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("256")]
+        public string Buckets3 {
+            get {
+                return ((string)(this["Buckets3"]));
+            }
+            set {
+                this["Buckets3"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool WaitForCopy {
+            get {
+                return ((bool)(this["WaitForCopy"]));
+            }
+            set {
+                this["WaitForCopy"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1")]
+        public string ThreadmultiplierforP2 {
+            get {
+                return ((string)(this["ThreadmultiplierforP2"]));
+            }
+            set {
+                this["ThreadmultiplierforP2"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool WakeUpHDD {
+            get {
+                return ((bool)(this["WakeUpHDD"]));
+            }
+            set {
+                this["WakeUpHDD"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool PlotsPrüfen {
+            get {
+                return ((bool)(this["PlotsPrüfen"]));
+            }
+            set {
+                this["PlotsPrüfen"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string pfadWakeUpHDD {
+            get {
+                return ((string)(this["pfadWakeUpHDD"]));
+            }
+            set {
+                this["pfadWakeUpHDD"] = value;
+            }
+        }
     }
 }

@@ -52,7 +52,7 @@
             PlotCheck = new Button();
             SettingsSpeichern = new Button();
             CudaPlotterPfad = new TextBox();
-            PlotsPrüfen = new CheckBox();
+            PlotsPrüfenCB = new CheckBox();
             Werbelink = new LinkLabel();
             WerbungYouTube = new LinkLabel();
             WerbungSpende = new LinkLabel();
@@ -73,7 +73,7 @@
             MadMaxTmp2OrdnerBT = new Button();
             MadMaxTmp3OrdnerTB = new TextBox();
             MadMaxTmp3OrdnerBT = new Button();
-            WakeUpHDD = new CheckBox();
+            WakeUpHDDCB = new CheckBox();
             label9 = new Label();
             ThreadsND = new NumericUpDown();
             label10 = new Label();
@@ -83,6 +83,8 @@
             WaitForCopyCB = new CheckBox();
             label12 = new Label();
             ThreadmultiplierforP2ND = new NumericUpDown();
+            WakeUpHddsB = new Button();
+            WakeUpHddsTB = new TextBox();
             ((System.ComponentModel.ISupportInitialize)AnzahlPlots).BeginInit();
             ((System.ComponentModel.ISupportInitialize)GPUGemeinsameSpeicherGUI).BeginInit();
             groupBox1.SuspendLayout();
@@ -322,15 +324,15 @@
             CudaPlotterPfad.Size = new Size(945, 31);
             CudaPlotterPfad.TabIndex = 24;
             // 
-            // PlotsPrüfen
+            // PlotsPrüfenCB
             // 
-            PlotsPrüfen.AutoSize = true;
-            PlotsPrüfen.Location = new Point(2158, 47);
-            PlotsPrüfen.Name = "PlotsPrüfen";
-            PlotsPrüfen.Size = new Size(134, 29);
-            PlotsPrüfen.TabIndex = 25;
-            PlotsPrüfen.Text = "Plots prüfen";
-            PlotsPrüfen.UseVisualStyleBackColor = true;
+            PlotsPrüfenCB.AutoSize = true;
+            PlotsPrüfenCB.Location = new Point(2219, 209);
+            PlotsPrüfenCB.Name = "PlotsPrüfenCB";
+            PlotsPrüfenCB.Size = new Size(134, 29);
+            PlotsPrüfenCB.TabIndex = 25;
+            PlotsPrüfenCB.Text = "Plots prüfen";
+            PlotsPrüfenCB.UseVisualStyleBackColor = true;
             // 
             // Werbelink
             // 
@@ -404,7 +406,7 @@
             GPUGemeinsameSpeicherGUI.Name = "GPUGemeinsameSpeicherGUI";
             GPUGemeinsameSpeicherGUI.Size = new Size(84, 31);
             GPUGemeinsameSpeicherGUI.TabIndex = 32;
-            GPUGemeinsameSpeicherGUI.Value = new decimal(new int[] { 215, 0, 0, 0 });
+            GPUGemeinsameSpeicherGUI.Value = new decimal(new int[] { 115, 0, 0, 0 });
             // 
             // InfoGUI
             // 
@@ -499,14 +501,14 @@
             // 
             // MadMaxTmp2OrdnerTB
             // 
-            MadMaxTmp2OrdnerTB.Location = new Point(1947, 212);
+            MadMaxTmp2OrdnerTB.Location = new Point(1592, 233);
             MadMaxTmp2OrdnerTB.Name = "MadMaxTmp2OrdnerTB";
             MadMaxTmp2OrdnerTB.Size = new Size(433, 31);
             MadMaxTmp2OrdnerTB.TabIndex = 41;
             // 
             // MadMaxTmp2OrdnerBT
             // 
-            MadMaxTmp2OrdnerBT.Location = new Point(1716, 212);
+            MadMaxTmp2OrdnerBT.Location = new Point(1361, 233);
             MadMaxTmp2OrdnerBT.Name = "MadMaxTmp2OrdnerBT";
             MadMaxTmp2OrdnerBT.Size = new Size(214, 31);
             MadMaxTmp2OrdnerBT.TabIndex = 42;
@@ -516,14 +518,14 @@
             // 
             // MadMaxTmp3OrdnerTB
             // 
-            MadMaxTmp3OrdnerTB.Location = new Point(1947, 249);
+            MadMaxTmp3OrdnerTB.Location = new Point(1592, 270);
             MadMaxTmp3OrdnerTB.Name = "MadMaxTmp3OrdnerTB";
             MadMaxTmp3OrdnerTB.Size = new Size(433, 31);
             MadMaxTmp3OrdnerTB.TabIndex = 43;
             // 
             // MadMaxTmp3OrdnerBT
             // 
-            MadMaxTmp3OrdnerBT.Location = new Point(1716, 249);
+            MadMaxTmp3OrdnerBT.Location = new Point(1361, 270);
             MadMaxTmp3OrdnerBT.Name = "MadMaxTmp3OrdnerBT";
             MadMaxTmp3OrdnerBT.Size = new Size(214, 31);
             MadMaxTmp3OrdnerBT.TabIndex = 44;
@@ -531,16 +533,16 @@
             MadMaxTmp3OrdnerBT.UseVisualStyleBackColor = true;
             MadMaxTmp3OrdnerBT.Click += MadMaxTmp3OrdnerBT_Click;
             // 
-            // WakeUpHDD
+            // WakeUpHDDCB
             // 
-            WakeUpHDD.AutoSize = true;
-            WakeUpHDD.Location = new Point(1999, 44);
-            WakeUpHDD.Name = "WakeUpHDD";
-            WakeUpHDD.Size = new Size(153, 29);
-            WakeUpHDD.TabIndex = 45;
-            WakeUpHDD.Text = "Wake Up HDD";
-            WakeUpHDD.UseVisualStyleBackColor = true;
-            WakeUpHDD.CheckStateChanged += WakeUpHDD_CheckStateChanged;
+            WakeUpHDDCB.AutoSize = true;
+            WakeUpHDDCB.Location = new Point(2219, 174);
+            WakeUpHDDCB.Name = "WakeUpHDDCB";
+            WakeUpHDDCB.Size = new Size(153, 29);
+            WakeUpHDDCB.TabIndex = 45;
+            WakeUpHDDCB.Text = "Wake Up HDD";
+            WakeUpHDDCB.UseVisualStyleBackColor = true;
+            WakeUpHDDCB.CheckStateChanged += WakeUpHDD_CheckStateChanged;
             // 
             // label9
             // 
@@ -608,7 +610,6 @@
             WaitForCopyCB.TabIndex = 52;
             WaitForCopyCB.Text = "Warten bis kopiert";
             WaitForCopyCB.UseVisualStyleBackColor = true;
-            WaitForCopyCB.CheckedChanged += WaitForCopyCB_CheckedChanged;
             // 
             // label12
             // 
@@ -629,11 +630,30 @@
             ThreadmultiplierforP2ND.TabIndex = 53;
             ThreadmultiplierforP2ND.Value = new decimal(new int[] { 1, 0, 0, 0 });
             // 
+            // WakeUpHddsB
+            // 
+            WakeUpHddsB.Location = new Point(1592, 167);
+            WakeUpHddsB.Name = "WakeUpHddsB";
+            WakeUpHddsB.Size = new Size(230, 41);
+            WakeUpHddsB.TabIndex = 55;
+            WakeUpHddsB.Text = "Pfad Wake Up Hdds";
+            WakeUpHddsB.UseVisualStyleBackColor = true;
+            WakeUpHddsB.Click += WakeUpHddsB_Click;
+            // 
+            // WakeUpHddsTB
+            // 
+            WakeUpHddsTB.Location = new Point(1828, 172);
+            WakeUpHddsTB.Name = "WakeUpHddsTB";
+            WakeUpHddsTB.Size = new Size(385, 31);
+            WakeUpHddsTB.TabIndex = 56;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(2384, 765);
+            Controls.Add(WakeUpHddsTB);
+            Controls.Add(WakeUpHddsB);
             Controls.Add(label12);
             Controls.Add(ThreadmultiplierforP2ND);
             Controls.Add(WaitForCopyCB);
@@ -643,7 +663,7 @@
             Controls.Add(BucketsND);
             Controls.Add(label9);
             Controls.Add(ThreadsND);
-            Controls.Add(WakeUpHDD);
+            Controls.Add(WakeUpHDDCB);
             Controls.Add(MadMaxTmp3OrdnerBT);
             Controls.Add(MadMaxTmp3OrdnerTB);
             Controls.Add(MadMaxTmp2OrdnerBT);
@@ -661,7 +681,7 @@
             Controls.Add(WerbungSpende);
             Controls.Add(WerbungYouTube);
             Controls.Add(Werbelink);
-            Controls.Add(PlotsPrüfen);
+            Controls.Add(PlotsPrüfenCB);
             Controls.Add(CudaPlotterPfad);
             Controls.Add(SettingsSpeichern);
             Controls.Add(PlotCheck);
@@ -687,7 +707,7 @@
             Controls.Add(KopierenStarten);
             Controls.Add(Kopieren);
             Name = "Form1";
-            Text = "mech2youDV v1.0.4";
+            Text = "mech2youDV v1.0.5";
             FormClosing += Form1_FormClosing;
             Load += Form1_Load;
             ((System.ComponentModel.ISupportInitialize)AnzahlPlots).EndInit();
@@ -728,7 +748,7 @@
         private Button PlotCheck;
         private Button SettingsSpeichern;
         private TextBox CudaPlotterPfad;
-        private CheckBox PlotsPrüfen;
+        private CheckBox PlotsPrüfenCB;
         private LinkLabel Werbelink;
         private LinkLabel WerbungYouTube;
         private LinkLabel WerbungSpende;
@@ -749,7 +769,7 @@
         private Button MadMaxTmp2OrdnerBT;
         private TextBox MadMaxTmp3OrdnerTB;
         private Button MadMaxTmp3OrdnerBT;
-        private CheckBox WakeUpHDD;
+        private CheckBox WakeUpHDDCB;
         private Label label9;
         private NumericUpDown ThreadsND;
         private Label label10;
@@ -759,5 +779,7 @@
         private CheckBox WaitForCopyCB;
         private Label label12;
         private NumericUpDown ThreadmultiplierforP2ND;
+        private Button WakeUpHddsB;
+        private TextBox WakeUpHddsTB;
     }
 }
