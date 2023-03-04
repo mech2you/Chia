@@ -75,7 +75,8 @@ namespace Daten_kopieren_Chia_GPU_Plotter
         private void HHD_BW_DoWork(object? sender, DoWorkEventArgs e)
         {
             BackgroundWorker worker = (BackgroundWorker)sender;
-            if (Directory.Exists(pfadWakeUpHDD)) {
+            if (Directory.Exists(pfadWakeUpHDD))
+            {
                 string[] pfade = Directory.GetDirectories(pfadWakeUpHDD);
                 foreach (string pfad in pfade)
                 {
@@ -101,7 +102,7 @@ namespace Daten_kopieren_Chia_GPU_Plotter
             {
                 logGlobal("HDD Wake Up Pfade nicht vorhanden");
             }
-            
+
 
         }
         /// <summary>
@@ -316,7 +317,7 @@ namespace Daten_kopieren_Chia_GPU_Plotter
                         {
                             if (inhalt.fertig == false)// Datei wird nicht bereits kopiert
                             {
-                                if (inhalt.quellpfad.IndexOf("\\\\") != -1)// handelt sich nicht um eine Netzwerkfreigabe?
+                                if (DatenKopierer[i].zielpfad.IndexOf("\\\\") != -1)// handelt sich nicht um eine Netzwerkfreigabe?
                                 {
                                     long free = 0, dummy1 = 0, dummy2 = 0;
 
@@ -572,7 +573,7 @@ namespace Daten_kopieren_Chia_GPU_Plotter
             {
                 WakeUpHDDCB.Checked = false;
             }
-            WakeUpHddsTB.Text=Properties.Settings.Default.pfadWakeUpHDD ;
+            WakeUpHddsTB.Text = Properties.Settings.Default.pfadWakeUpHDD;
             pfadWakeUpHDD = WakeUpHddsTB.Text;
 
         }
@@ -663,7 +664,7 @@ namespace Daten_kopieren_Chia_GPU_Plotter
             using (OpenFileDialog openFileDialog = new OpenFileDialog())
             {
                 openFileDialog.InitialDirectory = "C:\\";
-                openFileDialog.Filter = "Chia Cuda Plotter (*.exe)|*.exe";
+                openFileDialog.Filter = "Plotter (*.exe)|*.exe";
                 openFileDialog.FilterIndex = 1;
                 openFileDialog.RestoreDirectory = true;
 
@@ -866,7 +867,7 @@ namespace Daten_kopieren_Chia_GPU_Plotter
                 Properties.Settings.Default.WakeUpHDD = false;
             }
             Properties.Settings.Default.pfadWakeUpHDD = WakeUpHddsTB.Text;
-       
+
 
             Properties.Settings.Default.Save();
 
@@ -962,7 +963,7 @@ namespace Daten_kopieren_Chia_GPU_Plotter
 
                 if (result == System.Windows.Forms.DialogResult.OK)
                 {
-                    WakeUpHddsTB.Text= dialog.SelectedPath + "\\";
+                    WakeUpHddsTB.Text = dialog.SelectedPath + "\\";
                     pfadWakeUpHDD = WakeUpHddsTB.Text;
 
                 }
