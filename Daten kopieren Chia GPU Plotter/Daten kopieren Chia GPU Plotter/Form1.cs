@@ -317,67 +317,26 @@ namespace Daten_kopieren_Chia_GPU_Plotter
                         {
                             if (inhalt.fertig == false)// Datei wird nicht bereits kopiert
                             {
-                                if (DatenKopierer[i].zielpfad.IndexOf("\\\\") != -1)// handelt sich nicht um eine Netzwerkfreigabe?
+                                long free = 0, dummy1 = 0, dummy2 = 0;
+                                GetDiskFreeSpaceEx(DatenKopierer[i].zielpfad, ref free, ref dummy1, ref dummy2);// Gibt freie Speicherplatz zurück
+                                FileInfo info = new FileInfo(inhalt.quellpfad + inhalt.dateiname);
+                                if (free > info.Length)// Ist genug Speicher da?
                                 {
-                                    long free = 0, dummy1 = 0, dummy2 = 0;
-
-                                    GetDiskFreeSpaceEx(inhalt.quellpfad, ref free, ref dummy1, ref dummy2);
-                                    FileInfo info = new FileInfo(inhalt.quellpfad + inhalt.dateiname);
-                                    if (free > info.Length)// Ist genug Speicher da?
+                                    if (DatenKopierer[i].BWkopieren.IsBusy == false)// Ist BW noch frei?
                                     {
-                                        if (DatenKopierer[i].BWkopieren.IsBusy == false)// Ist BW noch frei?
-                                        {
-                                            DatenKopierer[i].quellpfad = inhalt.quellpfad;
-                                            DatenKopierer[i].dateiname = inhalt.dateiname;
-                                            DatenKopierer[i].fertig = true;// Sperrt die Datei das dies nun von ausgewählten BW bearbeitet wird 
-                                            inhalt.fertig = true;
-                                            DatenKopierer[i].BWkopieren.RunWorkerAsync();
-                                        }
-                                    }
-                                    else
-                                    {
-                                        logGlobal("Zielfreigabe hat zu wenig Speicher: " + DatenKopierer[i].zielpfad);
-                                        LaufwerkEntfernen(DatenKopierer[i].zielpfad.ToString());
-                                    }
-                                    abbrechen2 = true;// Es wird kopiert oder der Speicher ist voll. In beiden Fällen muss man raus aus den Schleifen
-
-                                }
-                                else// Es ist ein Laufwerk
-                                {
-                                    DriveInfo[] allDrives = DriveInfo.GetDrives();
-                                    foreach (DriveInfo drive in allDrives)
-                                    {
-
-                                        if (DatenKopierer[i].zielpfad.IndexOf(drive.Name) != -1)//Ist der Datenträger im Zielpfad?
-                                        {
-                                            FileInfo info = new FileInfo(inhalt.quellpfad + inhalt.dateiname);
-                                            //logGlobal("Laufwerk Name " + drive.Name + " freie Speicher " + (drive.AvailableFreeSpace / 1024 / 1024 / 1024) + "GB Dateigröße " + (info.Length / 1024 / 1024 / 1024) + "GB");//Für Debug
-
-                                            if (drive.AvailableFreeSpace > info.Length)// Ist genug Speicher da?
-                                            {
-                                                if (DatenKopierer[i].BWkopieren.IsBusy == false)// Ist BW noch frei?
-                                                {
-                                                    DatenKopierer[i].quellpfad = inhalt.quellpfad;
-                                                    DatenKopierer[i].dateiname = inhalt.dateiname;
-                                                    DatenKopierer[i].fertig = true;// Sperrt die Datei das dies nun von ausgewählten BW bearbeitet wird 
-                                                    inhalt.fertig = true;
-                                                    DatenKopierer[i].BWkopieren.RunWorkerAsync();
-                                                }
-
-                                            }
-                                            else
-                                            {
-                                                logGlobal("Zielpfad hat zu wenig Speicher: " + DatenKopierer[i].zielpfad);
-                                                LaufwerkEntfernen(DatenKopierer[i].zielpfad.ToString());
-                                            }
-                                            abbrechen2 = true;// Es wird kopiert oder der Speicher ist voll. In beiden Fällen muss man raus aus den Schleifen
-                                        }
-                                        if (abbrechen2)
-                                        {
-                                            break;
-                                        }
+                                        DatenKopierer[i].quellpfad = inhalt.quellpfad;
+                                        DatenKopierer[i].dateiname = inhalt.dateiname;
+                                        DatenKopierer[i].fertig = true;// Sperrt die Datei das dies nun von ausgewählten BW bearbeitet wird 
+                                        inhalt.fertig = true;
+                                        DatenKopierer[i].BWkopieren.RunWorkerAsync();
                                     }
                                 }
+                                else
+                                {
+                                    logGlobal("Zielfreigabe hat zu wenig Speicher: " + DatenKopierer[i].zielpfad);
+                                    LaufwerkEntfernen(DatenKopierer[i].zielpfad.ToString());
+                                }
+                                abbrechen2 = true;// Es wird kopiert oder der Speicher ist voll. In beiden Fällen muss man raus aus den Schleifen
                             }
                             if (abbrechen2)
                             {
