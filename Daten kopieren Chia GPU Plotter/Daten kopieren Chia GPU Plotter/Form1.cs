@@ -82,7 +82,11 @@ namespace Daten_kopieren_Chia_GPU_Plotter
                 {
                     if (!File.Exists(pfad + "\\" + hddWakeUp))// Erstellt eine Datei falls diese nicht vorhanden ist
                     {
-                        File.Create(pfad + hddWakeUp);
+                        try
+                        {
+                            File.Create(pfad + "\\" + hddWakeUp);
+                        }catch { }
+                        
                     }
                 }
                 logGlobal("HDD Wake Up start");
@@ -90,13 +94,17 @@ namespace Daten_kopieren_Chia_GPU_Plotter
                 {
                     foreach (string pfad in pfade)
                     {
-                        string[] lines = { "Test" };
-                        File.WriteAllLinesAsync(pfad + "\\" + hddWakeUp, lines);
+                        if (File.Exists(pfad + "\\" + hddWakeUp))// Nur wenn die Datei vorhanden ist darf geschrieben werden 
+                        {
+                            string[] lines = { "Test" };
+                            File.WriteAllLinesAsync(pfad + "\\" + hddWakeUp, lines);
+                        }
                     }
 
                     Thread.Sleep(50000);
                 }
                 logGlobal("HDD Wake Up stop");
+                
             }
             else
             {
@@ -212,42 +220,48 @@ namespace Daten_kopieren_Chia_GPU_Plotter
         {
             if (zielPfadListe.Items.Count > 0)// Es muss ein Element oder mehere Element vorhanden sein
             {
-                int index = zielPfadListe.FindString(_pfad);// Suchen nach dem Pfad
-                if (index != -1)
+                zielPfadListe.Invoke((MethodInvoker)delegate
                 {
-                    zielPfadListe.Invoke((MethodInvoker)delegate
+                    for (int k = 0; k < zielPfadListe.Items.Count; k++)// Löscht aus der Zielliste das Element
                     {
-                        zielPfadListe.Items.RemoveAt(index);// Löscht das Laufwerk
-                    });
-                    int i = 0;
-                    int w = 0;
-                    foreach (Kopiervorgang item in DatenKopierer)// Löscht alle Prozentbalken aus der GUI (Vieleicht gibt es eine besser Lösung für diesen Teil)
-                    {
-                        this.Invoke((MethodInvoker)delegate// Wegen threadübergreifender zugriff auf steuerelement mus das so gelöst werden
+                        if (zielPfadListe.Items[k].ToString()== _pfad)
                         {
-                            this.Controls.Remove(item.Kopierstatus); //Löscht alle GUI Prozentbalken
-                        });
-                        if (item.quellpfad == _pfad)
-                        {
-                            w = i;
+                            zielPfadListe.Items.RemoveAt(k);
+                            break;
                         }
-                        i++;
                     }
-                    DatenKopierer.RemoveAt(w);
+                });
 
+
+                int i = 0;
+                int w = 0;
+                foreach (Kopiervorgang item in DatenKopierer)// Löscht alle Prozentbalken aus der GUI (Vieleicht gibt es eine besser Lösung für diesen Teil)
+                {
                     this.Invoke((MethodInvoker)delegate// Wegen threadübergreifender zugriff auf steuerelement mus das so gelöst werden
                     {
-                        for (int k = 0; k < DatenKopierer.Count; k++)// Fügt alle Prozentbalken der GUI wieder hinzu
-                        {
-                            this.Controls.Add(DatenKopierer[k].Kopierstatus);//Fügt alle GUI Prozentbalken hinzu
-                            int tmpX = zielPfadListe.Location.X;
-                            int tmpY = zielPfadListe.Location.Y;
-                            DatenKopierer[k].Kopierstatus.Location = new Point(tmpX + zielPfadListe.Width, tmpY + (k) * (DatenKopierer[k].Kopierstatus.Height + abstandZwischenStatusanzeigen));
-                        }
+                        this.Controls.Remove(item.Kopierstatus); //Löscht alle GUI Prozentbalken
+                        
                     });
-
-
+                    if (item.quellpfad == _pfad)
+                    {
+                        w = i;
+                    }
+                    i++;
                 }
+                DatenKopierer.RemoveAt(w);
+
+                this.Invoke((MethodInvoker)delegate// Wegen threadübergreifender zugriff auf steuerelement muss das so gelöst werden
+                {
+                    for (int k = 0; k < DatenKopierer.Count; k++)// Fügt alle Prozentbalken der GUI wieder hinzu
+                    {
+                        this.Controls.Add(DatenKopierer[k].Kopierstatus);//Fügt alle GUI Prozentbalken hinzu
+                        int tmpX = zielPfadListe.Location.X;
+                        int tmpY = zielPfadListe.Location.Y;
+                        DatenKopierer[k].Kopierstatus.Location = new Point(tmpX + zielPfadListe.Width, tmpY + (k) * (DatenKopierer[k].Kopierstatus.Height + abstandZwischenStatusanzeigen));
+                        
+                    }
+                });
+                
             }
         }
         //https://code.4noobz.net/determine-the-available-space-on-a-network-drive/
