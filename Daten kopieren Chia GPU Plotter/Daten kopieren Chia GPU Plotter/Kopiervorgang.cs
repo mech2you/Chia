@@ -26,6 +26,7 @@ namespace Daten_kopieren_Chia_GPU_Plotter
             BWkopieren.WorkerSupportsCancellation = true;
             BWkopieren.WorkerReportsProgress= true;
             zielpfad = _zielpfad;
+            Log("zielpfad ");
         }
         private delegate void ProgressbarUpdateDelegate(int value);
         private void BWkopiervorgang_status(object sender, ProgressChangedEventArgs e)

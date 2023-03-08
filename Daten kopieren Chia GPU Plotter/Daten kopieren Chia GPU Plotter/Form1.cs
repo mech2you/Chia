@@ -220,7 +220,7 @@ namespace Daten_kopieren_Chia_GPU_Plotter
         {
             if (zielPfadListe.Items.Count > 0)// Es muss ein Element oder mehere Element vorhanden sein
             {
-                zielPfadListe.Invoke((MethodInvoker)delegate
+                Invoke((MethodInvoker)delegate
                 {
                     for (int k = 0; k < zielPfadListe.Items.Count; k++)// Löscht aus der Zielliste das Element
                     {
@@ -242,7 +242,7 @@ namespace Daten_kopieren_Chia_GPU_Plotter
                         this.Controls.Remove(item.Kopierstatus); //Löscht alle GUI Prozentbalken
                         
                     });
-                    if (item.quellpfad == _pfad)
+                    if (item.zielpfad == _pfad)
                     {
                         w = i;
                     }
