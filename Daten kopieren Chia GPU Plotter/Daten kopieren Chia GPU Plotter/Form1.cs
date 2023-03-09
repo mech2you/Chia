@@ -85,8 +85,9 @@ namespace Daten_kopieren_Chia_GPU_Plotter
                         try
                         {
                             File.Create(pfad + "\\" + hddWakeUp);
-                        }catch { }
-                        
+                        }
+                        catch { }
+
                     }
                 }
                 logGlobal("HDD Wake Up start");
@@ -104,7 +105,7 @@ namespace Daten_kopieren_Chia_GPU_Plotter
                     Thread.Sleep(50000);
                 }
                 logGlobal("HDD Wake Up stop");
-                
+
             }
             else
             {
@@ -224,7 +225,7 @@ namespace Daten_kopieren_Chia_GPU_Plotter
                 {
                     for (int k = 0; k < zielPfadListe.Items.Count; k++)// Löscht aus der Zielliste das Element
                     {
-                        if (zielPfadListe.Items[k].ToString()== _pfad)
+                        if (zielPfadListe.Items[k].ToString() == _pfad)
                         {
                             zielPfadListe.Items.RemoveAt(k);
                             break;
@@ -235,21 +236,23 @@ namespace Daten_kopieren_Chia_GPU_Plotter
 
                 int i = 0;
                 int w = 0;
-                foreach (Kopiervorgang item in DatenKopierer)// Löscht alle Prozentbalken aus der GUI (Vieleicht gibt es eine besser Lösung für diesen Teil)
+                if (DatenKopierer.Count > 0)
                 {
-                    this.Invoke((MethodInvoker)delegate// Wegen threadübergreifender zugriff auf steuerelement mus das so gelöst werden
+                    foreach (Kopiervorgang item in DatenKopierer)// Löscht alle Prozentbalken aus der GUI (Vieleicht gibt es eine besser Lösung für diesen Teil)
                     {
-                        this.Controls.Remove(item.Kopierstatus); //Löscht alle GUI Prozentbalken
-                        
-                    });
-                    if (item.zielpfad == _pfad)
-                    {
-                        w = i;
-                    }
-                    i++;
-                }
-                DatenKopierer.RemoveAt(w);
+                        this.Invoke((MethodInvoker)delegate// Wegen threadübergreifender zugriff auf steuerelement mus das so gelöst werden
+                        {
+                            this.Controls.Remove(item.Kopierstatus); //Löscht alle GUI Prozentbalken
 
+                        });
+                        if (item.zielpfad == _pfad)
+                        {
+                            w = i;
+                        }
+                        i++;
+                    }
+                    DatenKopierer.RemoveAt(w);
+                }
                 this.Invoke((MethodInvoker)delegate// Wegen threadübergreifender zugriff auf steuerelement muss das so gelöst werden
                 {
                     for (int k = 0; k < DatenKopierer.Count; k++)// Fügt alle Prozentbalken der GUI wieder hinzu
@@ -258,10 +261,9 @@ namespace Daten_kopieren_Chia_GPU_Plotter
                         int tmpX = zielPfadListe.Location.X;
                         int tmpY = zielPfadListe.Location.Y;
                         DatenKopierer[k].Kopierstatus.Location = new Point(tmpX + zielPfadListe.Width, tmpY + (k) * (DatenKopierer[k].Kopierstatus.Height + abstandZwischenStatusanzeigen));
-                        
+
                     }
                 });
-                
             }
         }
         //https://code.4noobz.net/determine-the-available-space-on-a-network-drive/
