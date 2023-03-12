@@ -156,6 +156,10 @@ namespace Daten_kopieren_Chia_GPU_Plotter
                 rückgabePS = _ps.AddScript(pfadBladBitGPUPlotter + argumente).Invoke();
                 if (_ps.HadErrors)
                 {
+                    for (int i = 0; i < rückgabePS.Count; i++)
+                    {
+                        logGlobal(rückgabePS[i].ToString());
+                    }
                     foreach (var error in _ps.Streams.Error)
                     {
                         // Manchmal Fehler WritePark(): ans_length (859) > max_ans_length (858) (y = 1, i = 6283)
@@ -166,7 +170,10 @@ namespace Daten_kopieren_Chia_GPU_Plotter
                 }
                 else
                 {
-                    logGlobal("Plotter gestartet");
+                    for (int i = 0; i < rückgabePS.Count; i++)
+                    {
+                        logGlobal(rückgabePS[i].ToString());
+                    }
                 }
             }
             catch (Exception ex)
@@ -613,6 +620,12 @@ namespace Daten_kopieren_Chia_GPU_Plotter
                     PlotterGefunden.Checked = true;
                     gefunden = true;
                     logGlobal("Chia GPU Plotter gefunden");
+                }
+                if (zeile.ToString().IndexOf("3.0.0-alpha3-dev") != -1)// Version Chia GPU Plotter gefunden
+                {
+                    PlotterGefunden.Checked = true;
+                    gefunden = true;
+                    logGlobal("Chia GPU Plotter 3 alpha3 gefunden");
                 }
                 if (zeile.ToString().IndexOf("2.0.0-3e00fa3") != -1)// Version MadMax GPU Plotter gefunden
                 {

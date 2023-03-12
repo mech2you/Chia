@@ -57,18 +57,27 @@ namespace Daten_kopieren_Chia_GPU_Plotter
         /// <param name="_zieldatei"></param>
         void copyNetwork(string _quelldatei, string _zieldatei)
         {
-            FileOptions FileFlagNoBuffering = (FileOptions)0x20000000;
-            FileStream fsout = new FileStream(_zieldatei, FileMode.Create, FileAccess.Write, FileShare.None, 8, FileFlagNoBuffering | FileOptions.Asynchronous);
-            FileStream fsin = new FileStream(_quelldatei, FileMode.Open, FileAccess.Read, FileShare.None, 8, FileFlagNoBuffering | FileOptions.Asynchronous);
-            byte[] data = new byte[1048576];//in MiB
-            int readbyte;
-            while ((readbyte = fsin.Read(data, 0, data.Length)) > 0)
+            try
             {
-                fsout.Write(data, 0, readbyte);
-                BWkopieren.ReportProgress((int)(fsin.Position * 100 / fsin.Length));
+                FileOptions FileFlagNoBuffering = (FileOptions)0x20000000;
+                FileStream fsout = new FileStream(_zieldatei, FileMode.Create, FileAccess.Write, FileShare.None, 8, FileFlagNoBuffering | FileOptions.Asynchronous);
+                FileStream fsin = new FileStream(_quelldatei, FileMode.Open, FileAccess.Read, FileShare.None, 8, FileFlagNoBuffering | FileOptions.Asynchronous);
+                byte[] data = new byte[1048576];//in MiB
+                int readbyte;
+                while ((readbyte = fsin.Read(data, 0, data.Length)) > 0)
+                {
+                    fsout.Write(data, 0, readbyte);
+                    BWkopieren.ReportProgress((int)(fsin.Position * 100 / fsin.Length));
+                }
+                fsin.Close();
+                fsout.Close();
             }
-            fsin.Close();
-            fsout.Close();
+            catch (Exception e)
+            {
+                Log("Fehler Datei " + _quelldatei + " konnte nicht nach " + _zieldatei + " kopiert werden");
+                Log(e.ToString());
+            }
+            
         }
 
         /// <summary>
@@ -78,17 +87,27 @@ namespace Daten_kopieren_Chia_GPU_Plotter
         /// <param name="_zieldatei"></param>
         public void copy (String _quelldatei, String _zieldatei)
         {
-            FileStream fsout = new FileStream(_zieldatei, FileMode.Create);
-            FileStream fsin = new FileStream(_quelldatei, FileMode.Open);
-            byte[] data = new byte[1048576];//in MiB
-            int readbyte;
-            while ((readbyte=fsin.Read(data,0,data.Length))>0)
+            //Die Anforderung konnte wegen eines E/A-Gerätefehlers nicht ausgeführt werden. : 'C:\Chia\024\024_16TB_SG_MM_PP\plot-k32-c7-2023-03-12-06-16-e9da82f7df2b1b45a4e8d675442248f26ead68b0705c20ea39fb43ec569f199f.plot.tmp'"
+            try
             {
-                fsout.Write(data, 0, readbyte);
-                BWkopieren.ReportProgress((int)(fsin.Position*100/fsin.Length));
+                FileStream fsout = new FileStream(_zieldatei, FileMode.Create);
+                FileStream fsin = new FileStream(_quelldatei, FileMode.Open);
+                byte[] data = new byte[1048576];//in MiB
+                int readbyte;
+                while ((readbyte = fsin.Read(data, 0, data.Length)) > 0)
+                {
+                    fsout.Write(data, 0, readbyte);
+                    BWkopieren.ReportProgress((int)(fsin.Position * 100 / fsin.Length));
+                }
+                fsin.Close();
+                fsout.Close();
             }
-            fsin.Close();
-            fsout.Close();
+            catch (Exception e)
+            {
+                Log("Fehler Datei " + _quelldatei + " konnte nicht nach " + _zieldatei + " kopiert werden");
+                Log(e.ToString());
+            }
+            
         }
         /// <summary>
         /// kopiert die Daten von Quellpfad zum Zielpfad ohne zu prüfen. Ist eine .tmp enthalten mit den Zielpfadnamen wird diese gelöscht
