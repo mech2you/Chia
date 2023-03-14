@@ -15,6 +15,7 @@ using Namotion.Reflection;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 using System.Security;
+using System.IO;
 
 namespace Daten_kopieren_Chia_GPU_Plotter
 {
@@ -74,38 +75,40 @@ namespace Daten_kopieren_Chia_GPU_Plotter
         /// <param name="e"></param>
         private void HHD_BW_DoWork(object? sender, DoWorkEventArgs e)
         {
-            BackgroundWorker worker = (BackgroundWorker)sender;
-            if (Directory.Exists(pfadWakeUpHDD))
+            if (sender != null)
             {
-                string[] pfade = Directory.GetDirectories(pfadWakeUpHDD);
-                foreach (string pfad in pfade)
+                BackgroundWorker worker = (BackgroundWorker)sender;
+                if (Directory.Exists(pfadWakeUpHDD))
                 {
-                    if (!File.Exists(pfad + "\\" + hddWakeUp))// Erstellt eine Datei falls diese nicht vorhanden ist
-                    {
-                        try
-                        {
-                            File.Create(pfad + "\\" + hddWakeUp);
-                        }
-                        catch { }
-
-                    }
-                }
-                logGlobal("HDD Wake Up start");
-                while (worker.CancellationPending != true)// Bricht das WakeUp für die HDD´s ab
-                {
+                    string[] pfade = Directory.GetDirectories(pfadWakeUpHDD);
                     foreach (string pfad in pfade)
                     {
-                        if (File.Exists(pfad + "\\" + hddWakeUp))// Nur wenn die Datei vorhanden ist darf geschrieben werden 
+                        if (!File.Exists(pfad + "\\" + hddWakeUp))// Erstellt eine Datei falls diese nicht vorhanden ist
                         {
-                            string[] lines = { "Test" };
-                            File.WriteAllLinesAsync(pfad + "\\" + hddWakeUp, lines);
+                            try
+                            {
+                                File.Create(pfad + "\\" + hddWakeUp);
+                            }
+                            catch { }
+
                         }
                     }
+                    logGlobal("HDD Wake Up start");
+                    while (worker.CancellationPending != true)// Bricht das WakeUp für die HDD´s ab
+                    {
+                        foreach (string pfad in pfade)
+                        {
+                            if (File.Exists(pfad + "\\" + hddWakeUp))// Nur wenn die Datei vorhanden ist darf geschrieben werden 
+                            {
+                                string[] lines = { "Test" };
+                                File.WriteAllLinesAsync(pfad + "\\" + hddWakeUp, lines);
+                            }
+                        }
 
-                    Thread.Sleep(50000);
+                        Thread.Sleep(50000);
+                    }
+                    logGlobal("HDD Wake Up stop");
                 }
-                logGlobal("HDD Wake Up stop");
-
             }
             else
             {
@@ -190,8 +193,10 @@ namespace Daten_kopieren_Chia_GPU_Plotter
             aTimer.Elapsed += OnTimedEvent;
             aTimer.AutoReset = true;
             aTimer.Enabled = true;
+
+
         }
-        private void OnTimedEvent(Object source, ElapsedEventArgs e)
+        public void OnTimedEvent(Object source, ElapsedEventArgs e)
         {
             Kopieren_Click(null, EventArgs.Empty);
         }
@@ -273,10 +278,58 @@ namespace Daten_kopieren_Chia_GPU_Plotter
                 });
             }
         }
+        public bool kopiervorgangStarten(Kopiervorgang _kopierer, KopierDaten _daten)
+        {
+            long free = 0, dummy1 = 0, dummy2 = 0;
+            GetDiskFreeSpaceEx(_kopierer.zielpfad, ref free, ref dummy1, ref dummy2);// Gibt freie Speicherplatz zurück
+            FileInfo info = new FileInfo(_daten.quellpfad + _daten.dateiname);
+            if (free > info.Length)// Ist genug Speicher da?
+            {
+                if (_kopierer.BWkopieren.IsBusy == false)// Ist BW noch frei?
+                {
+                    _kopierer.quellpfad = _daten.quellpfad;
+                    _kopierer.dateiname = _daten.dateiname;
+                    _kopierer.fertig = true;// Sperrt die Datei das dies nun von ausgewählten BW bearbeitet wird 
+                    _daten.fertig = true;
+                    _kopierer.BWkopieren.RunWorkerAsync();
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                logGlobal("Zielfreigabe hat zu wenig Speicher: " + _kopierer.zielpfad);
+                LaufwerkEntfernen(_kopierer.zielpfad.ToString());
+                return false;
+            }
+        }
+        /// <summary>
+        /// Gibt den nächste Datei zurück die noch kopiert werden soll. 
+        /// </summary>
+        /// <returns>Falls keine Datei gefunden wird null zurückgegeben ansonsten die KopierDaten</returns>
+        public KopierDaten? getFreienKopierDaten()
+        {
+            KopierDaten? tmp = null;
+            foreach (KopierDaten inhalt in Kopierliste)//  File wird ausgewählt die kopiert werden soll
+            {
+                if (inhalt.fertig == false)// Datei wird nicht bereits kopiert
+                {
+                    tmp = inhalt;
+                }
+            }
+            return tmp;
+        }
+
+
+
         //https://code.4noobz.net/determine-the-available-space-on-a-network-drive/
         [SuppressMessage("Microsoft.Security", "CA2118:ReviewSuppressUnmanagedCodeSecurityUsage"), SuppressUnmanagedCodeSecurity]
         [DllImport("Kernel32", SetLastError = true, CharSet = CharSet.Auto)]
         [return: MarshalAs(UnmanagedType.Bool)]
+
 
         private static extern bool GetDiskFreeSpaceEx
         (
@@ -332,38 +385,75 @@ namespace Daten_kopieren_Chia_GPU_Plotter
                     }
                 }
                 bool abbrechen2 = false;
-                for (int i = 0; i < DatenKopierer.Count; i++)// foreach kann nicht verwendet werden da wir Elemente löschen
+                for (int i = 0; i < DatenKopierer.Count; i++)// foreach kann nicht verwendet werden da Elemente gelöscht werden
                 {
                     if (DatenKopierer[i].BWkopieren.IsBusy == false)// Ein Laufwerk wird ausgewählt wo der BW nicht beschäftigt mit kopieren ist
                     {
-                        foreach (KopierDaten inhalt in Kopierliste)//  File wird ausgewählt die kopiert werden soll
+                        if (PlotGleichmäßigVerteilen.Checked == true)
                         {
-                            if (inhalt.fertig == false)// Datei wird nicht bereits kopiert
+                            int freieSpeicher = 0;
+                            long kleinstefreieSpeicher = 0;
+                            for (int k = 0; k < DatenKopierer.Count; k++)//  File wird ausgewählt die kopiert werden soll
                             {
-                                long free = 0, dummy1 = 0, dummy2 = 0;
-                                GetDiskFreeSpaceEx(DatenKopierer[i].zielpfad, ref free, ref dummy1, ref dummy2);// Gibt freie Speicherplatz zurück
-                                FileInfo info = new FileInfo(inhalt.quellpfad + inhalt.dateiname);
-                                if (free > info.Length)// Ist genug Speicher da?
+
+                                if (DatenKopierer[k].BWkopieren.IsBusy != true)
                                 {
-                                    if (DatenKopierer[i].BWkopieren.IsBusy == false)// Ist BW noch frei?
+                                    long free = 0, dummy1 = 0, dummy2 = 0;
+                                    GetDiskFreeSpaceEx(DatenKopierer[k].zielpfad, ref free, ref dummy1, ref dummy2);// Gibt den freien Speicherplatz zurück
+                                    if (k == 0)// Beim ersten mal wird der Speichergröße einfach an kleinstefreieSpeicher übertragen
                                     {
-                                        DatenKopierer[i].quellpfad = inhalt.quellpfad;
-                                        DatenKopierer[i].dateiname = inhalt.dateiname;
-                                        DatenKopierer[i].fertig = true;// Sperrt die Datei das dies nun von ausgewählten BW bearbeitet wird 
-                                        inhalt.fertig = true;
-                                        DatenKopierer[i].BWkopieren.RunWorkerAsync();
+                                        kleinstefreieSpeicher = free;
+                                    }
+                                    if (kleinstefreieSpeicher < free)// Es wurde ein Datenträger gefunden der noch mehr freien Speicher hat
+                                    {
+                                        kleinstefreieSpeicher = free;
+                                        freieSpeicher = k;//Ermittelt welche DatenKopierer noch am wenigsten voll ist. Merken des Listenindex um den Datenkopier später direkt anzusprechen
                                     }
                                 }
-                                else
+                            }
+                            KopierDaten? kopierTMP = getFreienKopierDaten();
+                            if (kopierTMP != null)
+                            {
+                                if (DatenKopierer.Count > freieSpeicher)
                                 {
-                                    logGlobal("Zielfreigabe hat zu wenig Speicher: " + DatenKopierer[i].zielpfad);
-                                    LaufwerkEntfernen(DatenKopierer[i].zielpfad.ToString());
+                                    kopiervorgangStarten(DatenKopierer[freieSpeicher], kopierTMP);
+
                                 }
                                 abbrechen2 = true;// Es wird kopiert oder der Speicher ist voll. In beiden Fällen muss man raus aus den Schleifen
                             }
-                            if (abbrechen2)
+                        }
+                        else
+                        {
+
+                            foreach (KopierDaten inhalt in Kopierliste)//  File wird ausgewählt die kopiert werden soll
                             {
-                                break;
+                                if (inhalt.fertig == false)// Datei wird nicht bereits kopiert
+                                {
+                                    long free = 0, dummy1 = 0, dummy2 = 0;
+                                    GetDiskFreeSpaceEx(DatenKopierer[i].zielpfad, ref free, ref dummy1, ref dummy2);// Gibt freie Speicherplatz zurück
+                                    FileInfo info = new FileInfo(inhalt.quellpfad + inhalt.dateiname);
+                                    if (free > info.Length)// Ist genug Speicher da?
+                                    {
+                                        if (DatenKopierer[i].BWkopieren.IsBusy == false)// Ist BW noch frei?
+                                        {
+                                            DatenKopierer[i].quellpfad = inhalt.quellpfad;
+                                            DatenKopierer[i].dateiname = inhalt.dateiname;
+                                            DatenKopierer[i].fertig = true;// Sperrt die Datei das dies nun von ausgewählten BW bearbeitet wird 
+                                            inhalt.fertig = true;
+                                            DatenKopierer[i].BWkopieren.RunWorkerAsync();
+                                        }
+                                    }
+                                    else
+                                    {
+                                        logGlobal("Zielfreigabe hat zu wenig Speicher: " + DatenKopierer[i].zielpfad);
+                                        LaufwerkEntfernen(DatenKopierer[i].zielpfad.ToString());
+                                    }
+                                    abbrechen2 = true;// Es wird kopiert oder der Speicher ist voll. In beiden Fällen muss man raus aus den Schleifen
+                                }
+                                if (abbrechen2)
+                                {
+                                    break;
+                                }
                             }
                         }
                     }
@@ -558,6 +648,15 @@ namespace Daten_kopieren_Chia_GPU_Plotter
             WakeUpHddsTB.Text = Properties.Settings.Default.pfadWakeUpHDD;
             pfadWakeUpHDD = WakeUpHddsTB.Text;
 
+            if (Properties.Settings.Default.PlotGleichmäßigVerteilen)
+            {
+                PlotGleichmäßigVerteilen.Checked = true;
+            }
+            else
+            {
+                PlotGleichmäßigVerteilen.Checked = false;
+            }
+
         }
         /// <summary>
         /// Dient zum löschen von Pfaden in der Liste
@@ -570,9 +669,13 @@ namespace Daten_kopieren_Chia_GPU_Plotter
             {
                 if (zielPfadListe.SelectedItem != null)// Es muss ein Element gewählt sein
                 {
-                    string curItem = zielPfadListe.SelectedItem.ToString();
+                    string? curItem = zielPfadListe.SelectedItem.ToString();
                     // Find the string in ListBox2.
-                    LaufwerkEntfernen(curItem.ToString());
+                    if (curItem != null)
+                    {
+                        LaufwerkEntfernen(curItem);
+                    }
+
                 }
             }
         }
@@ -719,6 +822,7 @@ namespace Daten_kopieren_Chia_GPU_Plotter
         private void StopPlot_Click(object sender, EventArgs e)
         {
             _ps.Stop();
+            //PSBackgroundWorker.CancelAsync();
             StartPlot.Visible = true;
             StopPlot.Visible = false;
         }
@@ -856,7 +960,14 @@ namespace Daten_kopieren_Chia_GPU_Plotter
             }
             Properties.Settings.Default.pfadWakeUpHDD = WakeUpHddsTB.Text;
 
-
+            if (PlotGleichmäßigVerteilen.Checked)
+            {
+                Properties.Settings.Default.PlotGleichmäßigVerteilen = true;
+            }
+            else
+            {
+                Properties.Settings.Default.PlotGleichmäßigVerteilen = false;
+            }
             Properties.Settings.Default.Save();
 
 
@@ -956,6 +1067,90 @@ namespace Daten_kopieren_Chia_GPU_Plotter
 
                 }
 
+            }
+        }
+        /// <summary>
+        /// löscht alle .tmp Dateien in den 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void TmpDateienLöschen_Click(object sender, EventArgs e)
+        {
+            if (Directory.Exists(WakeUpHddsTB.Text))
+            {
+                _ps.Stop();
+                PSBackgroundWorker.CancelAsync();
+
+                //Bricht alle Kopiervorgänge ab
+                foreach (var item in DatenKopierer)
+                {
+                    item.BWkopieren.CancelAsync();
+                }
+
+                string[] ordner = Directory.GetDirectories(WakeUpHddsTB.Text);
+                // 
+                foreach (string pfad in ordner)
+                {
+                    string[] dateien = Directory.GetFiles(pfad);
+                    foreach (string dateipfad in dateien)
+                    {
+                        string[] pfad1 = Directory.GetDirectories(pfad);
+                        if (pfad1.Count() > 0)// es existiert ein Unterpfad
+                        {
+                            foreach (string unterpfad in pfad1)
+                            {
+                                FileAttributes attributes = File.GetAttributes(unterpfad);
+                                if ((attributes & FileAttributes.System) != FileAttributes.System)
+                                {
+                                    string[] dateien1 = Directory.GetFiles(unterpfad);
+                                    foreach (string dateipfad1 in dateien1)
+                                    {
+                                        if (dateipfad1.Substring(dateipfad1.Length - 3) == "tmp")// handelt es sich um eine tmp File
+                                        {
+                                            if (File.Exists(dateipfad1))// Nur wenn die Datei existiert geht es weiter
+                                            {
+                                                try
+                                                {
+                                                    logGlobal("TMP Datei wurde gelöscht: " + dateipfad1);
+                                                    File.Delete(dateipfad1);
+                                                }
+                                                catch (Exception ex)
+                                                {
+                                                    logGlobal("Fehler TMP Datei konnte nicht gelöscht werden -> " + dateipfad1);
+                                                    logGlobal(ex.ToString());
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+
+                            }
+                        }
+                        else
+                        {
+                            if (dateipfad.Substring(dateipfad.Length - 3) == "tmp")// handelt es sich um eine tmp File
+                            {
+                                if (File.Exists(dateipfad))// Nur wenn die Datei existiert geht es weiter
+                                {
+
+                                    try
+                                    {
+                                        logGlobal("TMP Datei wurde gelöscht: " + dateipfad);
+                                        File.Delete(dateipfad);
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        logGlobal("Fehler TMP Datei konnte nicht gelöscht werden -> " + dateipfad);
+                                        logGlobal(ex.ToString());
+                                    }
+
+
+                                }
+                            }
+                        }
+                    }
+
+                }
             }
         }
     }

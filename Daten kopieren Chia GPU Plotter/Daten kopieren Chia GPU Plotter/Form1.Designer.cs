@@ -85,6 +85,8 @@
             ThreadmultiplierforP2ND = new NumericUpDown();
             WakeUpHddsB = new Button();
             WakeUpHddsTB = new TextBox();
+            PlotGleichmäßigVerteilen = new CheckBox();
+            TmpDateienLöschen = new Button();
             ((System.ComponentModel.ISupportInitialize)AnzahlPlots).BeginInit();
             ((System.ComponentModel.ISupportInitialize)GPUGemeinsameSpeicherGUI).BeginInit();
             groupBox1.SuspendLayout();
@@ -647,11 +649,35 @@
             WakeUpHddsTB.Size = new Size(385, 31);
             WakeUpHddsTB.TabIndex = 56;
             // 
+            // PlotGleichmäßigVerteilen
+            // 
+            PlotGleichmäßigVerteilen.AllowDrop = true;
+            PlotGleichmäßigVerteilen.AutoSize = true;
+            PlotGleichmäßigVerteilen.Location = new Point(35, 762);
+            PlotGleichmäßigVerteilen.Name = "PlotGleichmäßigVerteilen";
+            PlotGleichmäßigVerteilen.Size = new Size(249, 29);
+            PlotGleichmäßigVerteilen.TabIndex = 57;
+            PlotGleichmäßigVerteilen.TabStop = false;
+            PlotGleichmäßigVerteilen.Text = "Plots gleichmäßig verteilen";
+            PlotGleichmäßigVerteilen.UseVisualStyleBackColor = true;
+            // 
+            // TmpDateienLöschen
+            // 
+            TmpDateienLöschen.Location = new Point(296, 754);
+            TmpDateienLöschen.Name = "TmpDateienLöschen";
+            TmpDateienLöschen.Size = new Size(257, 34);
+            TmpDateienLöschen.TabIndex = 58;
+            TmpDateienLöschen.Text = "Tmp Dateien löschen";
+            TmpDateienLöschen.UseVisualStyleBackColor = true;
+            TmpDateienLöschen.Click += TmpDateienLöschen_Click;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(2384, 765);
+            ClientSize = new Size(2384, 803);
+            Controls.Add(TmpDateienLöschen);
+            Controls.Add(PlotGleichmäßigVerteilen);
             Controls.Add(WakeUpHddsTB);
             Controls.Add(WakeUpHddsB);
             Controls.Add(label12);
@@ -707,7 +733,7 @@
             Controls.Add(KopierenStarten);
             Controls.Add(Kopieren);
             Name = "Form1";
-            Text = "mech2youDV v1.1.3";
+            Text = "mech2youDV v1.1.4";
             FormClosing += Form1_FormClosing;
             Load += Form1_Load;
             ((System.ComponentModel.ISupportInitialize)AnzahlPlots).EndInit();
@@ -781,5 +807,7 @@
         private NumericUpDown ThreadmultiplierforP2ND;
         private Button WakeUpHddsB;
         private TextBox WakeUpHddsTB;
+        private CheckBox PlotGleichmäßigVerteilen;
+        private Button TmpDateienLöschen;
     }
 }

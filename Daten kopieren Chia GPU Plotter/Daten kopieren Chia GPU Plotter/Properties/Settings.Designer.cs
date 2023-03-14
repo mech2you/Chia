@@ -274,5 +274,17 @@ namespace Daten_kopieren_Chia_GPU_Plotter.Properties {
                 this["pfadWakeUpHDD"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool PlotGleichmäßigVerteilen {
+            get {
+                return ((bool)(this["PlotGleichmäßigVerteilen"]));
+            }
+            set {
+                this["PlotGleichmäßigVerteilen"] = value;
+            }
+        }
     }
 }

@@ -134,13 +134,21 @@ namespace Daten_kopieren_Chia_GPU_Plotter
             {
                 copy(quellpfad + dateiname, zielpfad + dateiname + endkürzel);
             }
-            
 
 
-            if (File.Exists(quellpfad + dateiname))// Die alte Datei wird gelöscht
+            try
             {
-                File.Delete(quellpfad + dateiname);
+                if (File.Exists(quellpfad + dateiname))// Die alte Datei wird gelöscht
+                {
+                    File.Delete(quellpfad + dateiname);
+                }
             }
+            catch (Exception ex)
+            {
+                Log("Fehler Datei konnte nicht umbenannt werden" + quellpfad + dateiname);
+                Log(ex.ToString());
+            }
+
             System.IO.File.Move(zielpfad + dateiname + endkürzel, zielpfad + dateiname);// Umbenennen
             watch.Stop();
             // Kopiervorgang wird in die Liste als abgeschlossen eingetragen
