@@ -16,6 +16,10 @@ using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 using System.Security;
 using System.IO;
+using System.Configuration;
+using System.Security.AccessControl;
+using System.Text.RegularExpressions;
+using System.Text;
 
 namespace Daten_kopieren_Chia_GPU_Plotter
 {
@@ -1152,6 +1156,131 @@ namespace Daten_kopieren_Chia_GPU_Plotter
 
                 }
             }
+
+        }
+        /// <summary>
+        /// Prüft ob die Zugrifssrechte vorhanden sind mit einer Datei test.txt
+        /// Diese wird erstellt und ein Inhalt eingefügt. 
+        /// Die Datei wird umbennant und danach wird der Inhalt gelesen.
+        /// Stimmt der Inhalt mit dem geschriebenen über wird die Datei gelöscht
+        /// Es wird nur true zurückgegeben wenn der Test ohne Fehler abläuft. 
+        /// </summary>
+        /// <param name="_pfad">Pfad zu der getestet werden soll z.B. "E:\\ChiaMM\\"</param>
+        /// <returns>true wenn keine Fehler gefunden</returns>
+        public bool GetZugriffsrechte(String _pfad)
+        {
+            if (Directory.Exists(_pfad))
+            {
+                logGlobal("Pfad vorhanden -> " + _pfad);
+                try
+                {
+                    using (StreamWriter sw = File.CreateText(_pfad + "test.txt"))
+                    {
+                        sw.WriteLine("Hallo das ist ein Test ob geschrieben werden darf!");
+                    }
+                    logGlobal("Erstellen einer Testdatei -> " + _pfad + "test.txt");
+                    try
+                    {
+                        File.Move(_pfad + "test.txt", _pfad + "test1.txt");
+                        logGlobal("Datei unbenannt von -> " + _pfad + "test.txt zu " + _pfad + "test1.txt");
+                        try
+                        {
+                            //https://learn.microsoft.com/de-de/troubleshoot/developer/visualstudio/csharp/language-compilers/read-write-text-file
+                            StreamReader sr = new StreamReader(_pfad + "test1.txt");
+                            //Read the first line of text
+                            String line = sr.ReadLine();
+                            //Continue to read until you reach end of file
+                            bool lesenErfolgreich = false;
+                            while (line != null)
+                            {
+                                //write the line to console window
+                                if (line.IndexOf("Hallo das ist ein Test ob geschrieben werden darf!") != -1)
+                                {
+                                    lesenErfolgreich = true;
+                                }
+                                //Read the next line
+                                line = sr.ReadLine();
+                            }
+                            //close the file
+                            sr.Close();
+
+                            if (lesenErfolgreich)
+                            {
+                                logGlobal("Inhalt der Datei konnte gelesen werden -> " + _pfad + "test1.txt");
+                                try
+                                {
+                                    File.Delete(_pfad + "test1.txt");
+                                    logGlobal("Datei konnte gelöscht werden -> " + _pfad + "test1.txt");
+                                    logGlobal("Test Erfolgreich für Pfad " + _pfad);
+                                    return true;
+                                }
+                                catch
+                                {
+                                    logGlobal("Fehler: Datei konnte nicht gelöscht werden -> " + _pfad + "test1.txt");
+                                }
+
+                            }
+                            else
+                            {
+                                logGlobal("Fehler: Inhalt der Datei konnte nicht gelesen werden -> " + _pfad + "test1.txt");
+                            }
+                        }
+                        catch
+                        {
+                            logGlobal("Fehler: Lesen war nicht erfolgreich -> " + _pfad + "test1.txt");
+                        }
+                    }
+                    catch
+                    {
+                        logGlobal("Fehler: Dateiname konnte nicht unbenannt werden -> " + _pfad + "test.txt zu " + _pfad + "test1.txt");
+                    }
+
+                }
+                catch
+                {
+                    logGlobal("Fehler: Erstellen einer Testdatei fehlgeschlagen. Zugriffsrechte fehlen -> " + _pfad + "test.txt");
+                }
+            }
+            else
+            {
+                logGlobal("Fehler: Pfad nicht vorhanden oder Zugriff fehlt -> " + _pfad);
+            }
+            return false;
+        }
+        private void ZugriffsrechtPrüfen_Click(object sender, EventArgs e)
+        {
+            int i = 0;
+            int k = 0;
+            if (quellPfad.Items.Count > 0)
+            {
+                if (GetZugriffsrechte(quellPfad.Items[0].ToString()))
+                {
+                    i++;
+                }
+                k++;
+
+            }
+            foreach (Kopiervorgang item in DatenKopierer)
+            {
+                if (item.zielpfad != null)
+                {
+                    if (GetZugriffsrechte(item.zielpfad))
+                    {
+                        i++;
+                    }
+                    k++;
+                }
+            }
+            if (k == i)
+            {
+                logGlobal("Test Erfolgreich für " + i + " Laufwerk/e");
+            }
+            else
+            {
+                k = k - i;
+                logGlobal("Fehler: Test nicht Erfolgreich für " + k + " Laufwerk/e | Log prüfen");
+            }
+
         }
     }
 }

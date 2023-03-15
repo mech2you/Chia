@@ -87,6 +87,7 @@
             WakeUpHddsTB = new TextBox();
             PlotGleichmäßigVerteilen = new CheckBox();
             TmpDateienLöschen = new Button();
+            ZugriffsrechtPrüfen = new Button();
             ((System.ComponentModel.ISupportInitialize)AnzahlPlots).BeginInit();
             ((System.ComponentModel.ISupportInitialize)GPUGemeinsameSpeicherGUI).BeginInit();
             groupBox1.SuspendLayout();
@@ -671,11 +672,22 @@
             TmpDateienLöschen.UseVisualStyleBackColor = true;
             TmpDateienLöschen.Click += TmpDateienLöschen_Click;
             // 
+            // ZugriffsrechtPrüfen
+            // 
+            ZugriffsrechtPrüfen.Location = new Point(559, 754);
+            ZugriffsrechtPrüfen.Name = "ZugriffsrechtPrüfen";
+            ZugriffsrechtPrüfen.Size = new Size(257, 34);
+            ZugriffsrechtPrüfen.TabIndex = 59;
+            ZugriffsrechtPrüfen.Text = "Zugriffsrecht prüfen";
+            ZugriffsrechtPrüfen.UseVisualStyleBackColor = true;
+            ZugriffsrechtPrüfen.Click += ZugriffsrechtPrüfen_Click;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(2384, 803);
+            Controls.Add(ZugriffsrechtPrüfen);
             Controls.Add(TmpDateienLöschen);
             Controls.Add(PlotGleichmäßigVerteilen);
             Controls.Add(WakeUpHddsTB);
@@ -733,7 +745,7 @@
             Controls.Add(KopierenStarten);
             Controls.Add(Kopieren);
             Name = "Form1";
-            Text = "mech2youDV v1.1.4";
+            Text = "mech2youDV v1.1.5";
             FormClosing += Form1_FormClosing;
             Load += Form1_Load;
             ((System.ComponentModel.ISupportInitialize)AnzahlPlots).EndInit();
@@ -809,5 +821,6 @@
         private TextBox WakeUpHddsTB;
         private CheckBox PlotGleichmäßigVerteilen;
         private Button TmpDateienLöschen;
+        private Button ZugriffsrechtPrüfen;
     }
 }
