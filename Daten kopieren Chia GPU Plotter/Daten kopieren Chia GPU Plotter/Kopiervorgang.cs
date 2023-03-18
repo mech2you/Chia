@@ -145,11 +145,18 @@ namespace Daten_kopieren_Chia_GPU_Plotter
             }
             catch (Exception ex)
             {
-                Log("Fehler Datei konnte nicht umbenannt werden" + quellpfad + dateiname);
+                Log("Fehler Alte Plot Datei konnte nicht gelöscht werden ->" + quellpfad + dateiname);
                 Log(ex.ToString());
             }
-
-            System.IO.File.Move(zielpfad + dateiname + endkürzel, zielpfad + dateiname);// Umbenennen
+            try
+            {
+                System.IO.File.Move(zielpfad + dateiname + endkürzel, zielpfad + dateiname);// Umbenennen
+            }
+            catch (Exception ex)
+            {
+                Log("Fehler Umbennen fehlgeschlagen von ->" + zielpfad + dateiname + endkürzel + " zu "+ zielpfad + dateiname);
+                Log(ex.ToString());
+            }
             watch.Stop();
             // Kopiervorgang wird in die Liste als abgeschlossen eingetragen
             fertig = true;

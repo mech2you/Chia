@@ -1095,68 +1095,110 @@ namespace Daten_kopieren_Chia_GPU_Plotter
                 // 
                 foreach (string pfad in ordner)
                 {
-                    string[] dateien = Directory.GetFiles(pfad);
-                    foreach (string dateipfad in dateien)
+                    if (Directory.Exists(pfad))
                     {
-                        string[] pfad1 = Directory.GetDirectories(pfad);
-                        if (pfad1.Count() > 0)// es existiert ein Unterpfad
+
+                        string[] dateien = null;
+                        try
                         {
-                            foreach (string unterpfad in pfad1)
+                            dateien = Directory.GetFiles(pfad);
+                        }
+                        catch (Exception ex)
+                        {
+                            logGlobal("Fehler Unbekannt Pfad -> " + pfad);
+                            logGlobal(ex.ToString());
+                            dateien = new string[] { "" };
+                        }
+                        foreach (string dateipfad in dateien)
+                        {
+                            string[] pfad1 = null;
+                            try
                             {
-                                FileAttributes attributes = File.GetAttributes(unterpfad);
-                                if ((attributes & FileAttributes.System) != FileAttributes.System)
+                                pfad1 = Directory.GetDirectories(pfad);
+                            }
+                            catch (Exception ex)
+                            {
+                                logGlobal("Fehler Unbekannt Pfad -> " + dateipfad);
+                                logGlobal(ex.ToString());
+                                pfad1 = new string[] { "" };
+                            }
+
+                            if (pfad1.Count() > 0)// es existiert ein Unterpfad
+                            {
+                                foreach (string unterpfad in pfad1)
                                 {
-                                    string[] dateien1 = Directory.GetFiles(unterpfad);
-                                    foreach (string dateipfad1 in dateien1)
+                                    if (Directory.Exists(unterpfad))
                                     {
-                                        if (dateipfad1.Substring(dateipfad1.Length - 3) == "tmp")// handelt es sich um eine tmp File
+                                        FileAttributes attributes = File.GetAttributes(unterpfad);
+                                        if ((attributes & FileAttributes.System) != FileAttributes.System)
                                         {
-                                            if (File.Exists(dateipfad1))// Nur wenn die Datei existiert geht es weiter
+
+                                            string[] dateien1 = null;
+                                            try
                                             {
-                                                try
+                                                dateien1 = Directory.GetFiles(unterpfad);
+                                            }
+                                            catch (Exception ex)
+                                            {
+                                                logGlobal("Fehler Unbekannt Pfad -> " + unterpfad);
+                                                logGlobal(ex.ToString());
+                                                dateien1 = new string[] { "" };
+                                            }
+                                            foreach (string dateipfad1 in dateien1)
+                                            {
+                                                if (dateipfad1.Substring(dateipfad1.Length - 3) == "tmp")// handelt es sich um eine tmp File
                                                 {
-                                                    logGlobal("TMP Datei wurde gelöscht: " + dateipfad1);
-                                                    File.Delete(dateipfad1);
-                                                }
-                                                catch (Exception ex)
-                                                {
-                                                    logGlobal("Fehler TMP Datei konnte nicht gelöscht werden -> " + dateipfad1);
-                                                    logGlobal(ex.ToString());
+                                                    if (File.Exists(dateipfad1))// Nur wenn die Datei existiert geht es weiter
+                                                    {
+                                                        try
+                                                        {
+                                                            logGlobal("TMP Datei wurde gelöscht: " + dateipfad1);
+                                                            File.Delete(dateipfad1);
+                                                        }
+                                                        catch (Exception ex)
+                                                        {
+                                                            logGlobal("Fehler TMP Datei konnte nicht gelöscht werden -> " + dateipfad1);
+                                                            logGlobal(ex.ToString());
+                                                        }
+                                                    }
                                                 }
                                             }
                                         }
                                     }
                                 }
-
                             }
-                        }
-                        else
-                        {
-                            if (dateipfad.Substring(dateipfad.Length - 3) == "tmp")// handelt es sich um eine tmp File
+                            else
                             {
-                                if (File.Exists(dateipfad))// Nur wenn die Datei existiert geht es weiter
+                                if (dateipfad.Substring(dateipfad.Length - 3) == "tmp")// handelt es sich um eine tmp File
                                 {
-
-                                    try
+                                    if (File.Exists(dateipfad))// Nur wenn die Datei existiert geht es weiter
                                     {
-                                        logGlobal("TMP Datei wurde gelöscht: " + dateipfad);
-                                        File.Delete(dateipfad);
-                                    }
-                                    catch (Exception ex)
-                                    {
-                                        logGlobal("Fehler TMP Datei konnte nicht gelöscht werden -> " + dateipfad);
-                                        logGlobal(ex.ToString());
-                                    }
+
+                                        try
+                                        {
+                                            logGlobal("TMP Datei wurde gelöscht: " + dateipfad);
+                                            File.Delete(dateipfad);
+                                        }
+                                        catch (Exception ex)
+                                        {
+                                            logGlobal("Fehler TMP Datei konnte nicht gelöscht werden -> " + dateipfad);
+                                            logGlobal(ex.ToString());
+                                        }
 
 
+                                    }
                                 }
                             }
                         }
                     }
+                    else
+                    {
+                        logGlobal("Fehler Pfad existiert nicht -> " + pfad);
+                    }
+
 
                 }
             }
-
         }
         /// <summary>
         /// Prüft ob die Zugrifssrechte vorhanden sind mit einer Datei test.txt
