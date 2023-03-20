@@ -745,7 +745,7 @@
             Controls.Add(KopierenStarten);
             Controls.Add(Kopieren);
             Name = "Form1";
-            Text = "mech2youDV v1.1.6";
+            Text = "mech2youDV v1.1.7";
             FormClosing += Form1_FormClosing;
             Load += Form1_Load;
             ((System.ComponentModel.ISupportInitialize)AnzahlPlots).EndInit();

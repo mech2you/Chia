@@ -746,6 +746,14 @@ namespace Daten_kopieren_Chia_GPU_Plotter
                     gefunden = true;
                     logGlobal("Version MadMax CPU gefunden");
                 }
+                if (zeile.ToString().IndexOf("2.0.0-29c814d") != -1)// Version MadMax CPU Plotter gefunden
+                {
+                    PlotterGefunden.Checked = true;
+                    gefunden = true;
+                    logGlobal("Version MadMax GPU gefunden 2.0.0-29c814d");
+                }
+
+
             }
             return gefunden;
         }
