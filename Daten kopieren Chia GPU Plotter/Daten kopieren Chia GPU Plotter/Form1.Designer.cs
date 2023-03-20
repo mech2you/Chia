@@ -88,6 +88,8 @@
             PlotGleichmäßigVerteilen = new CheckBox();
             TmpDateienLöschen = new Button();
             ZugriffsrechtPrüfen = new Button();
+            KopierenMax = new NumericUpDown();
+            label13 = new Label();
             ((System.ComponentModel.ISupportInitialize)AnzahlPlots).BeginInit();
             ((System.ComponentModel.ISupportInitialize)GPUGemeinsameSpeicherGUI).BeginInit();
             groupBox1.SuspendLayout();
@@ -95,6 +97,7 @@
             ((System.ComponentModel.ISupportInitialize)BucketsND).BeginInit();
             ((System.ComponentModel.ISupportInitialize)Buckets3ND).BeginInit();
             ((System.ComponentModel.ISupportInitialize)ThreadmultiplierforP2ND).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)KopierenMax).BeginInit();
             SuspendLayout();
             // 
             // Kopieren
@@ -682,11 +685,31 @@
             ZugriffsrechtPrüfen.UseVisualStyleBackColor = true;
             ZugriffsrechtPrüfen.Click += ZugriffsrechtPrüfen_Click;
             // 
+            // KopierenMax
+            // 
+            KopierenMax.Location = new Point(464, 127);
+            KopierenMax.Maximum = new decimal(new int[] { 10000, 0, 0, 0 });
+            KopierenMax.Name = "KopierenMax";
+            KopierenMax.Size = new Size(69, 31);
+            KopierenMax.TabIndex = 60;
+            KopierenMax.Value = new decimal(new int[] { 10, 0, 0, 0 });
+            // 
+            // label13
+            // 
+            label13.AutoSize = true;
+            label13.Location = new Point(338, 127);
+            label13.Name = "label13";
+            label13.Size = new Size(120, 25);
+            label13.TabIndex = 61;
+            label13.Text = "Kopieren Max";
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(2384, 803);
+            Controls.Add(label13);
+            Controls.Add(KopierenMax);
             Controls.Add(ZugriffsrechtPrüfen);
             Controls.Add(TmpDateienLöschen);
             Controls.Add(PlotGleichmäßigVerteilen);
@@ -745,7 +768,7 @@
             Controls.Add(KopierenStarten);
             Controls.Add(Kopieren);
             Name = "Form1";
-            Text = "mech2youDV v1.1.7";
+            Text = "mech2youDV v1.1.8";
             FormClosing += Form1_FormClosing;
             Load += Form1_Load;
             ((System.ComponentModel.ISupportInitialize)AnzahlPlots).EndInit();
@@ -756,6 +779,7 @@
             ((System.ComponentModel.ISupportInitialize)BucketsND).EndInit();
             ((System.ComponentModel.ISupportInitialize)Buckets3ND).EndInit();
             ((System.ComponentModel.ISupportInitialize)ThreadmultiplierforP2ND).EndInit();
+            ((System.ComponentModel.ISupportInitialize)KopierenMax).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -822,5 +846,7 @@
         private CheckBox PlotGleichmäßigVerteilen;
         private Button TmpDateienLöschen;
         private Button ZugriffsrechtPrüfen;
+        private NumericUpDown KopierenMax;
+        private Label label13;
     }
 }

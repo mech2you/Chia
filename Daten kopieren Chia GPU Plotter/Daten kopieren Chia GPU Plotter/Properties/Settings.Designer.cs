@@ -286,5 +286,17 @@ namespace Daten_kopieren_Chia_GPU_Plotter.Properties {
                 this["PlotGleichmäßigVerteilen"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("10")]
+        public string kopierenMax {
+            get {
+                return ((string)(this["kopierenMax"]));
+            }
+            set {
+                this["kopierenMax"] = value;
+            }
+        }
     }
 }
