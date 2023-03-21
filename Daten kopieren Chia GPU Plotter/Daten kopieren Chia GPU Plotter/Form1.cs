@@ -21,6 +21,7 @@ using System.Security.AccessControl;
 using System.Text.RegularExpressions;
 using System.Text;
 using System.Collections;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Daten_kopieren_Chia_GPU_Plotter
 {
@@ -43,6 +44,16 @@ namespace Daten_kopieren_Chia_GPU_Plotter
         String threadmultiplierforP2 = "";
         String pfadWakeUpHDD = "";
         public bool plotterAktiv = false;
+
+        List<Kopiervorgang> DatenKopierer = new List<Kopiervorgang>();// Jedes Ziellaufwerk erhält einen kopierer
+
+
+        public List<KopierDaten> Kopierliste = new List<KopierDaten>();// Quelldatei und Zustand
+        private static System.Timers.Timer aTimer = new System.Timers.Timer(2000);// In welchen Abstand in ms soll nach neuen Plots gesucht werden
+
+        BackgroundWorker PSBackgroundWorker = new BackgroundWorker();// Wird für die Powershell verwendet für den Plotter 
+
+
         /// <summary>
         /// Für den Event Handler Log
         /// </summary>
@@ -52,14 +63,22 @@ namespace Daten_kopieren_Chia_GPU_Plotter
         {
             logGlobal(_log);
         }
-
-        List<Kopiervorgang> DatenKopierer = new List<Kopiervorgang>();// Jedes Ziellaufwerk erhält einen kopierer
-
-
-        public List<KopierDaten> Kopierliste = new List<KopierDaten>();// Quelldatei und Zustand
-        private static System.Timers.Timer aTimer = new System.Timers.Timer(2000);// In welchen Abstand in ms soll nach neuen Plots gesucht werden
-
-        BackgroundWorker PSBackgroundWorker = new BackgroundWorker();// Wird für die Powershell verwendet für den Plotter 
+        /// <summary>
+        /// Event Handler der bei einen Fehler vom Kopiervorgang ausgelöst wird
+        /// </summary>
+        /// <param name="sendere"></param>
+        /// <param name="_dateiQuelle"></param>
+        public void FehlerKopiervorgang(object sendere, KopierDaten _dateiQuelle)
+        {
+            //logGlobal("Event FehlerKopiervorgang für "+_dateiQuelle.dateiname);
+            foreach (KopierDaten inhalt in Kopierliste)//  Es wird nach dem Plot gesucht die nicht kopiert werden konnte
+            {
+                if (inhalt.dateiname == _dateiQuelle.dateiname)// Wenn ein Plot gefunden wurde wird das Kopieren des Plots in der Liste zurückgesetzt
+                {
+                    inhalt.fertig = false;
+                }
+            }
+        }
 
 
 
@@ -190,7 +209,7 @@ namespace Daten_kopieren_Chia_GPU_Plotter
                         IAsyncResult results = powershell.BeginInvoke<PSObject, PSObject>(null, outputCollection);
                         foreach (PSObject outItem in outputCollection)
                         {
-                            logGlobal(outItem.BaseObject.ToString());
+                            logPlotter(outItem.BaseObject.ToString());
                             if (worker.CancellationPending == true)// Bricht die Powershell ab
                             {
                                 logGlobal("Plotter angehalten!!");
@@ -199,7 +218,7 @@ namespace Daten_kopieren_Chia_GPU_Plotter
                             }
                         }
                     }
-                    string[] dateien = Directory.GetFiles(quelle);// Löscht den defekten Plot da der Plotter abgebrochen hat
+                    string[] dateien = Directory.GetFiles(quelle);// Löscht defekten Plot da der Plotter abgebrochen oder beendet wurde
                     foreach (string dateiname in dateien)
                     {
                         if (dateiname.Substring(dateiname.Length - 3) == "tmp")// handelt es sich um einen defekten Plot
@@ -262,6 +281,8 @@ namespace Daten_kopieren_Chia_GPU_Plotter
                     log.Invoke(new Action(() =>
                     {
                         log.AppendText(message + Environment.NewLine);
+                        log.SelectionStart = log.Text.Length;
+                        log.ScrollToCaret();
 
                     }));
                 }
@@ -272,7 +293,29 @@ namespace Daten_kopieren_Chia_GPU_Plotter
                     log.ScrollToCaret();
                 }
             }
+        }
+        public void logPlotter(string message)
+        {
 
+            if (PlotterLog != null)
+            {
+                if (PlotterLog.InvokeRequired)
+                {
+                    PlotterLog.Invoke(new Action(() =>
+                    {
+                        PlotterLog.AppendText(message + Environment.NewLine);
+                        PlotterLog.SelectionStart = PlotterLog.Text.Length;
+                        PlotterLog.ScrollToCaret();
+
+                    }));
+                }
+                else
+                {
+                    PlotterLog.Text += message + Environment.NewLine;
+                    PlotterLog.SelectionStart = PlotterLog.Text.Length;
+                    PlotterLog.ScrollToCaret();
+                }
+            }
         }
         /// <summary>
         /// Entfernt das Laufwerk aus allen Variablen und auch aus der GUI
@@ -344,10 +387,11 @@ namespace Daten_kopieren_Chia_GPU_Plotter
                     {
                         _kopierer.BWkopieren.RunWorkerAsync();
                         return true;
-                    }catch (Exception ex)
+                    }
+                    catch (Exception ex)
                     {
                         logGlobal(ex.Message);
-                        return false ;
+                        return false;
                     }
                 }
                 else
@@ -549,8 +593,6 @@ namespace Daten_kopieren_Chia_GPU_Plotter
                                 }
                             }
                         }
-
-
                     }
                     if (abbrechen2)
                     {
@@ -610,6 +652,7 @@ namespace Daten_kopieren_Chia_GPU_Plotter
                     zielPfadListe.Items.Add(dialog.SelectedPath + "\\");
                     DatenKopierer.Add(new Kopiervorgang(dialog.SelectedPath.ToString() + "\\"));
                     DatenKopierer[DatenKopierer.Count - 1].neuerLog += LogKopiervorgang;
+                    DatenKopierer[DatenKopierer.Count - 1].fehlerKopieren += FehlerKopiervorgang;
                     // Prozessvortschrittsanzeige einfügen bei einen neuen Zielpfad
                     this.Controls.Add(DatenKopierer[DatenKopierer.Count - 1].Kopierstatus);
                     int tmpX = zielPfadListe.Location.X;
@@ -671,7 +714,7 @@ namespace Daten_kopieren_Chia_GPU_Plotter
                     zielPfadListe.Items.Add(separator);
                     DatenKopierer.Add(new Kopiervorgang(separator.ToString()));
                     DatenKopierer[DatenKopierer.Count - 1].neuerLog += LogKopiervorgang;
-
+                    DatenKopierer[DatenKopierer.Count - 1].fehlerKopieren += FehlerKopiervorgang;
 
                     // Prozessvortschrittsanzeige einfügen bei einen neuen Zielpfad
                     this.Controls.Add(DatenKopierer[DatenKopierer.Count - 1].Kopierstatus);
@@ -751,7 +794,7 @@ namespace Daten_kopieren_Chia_GPU_Plotter
             {
                 PlotGleichmäßigVerteilen.Checked = false;
             }
-            KopierenMax.Value=Convert.ToDecimal(Properties.Settings.Default.kopierenMax) ;
+            KopierenMax.Value = Convert.ToDecimal(Properties.Settings.Default.kopierenMax);
 
         }
         /// <summary>
@@ -779,6 +822,7 @@ namespace Daten_kopieren_Chia_GPU_Plotter
         private void LogLöschen_Click(object sender, EventArgs e)
         {
             log.Text = "";
+            PlotterLog.Text = "";
         }
 
         private void KopierenAnhalten_Click(object sender, EventArgs e)
@@ -806,13 +850,13 @@ namespace Daten_kopieren_Chia_GPU_Plotter
                     {
                         foreach (var error in powershell.Streams.Error)
                         {
-                            Console.WriteLine(error.ToString());
+                            logGlobal(error.ToString());
                         }
                     }
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine(ex.Message);
+                    logGlobal(ex.Message);
                 }
                 foreach (PSObject zeile in rückgabePS)
                 {
@@ -1422,6 +1466,16 @@ namespace Daten_kopieren_Chia_GPU_Plotter
                 logGlobal("Fehler: Test nicht Erfolgreich für " + k + " Laufwerk/e | Log prüfen");
             }
 
+        }
+
+        private void GlobalLogKopieren_Click(object sender, EventArgs e)
+        {
+            System.Windows.Forms.Clipboard.SetDataObject(log.Text);
+        }
+
+        private void PlotterLogKopieren_Click(object sender, EventArgs e)
+        {
+            System.Windows.Forms.Clipboard.SetDataObject(PlotterLogKopieren.Text);
         }
     }
 }

@@ -35,7 +35,6 @@
             zielPfadListe = new ListBox();
             ZielverzeichnissEinfügen = new Button();
             ZielverzeichnissLöschen = new Button();
-            log = new TextBox();
             LogLöschen = new Button();
             KopierenAnhalten = new Button();
             ChiaCudaPlotterWählen = new Button();
@@ -90,6 +89,12 @@
             ZugriffsrechtPrüfen = new Button();
             KopierenMax = new NumericUpDown();
             label13 = new Label();
+            PlotterLog = new RichTextBox();
+            log = new RichTextBox();
+            label14 = new Label();
+            label15 = new Label();
+            GlobalLogKopieren = new Button();
+            PlotterLogKopieren = new Button();
             ((System.ComponentModel.ISupportInitialize)AnzahlPlots).BeginInit();
             ((System.ComponentModel.ISupportInitialize)GPUGemeinsameSpeicherGUI).BeginInit();
             groupBox1.SuspendLayout();
@@ -168,15 +173,6 @@
             ZielverzeichnissLöschen.Text = "Zielverzeichniss löschen";
             ZielverzeichnissLöschen.UseVisualStyleBackColor = true;
             ZielverzeichnissLöschen.Click += ZielverzeichnissLöschen_Click;
-            // 
-            // log
-            // 
-            log.Location = new Point(598, 306);
-            log.Multiline = true;
-            log.Name = "log";
-            log.ScrollBars = ScrollBars.Both;
-            log.Size = new Size(1781, 363);
-            log.TabIndex = 7;
             // 
             // LogLöschen
             // 
@@ -416,9 +412,9 @@
             // 
             // InfoGUI
             // 
-            InfoGUI.Location = new Point(720, 674);
+            InfoGUI.Location = new Point(2107, 665);
             InfoGUI.Name = "InfoGUI";
-            InfoGUI.Size = new Size(180, 74);
+            InfoGUI.Size = new Size(272, 123);
             InfoGUI.TabIndex = 33;
             InfoGUI.Text = "18TB c8 235";
             // 
@@ -703,11 +699,71 @@
             label13.TabIndex = 61;
             label13.Text = "Kopieren Max";
             // 
+            // PlotterLog
+            // 
+            PlotterLog.Location = new Point(702, 539);
+            PlotterLog.Name = "PlotterLog";
+            PlotterLog.Size = new Size(1678, 120);
+            PlotterLog.TabIndex = 62;
+            PlotterLog.Text = "";
+            // 
+            // log
+            // 
+            log.Location = new Point(702, 307);
+            log.Name = "log";
+            log.Size = new Size(1678, 226);
+            log.TabIndex = 63;
+            log.Text = "";
+            // 
+            // label14
+            // 
+            label14.AutoSize = true;
+            label14.Location = new Point(598, 310);
+            label14.Name = "label14";
+            label14.Size = new Size(98, 25);
+            label14.TabIndex = 64;
+            label14.Text = "Global Log";
+            // 
+            // label15
+            // 
+            label15.AutoSize = true;
+            label15.Location = new Point(597, 542);
+            label15.Name = "label15";
+            label15.Size = new Size(99, 25);
+            label15.TabIndex = 65;
+            label15.Text = "Plotter Log";
+            // 
+            // GlobalLogKopieren
+            // 
+            GlobalLogKopieren.Location = new Point(576, 499);
+            GlobalLogKopieren.Name = "GlobalLogKopieren";
+            GlobalLogKopieren.Size = new Size(120, 34);
+            GlobalLogKopieren.TabIndex = 66;
+            GlobalLogKopieren.Text = "log kopieren";
+            GlobalLogKopieren.UseVisualStyleBackColor = true;
+            GlobalLogKopieren.Click += GlobalLogKopieren_Click;
+            // 
+            // PlotterLogKopieren
+            // 
+            PlotterLogKopieren.Location = new Point(576, 625);
+            PlotterLogKopieren.Name = "PlotterLogKopieren";
+            PlotterLogKopieren.Size = new Size(120, 34);
+            PlotterLogKopieren.TabIndex = 67;
+            PlotterLogKopieren.Text = "log kopieren";
+            PlotterLogKopieren.UseVisualStyleBackColor = true;
+            PlotterLogKopieren.Click += PlotterLogKopieren_Click;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(2384, 803);
+            Controls.Add(PlotterLogKopieren);
+            Controls.Add(GlobalLogKopieren);
+            Controls.Add(label15);
+            Controls.Add(label14);
+            Controls.Add(log);
+            Controls.Add(PlotterLog);
             Controls.Add(label13);
             Controls.Add(KopierenMax);
             Controls.Add(ZugriffsrechtPrüfen);
@@ -759,7 +815,6 @@
             Controls.Add(ChiaCudaPlotterWählen);
             Controls.Add(KopierenAnhalten);
             Controls.Add(LogLöschen);
-            Controls.Add(log);
             Controls.Add(ZielverzeichnissLöschen);
             Controls.Add(ZielverzeichnissEinfügen);
             Controls.Add(zielPfadListe);
@@ -768,7 +823,7 @@
             Controls.Add(KopierenStarten);
             Controls.Add(Kopieren);
             Name = "Form1";
-            Text = "mech2youDV v1.1.8";
+            Text = "mech2youDV v1.1.9";
             FormClosing += Form1_FormClosing;
             Load += Form1_Load;
             ((System.ComponentModel.ISupportInitialize)AnzahlPlots).EndInit();
@@ -793,7 +848,6 @@
         private ListBox zielPfadListe;
         private Button ZielverzeichnissEinfügen;
         private Button ZielverzeichnissLöschen;
-        private TextBox log;
         private Button LogLöschen;
         private Button KopierenAnhalten;
         private Button ChiaCudaPlotterWählen;
@@ -848,5 +902,13 @@
         private Button ZugriffsrechtPrüfen;
         private NumericUpDown KopierenMax;
         private Label label13;
+        private RichTextBox richTextBox1;
+        private RichTextBox PlotterLog;
+        private RichTextBox richTextBox2;
+        private RichTextBox log;
+        private Label label14;
+        private Label label15;
+        private Button GlobalLogKopieren;
+        private Button PlotterLogKopieren;
     }
 }
