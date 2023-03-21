@@ -55,7 +55,7 @@ namespace Daten_kopieren_Chia_GPU_Plotter
         /// </summary>
         /// <param name="_quelldatei"></param>
         /// <param name="_zieldatei"></param>
-        void copyNetwork(string _quelldatei, string _zieldatei)
+        bool copyNetwork(string _quelldatei, string _zieldatei)
         {
             try
             {
@@ -71,12 +71,15 @@ namespace Daten_kopieren_Chia_GPU_Plotter
                 }
                 fsin.Close();
                 fsout.Close();
+                return false;
             }
             catch (Exception e)
             {
-                Log("Fehler Datei " + _quelldatei + " konnte nicht nach " + _zieldatei + " kopiert werden");
+                Log("Fehler Netzwerk Datei " + _quelldatei + " konnte nicht nach " + _zieldatei + " kopiert werden");
                 Log(e.ToString());
+                return true;
             }
+            
             
         }
 
@@ -85,7 +88,7 @@ namespace Daten_kopieren_Chia_GPU_Plotter
         /// </summary>
         /// <param name="_quelldatei"></param>
         /// <param name="_zieldatei"></param>
-        public void copy (String _quelldatei, String _zieldatei)
+        public bool copy (String _quelldatei, String _zieldatei)
         {
             //Die Anforderung konnte wegen eines E/A-Gerätefehlers nicht ausgeführt werden. : 'C:\Chia\024\024_16TB_SG_MM_PP\plot-k32-c7-2023-03-12-06-16-e9da82f7df2b1b45a4e8d675442248f26ead68b0705c20ea39fb43ec569f199f.plot.tmp'"
             try
@@ -101,11 +104,13 @@ namespace Daten_kopieren_Chia_GPU_Plotter
                 }
                 fsin.Close();
                 fsout.Close();
+                return false;
             }
             catch (Exception e)
             {
                 Log("Fehler Datei " + _quelldatei + " konnte nicht nach " + _zieldatei + " kopiert werden");
                 Log(e.ToString());
+                return true;
             }
             
         }
@@ -125,42 +130,53 @@ namespace Daten_kopieren_Chia_GPU_Plotter
             {
                 File.Delete(zielpfad + dateiname + endkürzel);
             }
-            //System.IO.File.Move(quellpfad + dateiname, zielpfad + dateiname + endkürzel);//Kopieren vom Plot
+            bool error = false;
+            //System.IO.File.Move(quellpfad + dateiname, zielpfad + dateiname + endkürzel);//Kopieren vom Plot -> Bei Netzlaufwerken wird zuviel Speicher verwenden und kein Prozentanzeige
             if (zielpfad.IndexOf("\\\\")!=-1)//handelt es sich um einen Netzwerkfreigabe?
             {
-                copyNetwork(quellpfad + dateiname, zielpfad + dateiname + endkürzel);
+                error= copyNetwork(quellpfad + dateiname, zielpfad + dateiname + endkürzel);
             }
             else// Ein Laufwerk auf den PC 
             {
-                copy(quellpfad + dateiname, zielpfad + dateiname + endkürzel);
+                error= copy(quellpfad + dateiname, zielpfad + dateiname + endkürzel);
             }
 
-
-            try
+            if (!error)
             {
-                if (File.Exists(quellpfad + dateiname))// Die alte Datei wird gelöscht
+                try
                 {
-                    File.Delete(quellpfad + dateiname);
+                    if (File.Exists(quellpfad + dateiname))// Die alte Datei wird gelöscht
+                    {
+                        File.Delete(quellpfad + dateiname);
+                    }
                 }
+                catch (Exception ex)
+                {
+                    Log("Fehler Alte Plot Datei konnte nicht gelöscht werden ->" + quellpfad + dateiname);
+                    Log(ex.ToString());
+                }
+                try
+                {
+                    System.IO.File.Move(zielpfad + dateiname + endkürzel, zielpfad + dateiname);// Umbenennen
+                }
+                catch (Exception ex)
+                {
+                    Log("Fehler Umbennen fehlgeschlagen von ->" + zielpfad + dateiname + endkürzel + " zu " + zielpfad + dateiname);
+                    Log(ex.ToString());
+                }
+                watch.Stop();
+                // Kopiervorgang wird in die Liste als abgeschlossen eingetragen
+                fertig = true;
+                Log("kopieren nach " + quellpfad + dateiname + " Dauer: " + watch.Elapsed.TotalSeconds + " s");
+                BWkopieren.ReportProgress(0);
             }
-            catch (Exception ex)
+            else
             {
-                Log("Fehler Alte Plot Datei konnte nicht gelöscht werden ->" + quellpfad + dateiname);
-                Log(ex.ToString());
+                fertig = false;
+                Log("Fahler Kopieren nach " + quellpfad + dateiname + " Fehlgeschlagen");
+                BWkopieren.ReportProgress(0);
             }
-            try
-            {
-                System.IO.File.Move(zielpfad + dateiname + endkürzel, zielpfad + dateiname);// Umbenennen
-            }
-            catch (Exception ex)
-            {
-                Log("Fehler Umbennen fehlgeschlagen von ->" + zielpfad + dateiname + endkürzel + " zu "+ zielpfad + dateiname);
-                Log(ex.ToString());
-            }
-            watch.Stop();
-            // Kopiervorgang wird in die Liste als abgeschlossen eingetragen
-            fertig = true;
-            Log("kopieren nach " + quellpfad + dateiname + " Dauer: " + watch.Elapsed.TotalSeconds + " s");
+            
             
         }
         /// <summary>
