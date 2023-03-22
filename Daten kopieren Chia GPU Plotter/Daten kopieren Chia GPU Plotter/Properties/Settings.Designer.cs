@@ -298,5 +298,29 @@ namespace Daten_kopieren_Chia_GPU_Plotter.Properties {
                 this["kopierenMax"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string Tmp1Ordner {
+            get {
+                return ((string)(this["Tmp1Ordner"]));
+            }
+            set {
+                this["Tmp1Ordner"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("3")]
+        public string PlotsVorhalten {
+            get {
+                return ((string)(this["PlotsVorhalten"]));
+            }
+            set {
+                this["PlotsVorhalten"] = value;
+            }
+        }
     }
 }

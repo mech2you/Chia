@@ -44,7 +44,7 @@
             label2 = new Label();
             label3 = new Label();
             AnzahlPlots = new NumericUpDown();
-            label4 = new Label();
+            AnzahlPlotsL = new Label();
             StartPlot = new Button();
             PlotterGefunden = new CheckBox();
             StopPlot = new Button();
@@ -60,27 +60,27 @@
             KompressionAuswahl = new ComboBox();
             GPUGemeinsameSpeicherGUI = new NumericUpDown();
             InfoGUI = new RichTextBox();
-            label5 = new Label();
-            label6 = new Label();
-            label7 = new Label();
-            label8 = new Label();
+            PlotterAuswahlL = new Label();
+            KLevelAuswahlL = new Label();
+            KompressionAuswahlL = new Label();
+            GPUGemeinsameSpeicherGUIL = new Label();
             MadMaxRAMFull = new RadioButton();
             MadMaxRAMHalb = new RadioButton();
             MadMaxRAMViertel = new RadioButton();
-            groupBox1 = new GroupBox();
+            MadMaxRAMG = new GroupBox();
             MadMaxTmp2OrdnerTB = new TextBox();
             MadMaxTmp2OrdnerBT = new Button();
             MadMaxTmp3OrdnerTB = new TextBox();
             MadMaxTmp3OrdnerBT = new Button();
             WakeUpHDDCB = new CheckBox();
-            label9 = new Label();
+            ThreadsNDL = new Label();
             ThreadsND = new NumericUpDown();
-            label10 = new Label();
+            BucketsNDL = new Label();
             BucketsND = new NumericUpDown();
-            label11 = new Label();
+            Buckets3NDL = new Label();
             Buckets3ND = new NumericUpDown();
             WaitForCopyCB = new CheckBox();
-            label12 = new Label();
+            ThreadmultiplierforP2NDL = new Label();
             ThreadmultiplierforP2ND = new NumericUpDown();
             WakeUpHddsB = new Button();
             WakeUpHddsTB = new TextBox();
@@ -95,14 +95,19 @@
             label15 = new Label();
             GlobalLogKopieren = new Button();
             PlotterLogKopieren = new Button();
+            MadMaxTmp1OrdnerBT = new Button();
+            MadMaxTmp1OrdnerTB = new TextBox();
+            PlotsVorhalten = new NumericUpDown();
+            label16 = new Label();
             ((System.ComponentModel.ISupportInitialize)AnzahlPlots).BeginInit();
             ((System.ComponentModel.ISupportInitialize)GPUGemeinsameSpeicherGUI).BeginInit();
-            groupBox1.SuspendLayout();
+            MadMaxRAMG.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)ThreadsND).BeginInit();
             ((System.ComponentModel.ISupportInitialize)BucketsND).BeginInit();
             ((System.ComponentModel.ISupportInitialize)Buckets3ND).BeginInit();
             ((System.ComponentModel.ISupportInitialize)ThreadmultiplierforP2ND).BeginInit();
             ((System.ComponentModel.ISupportInitialize)KopierenMax).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)PlotsVorhalten).BeginInit();
             SuspendLayout();
             // 
             // Kopieren
@@ -257,14 +262,14 @@
             AnzahlPlots.TabIndex = 17;
             AnzahlPlots.Value = new decimal(new int[] { 1, 0, 0, 0 });
             // 
-            // label4
+            // AnzahlPlotsL
             // 
-            label4.AutoSize = true;
-            label4.Location = new Point(1170, 165);
-            label4.Name = "label4";
-            label4.Size = new Size(109, 25);
-            label4.TabIndex = 18;
-            label4.Text = "Anzahl Plots";
+            AnzahlPlotsL.AutoSize = true;
+            AnzahlPlotsL.Location = new Point(1170, 165);
+            AnzahlPlotsL.Name = "AnzahlPlotsL";
+            AnzahlPlotsL.Size = new Size(109, 25);
+            AnzahlPlotsL.TabIndex = 18;
+            AnzahlPlotsL.Text = "Anzahl Plots";
             // 
             // StartPlot
             // 
@@ -288,6 +293,7 @@
             PlotterGefunden.TabStop = false;
             PlotterGefunden.Text = "Plotter gefunden";
             PlotterGefunden.UseVisualStyleBackColor = true;
+            PlotterGefunden.CheckedChanged += PlotterGefunden_CheckedChanged;
             // 
             // StopPlot
             // 
@@ -335,6 +341,7 @@
             PlotsPrüfenCB.TabIndex = 25;
             PlotsPrüfenCB.Text = "Plots prüfen";
             PlotsPrüfenCB.UseVisualStyleBackColor = true;
+            PlotsPrüfenCB.Visible = false;
             // 
             // Werbelink
             // 
@@ -378,6 +385,7 @@
             PlotterAuswahl.Size = new Size(219, 33);
             PlotterAuswahl.TabIndex = 29;
             PlotterAuswahl.Text = "wähle den Plotter";
+            PlotterAuswahl.SelectedIndexChanged += PlotterAuswahl_SelectedIndexChanged;
             // 
             // KLevelAuswahl
             // 
@@ -418,41 +426,41 @@
             InfoGUI.TabIndex = 33;
             InfoGUI.Text = "18TB c8 235";
             // 
-            // label5
+            // PlotterAuswahlL
             // 
-            label5.AutoSize = true;
-            label5.Location = new Point(597, 165);
-            label5.Name = "label5";
-            label5.Size = new Size(64, 25);
-            label5.TabIndex = 34;
-            label5.Text = "Plotter";
+            PlotterAuswahlL.AutoSize = true;
+            PlotterAuswahlL.Location = new Point(597, 165);
+            PlotterAuswahlL.Name = "PlotterAuswahlL";
+            PlotterAuswahlL.Size = new Size(64, 25);
+            PlotterAuswahlL.TabIndex = 34;
+            PlotterAuswahlL.Text = "Plotter";
             // 
-            // label6
+            // KLevelAuswahlL
             // 
-            label6.AutoSize = true;
-            label6.Location = new Point(822, 165);
-            label6.Name = "label6";
-            label6.Size = new Size(66, 25);
-            label6.TabIndex = 35;
-            label6.Text = "K Level";
+            KLevelAuswahlL.AutoSize = true;
+            KLevelAuswahlL.Location = new Point(822, 165);
+            KLevelAuswahlL.Name = "KLevelAuswahlL";
+            KLevelAuswahlL.Size = new Size(66, 25);
+            KLevelAuswahlL.TabIndex = 35;
+            KLevelAuswahlL.Text = "K Level";
             // 
-            // label7
+            // KompressionAuswahlL
             // 
-            label7.AutoSize = true;
-            label7.Location = new Point(924, 165);
-            label7.Name = "label7";
-            label7.Size = new Size(116, 25);
-            label7.TabIndex = 36;
-            label7.Text = "Kompression";
+            KompressionAuswahlL.AutoSize = true;
+            KompressionAuswahlL.Location = new Point(924, 165);
+            KompressionAuswahlL.Name = "KompressionAuswahlL";
+            KompressionAuswahlL.Size = new Size(116, 25);
+            KompressionAuswahlL.TabIndex = 36;
+            KompressionAuswahlL.Text = "Kompression";
             // 
-            // label8
+            // GPUGemeinsameSpeicherGUIL
             // 
-            label8.AutoSize = true;
-            label8.Location = new Point(1068, 165);
-            label8.Name = "label8";
-            label8.Size = new Size(102, 25);
-            label8.TabIndex = 37;
-            label8.Text = "SMem GPU";
+            GPUGemeinsameSpeicherGUIL.AutoSize = true;
+            GPUGemeinsameSpeicherGUIL.Location = new Point(1068, 165);
+            GPUGemeinsameSpeicherGUIL.Name = "GPUGemeinsameSpeicherGUIL";
+            GPUGemeinsameSpeicherGUIL.Size = new Size(102, 25);
+            GPUGemeinsameSpeicherGUIL.TabIndex = 37;
+            GPUGemeinsameSpeicherGUIL.Text = "SMem GPU";
             // 
             // MadMaxRAMFull
             // 
@@ -464,6 +472,7 @@
             MadMaxRAMFull.TabIndex = 38;
             MadMaxRAMFull.Text = "Full GB";
             MadMaxRAMFull.UseVisualStyleBackColor = true;
+            MadMaxRAMFull.CheckedChanged += MadMaxRAMFull_CheckedChanged;
             // 
             // MadMaxRAMHalb
             // 
@@ -475,6 +484,7 @@
             MadMaxRAMHalb.TabIndex = 39;
             MadMaxRAMHalb.Text = "1/2 GB";
             MadMaxRAMHalb.UseVisualStyleBackColor = true;
+            MadMaxRAMHalb.CheckedChanged += MadMaxRAMHalb_CheckedChanged;
             // 
             // MadMaxRAMViertel
             // 
@@ -486,52 +496,53 @@
             MadMaxRAMViertel.TabIndex = 40;
             MadMaxRAMViertel.Text = "1/4 GB";
             MadMaxRAMViertel.UseVisualStyleBackColor = true;
+            MadMaxRAMViertel.CheckedChanged += MadMaxRAMViertel_CheckedChanged;
             // 
-            // groupBox1
+            // MadMaxRAMG
             // 
-            groupBox1.Controls.Add(MadMaxRAMViertel);
-            groupBox1.Controls.Add(MadMaxRAMHalb);
-            groupBox1.Controls.Add(MadMaxRAMFull);
-            groupBox1.Location = new Point(1300, 158);
-            groupBox1.Margin = new Padding(2);
-            groupBox1.Name = "groupBox1";
-            groupBox1.Padding = new Padding(2);
-            groupBox1.Size = new Size(259, 72);
-            groupBox1.TabIndex = 41;
-            groupBox1.TabStop = false;
-            groupBox1.Text = "MadMax RAM verfügbar";
+            MadMaxRAMG.Controls.Add(MadMaxRAMViertel);
+            MadMaxRAMG.Controls.Add(MadMaxRAMHalb);
+            MadMaxRAMG.Controls.Add(MadMaxRAMFull);
+            MadMaxRAMG.Location = new Point(1300, 158);
+            MadMaxRAMG.Margin = new Padding(2);
+            MadMaxRAMG.Name = "MadMaxRAMG";
+            MadMaxRAMG.Padding = new Padding(2);
+            MadMaxRAMG.Size = new Size(259, 72);
+            MadMaxRAMG.TabIndex = 41;
+            MadMaxRAMG.TabStop = false;
+            MadMaxRAMG.Text = "MadMax RAM verfügbar";
             // 
             // MadMaxTmp2OrdnerTB
             // 
-            MadMaxTmp2OrdnerTB.Location = new Point(1592, 233);
+            MadMaxTmp2OrdnerTB.Location = new Point(1503, 260);
             MadMaxTmp2OrdnerTB.Name = "MadMaxTmp2OrdnerTB";
             MadMaxTmp2OrdnerTB.Size = new Size(433, 31);
             MadMaxTmp2OrdnerTB.TabIndex = 41;
             // 
             // MadMaxTmp2OrdnerBT
             // 
-            MadMaxTmp2OrdnerBT.Location = new Point(1361, 233);
+            MadMaxTmp2OrdnerBT.Location = new Point(1366, 260);
             MadMaxTmp2OrdnerBT.Name = "MadMaxTmp2OrdnerBT";
-            MadMaxTmp2OrdnerBT.Size = new Size(214, 31);
+            MadMaxTmp2OrdnerBT.Size = new Size(131, 31);
             MadMaxTmp2OrdnerBT.TabIndex = 42;
-            MadMaxTmp2OrdnerBT.Text = "MadMax Tmp2 Ordner";
+            MadMaxTmp2OrdnerBT.Text = "Tmp2 Ordner";
             MadMaxTmp2OrdnerBT.UseVisualStyleBackColor = true;
             MadMaxTmp2OrdnerBT.Click += MadMaxTmpOrdnerBT_Click;
             // 
             // MadMaxTmp3OrdnerTB
             // 
-            MadMaxTmp3OrdnerTB.Location = new Point(1592, 270);
+            MadMaxTmp3OrdnerTB.Location = new Point(1503, 297);
             MadMaxTmp3OrdnerTB.Name = "MadMaxTmp3OrdnerTB";
             MadMaxTmp3OrdnerTB.Size = new Size(433, 31);
             MadMaxTmp3OrdnerTB.TabIndex = 43;
             // 
             // MadMaxTmp3OrdnerBT
             // 
-            MadMaxTmp3OrdnerBT.Location = new Point(1361, 270);
+            MadMaxTmp3OrdnerBT.Location = new Point(1366, 297);
             MadMaxTmp3OrdnerBT.Name = "MadMaxTmp3OrdnerBT";
-            MadMaxTmp3OrdnerBT.Size = new Size(214, 31);
+            MadMaxTmp3OrdnerBT.Size = new Size(131, 31);
             MadMaxTmp3OrdnerBT.TabIndex = 44;
-            MadMaxTmp3OrdnerBT.Text = "MadMax Tmp3 Ordner";
+            MadMaxTmp3OrdnerBT.Text = "Tmp3 Ordner";
             MadMaxTmp3OrdnerBT.UseVisualStyleBackColor = true;
             MadMaxTmp3OrdnerBT.Click += MadMaxTmp3OrdnerBT_Click;
             // 
@@ -546,14 +557,14 @@
             WakeUpHDDCB.UseVisualStyleBackColor = true;
             WakeUpHDDCB.CheckStateChanged += WakeUpHDD_CheckStateChanged;
             // 
-            // label9
+            // ThreadsNDL
             // 
-            label9.AutoSize = true;
-            label9.Location = new Point(598, 233);
-            label9.Name = "label9";
-            label9.Size = new Size(74, 25);
-            label9.TabIndex = 47;
-            label9.Text = "Threads";
+            ThreadsNDL.AutoSize = true;
+            ThreadsNDL.Location = new Point(598, 233);
+            ThreadsNDL.Name = "ThreadsNDL";
+            ThreadsNDL.Size = new Size(74, 25);
+            ThreadsNDL.TabIndex = 47;
+            ThreadsNDL.Text = "Threads";
             // 
             // ThreadsND
             // 
@@ -565,14 +576,14 @@
             ThreadsND.TabIndex = 46;
             ThreadsND.Value = new decimal(new int[] { 4, 0, 0, 0 });
             // 
-            // label10
+            // BucketsNDL
             // 
-            label10.AutoSize = true;
-            label10.Location = new Point(734, 233);
-            label10.Name = "label10";
-            label10.Size = new Size(72, 25);
-            label10.TabIndex = 49;
-            label10.Text = "Buckets";
+            BucketsNDL.AutoSize = true;
+            BucketsNDL.Location = new Point(734, 233);
+            BucketsNDL.Name = "BucketsNDL";
+            BucketsNDL.Size = new Size(72, 25);
+            BucketsNDL.TabIndex = 49;
+            BucketsNDL.Text = "Buckets";
             // 
             // BucketsND
             // 
@@ -584,14 +595,14 @@
             BucketsND.TabIndex = 48;
             BucketsND.Value = new decimal(new int[] { 256, 0, 0, 0 });
             // 
-            // label11
+            // Buckets3NDL
             // 
-            label11.AutoSize = true;
-            label11.Location = new Point(871, 233);
-            label11.Name = "label11";
-            label11.Size = new Size(87, 25);
-            label11.TabIndex = 51;
-            label11.Text = "Buckets 3";
+            Buckets3NDL.AutoSize = true;
+            Buckets3NDL.Location = new Point(871, 233);
+            Buckets3NDL.Name = "Buckets3NDL";
+            Buckets3NDL.Size = new Size(87, 25);
+            Buckets3NDL.TabIndex = 51;
+            Buckets3NDL.Text = "Buckets 3";
             // 
             // Buckets3ND
             // 
@@ -613,14 +624,14 @@
             WaitForCopyCB.Text = "Warten bis kopiert";
             WaitForCopyCB.UseVisualStyleBackColor = true;
             // 
-            // label12
+            // ThreadmultiplierforP2NDL
             // 
-            label12.AutoSize = true;
-            label12.Location = new Point(1190, 233);
-            label12.Name = "label12";
-            label12.Size = new Size(170, 25);
-            label12.TabIndex = 54;
-            label12.Text = "Thread multiplier P2";
+            ThreadmultiplierforP2NDL.AutoSize = true;
+            ThreadmultiplierforP2NDL.Location = new Point(1190, 233);
+            ThreadmultiplierforP2NDL.Name = "ThreadmultiplierforP2NDL";
+            ThreadmultiplierforP2NDL.Size = new Size(170, 25);
+            ThreadmultiplierforP2NDL.TabIndex = 54;
+            ThreadmultiplierforP2NDL.Text = "Thread multiplier P2";
             // 
             // ThreadmultiplierforP2ND
             // 
@@ -683,7 +694,7 @@
             // 
             // KopierenMax
             // 
-            KopierenMax.Location = new Point(464, 127);
+            KopierenMax.Location = new Point(397, 131);
             KopierenMax.Maximum = new decimal(new int[] { 10000, 0, 0, 0 });
             KopierenMax.Name = "KopierenMax";
             KopierenMax.Size = new Size(69, 31);
@@ -693,11 +704,11 @@
             // label13
             // 
             label13.AutoSize = true;
-            label13.Location = new Point(338, 127);
+            label13.Location = new Point(237, 133);
             label13.Name = "label13";
-            label13.Size = new Size(120, 25);
+            label13.Size = new Size(163, 25);
             label13.TabIndex = 61;
-            label13.Text = "Kopieren Max";
+            label13.Text = "Plots kopieren Max";
             // 
             // PlotterLog
             // 
@@ -709,16 +720,16 @@
             // 
             // log
             // 
-            log.Location = new Point(702, 307);
+            log.Location = new Point(702, 340);
             log.Name = "log";
-            log.Size = new Size(1678, 226);
+            log.Size = new Size(1678, 193);
             log.TabIndex = 63;
             log.Text = "";
             // 
             // label14
             // 
             label14.AutoSize = true;
-            label14.Location = new Point(598, 310);
+            label14.Location = new Point(597, 340);
             label14.Name = "label14";
             label14.Size = new Size(98, 25);
             label14.TabIndex = 64;
@@ -753,11 +764,51 @@
             PlotterLogKopieren.UseVisualStyleBackColor = true;
             PlotterLogKopieren.Click += PlotterLogKopieren_Click;
             // 
+            // MadMaxTmp1OrdnerBT
+            // 
+            MadMaxTmp1OrdnerBT.Location = new Point(1366, 223);
+            MadMaxTmp1OrdnerBT.Name = "MadMaxTmp1OrdnerBT";
+            MadMaxTmp1OrdnerBT.Size = new Size(131, 31);
+            MadMaxTmp1OrdnerBT.TabIndex = 69;
+            MadMaxTmp1OrdnerBT.Text = "Tmp1 Ordner";
+            MadMaxTmp1OrdnerBT.UseVisualStyleBackColor = true;
+            MadMaxTmp1OrdnerBT.Click += MadMaxTmp1OrdnerBT_Click;
+            // 
+            // MadMaxTmp1OrdnerTB
+            // 
+            MadMaxTmp1OrdnerTB.Location = new Point(1503, 223);
+            MadMaxTmp1OrdnerTB.Name = "MadMaxTmp1OrdnerTB";
+            MadMaxTmp1OrdnerTB.Size = new Size(433, 31);
+            MadMaxTmp1OrdnerTB.TabIndex = 68;
+            // 
+            // PlotsVorhalten
+            // 
+            PlotsVorhalten.Location = new Point(162, 131);
+            PlotsVorhalten.Maximum = new decimal(new int[] { 10000, 0, 0, 0 });
+            PlotsVorhalten.Name = "PlotsVorhalten";
+            PlotsVorhalten.Size = new Size(69, 31);
+            PlotsVorhalten.TabIndex = 70;
+            PlotsVorhalten.Value = new decimal(new int[] { 3, 0, 0, 0 });
+            // 
+            // label16
+            // 
+            label16.AutoSize = true;
+            label16.Location = new Point(35, 133);
+            label16.Name = "label16";
+            label16.Size = new Size(130, 25);
+            label16.TabIndex = 71;
+            label16.Text = "Plots vorhalten";
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(2384, 803);
+            Controls.Add(PlotsVorhalten);
+            Controls.Add(KopierenMax);
+            Controls.Add(label16);
+            Controls.Add(MadMaxTmp1OrdnerBT);
+            Controls.Add(MadMaxTmp1OrdnerTB);
             Controls.Add(PlotterLogKopieren);
             Controls.Add(GlobalLogKopieren);
             Controls.Add(label15);
@@ -765,31 +816,30 @@
             Controls.Add(log);
             Controls.Add(PlotterLog);
             Controls.Add(label13);
-            Controls.Add(KopierenMax);
             Controls.Add(ZugriffsrechtPrüfen);
             Controls.Add(TmpDateienLöschen);
             Controls.Add(PlotGleichmäßigVerteilen);
             Controls.Add(WakeUpHddsTB);
             Controls.Add(WakeUpHddsB);
-            Controls.Add(label12);
+            Controls.Add(ThreadmultiplierforP2NDL);
             Controls.Add(ThreadmultiplierforP2ND);
             Controls.Add(WaitForCopyCB);
-            Controls.Add(label11);
+            Controls.Add(Buckets3NDL);
             Controls.Add(Buckets3ND);
-            Controls.Add(label10);
+            Controls.Add(BucketsNDL);
             Controls.Add(BucketsND);
-            Controls.Add(label9);
+            Controls.Add(ThreadsNDL);
             Controls.Add(ThreadsND);
             Controls.Add(WakeUpHDDCB);
             Controls.Add(MadMaxTmp3OrdnerBT);
             Controls.Add(MadMaxTmp3OrdnerTB);
             Controls.Add(MadMaxTmp2OrdnerBT);
             Controls.Add(MadMaxTmp2OrdnerTB);
-            Controls.Add(groupBox1);
-            Controls.Add(label8);
-            Controls.Add(label7);
-            Controls.Add(label6);
-            Controls.Add(label5);
+            Controls.Add(MadMaxRAMG);
+            Controls.Add(GPUGemeinsameSpeicherGUIL);
+            Controls.Add(KompressionAuswahlL);
+            Controls.Add(KLevelAuswahlL);
+            Controls.Add(PlotterAuswahlL);
             Controls.Add(InfoGUI);
             Controls.Add(GPUGemeinsameSpeicherGUI);
             Controls.Add(KompressionAuswahl);
@@ -805,7 +855,7 @@
             Controls.Add(StopPlot);
             Controls.Add(PlotterGefunden);
             Controls.Add(StartPlot);
-            Controls.Add(label4);
+            Controls.Add(AnzahlPlotsL);
             Controls.Add(AnzahlPlots);
             Controls.Add(label3);
             Controls.Add(label2);
@@ -823,18 +873,19 @@
             Controls.Add(KopierenStarten);
             Controls.Add(Kopieren);
             Name = "Form1";
-            Text = "mech2youDV v1.1.9";
+            Text = "mech2youDV v1.1.10";
             FormClosing += Form1_FormClosing;
             Load += Form1_Load;
             ((System.ComponentModel.ISupportInitialize)AnzahlPlots).EndInit();
             ((System.ComponentModel.ISupportInitialize)GPUGemeinsameSpeicherGUI).EndInit();
-            groupBox1.ResumeLayout(false);
-            groupBox1.PerformLayout();
+            MadMaxRAMG.ResumeLayout(false);
+            MadMaxRAMG.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)ThreadsND).EndInit();
             ((System.ComponentModel.ISupportInitialize)BucketsND).EndInit();
             ((System.ComponentModel.ISupportInitialize)Buckets3ND).EndInit();
             ((System.ComponentModel.ISupportInitialize)ThreadmultiplierforP2ND).EndInit();
             ((System.ComponentModel.ISupportInitialize)KopierenMax).EndInit();
+            ((System.ComponentModel.ISupportInitialize)PlotsVorhalten).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -910,5 +961,20 @@
         private Label label15;
         private Button GlobalLogKopieren;
         private Button PlotterLogKopieren;
+        private Label AnzahlPlotsL;
+        private Label PlotterAuswahlL;
+        private Label KLevelAuswahlL;
+        private Label KompressionAuswahlL;
+        private Label GPUGemeinsameSpeicherGUIL;
+        private GroupBox MadMaxRAMG;
+        private Label ThreadsNDL;
+        private Label BucketsNDL;
+        private Label ThreadmultiplierforP2NDL;
+        private Button MadMaxTmp1OrdnerBT;
+        private TextBox MadMaxTmp1OrdnerTB;
+        private Label Buckets3NDL;
+        private NumericUpDown numericUpDown1;
+        private Label label16;
+        private NumericUpDown PlotsVorhalten;
     }
 }

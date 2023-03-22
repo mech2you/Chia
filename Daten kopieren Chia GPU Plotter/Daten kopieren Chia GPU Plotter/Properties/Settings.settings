@@ -71,5 +71,11 @@
     <Setting Name="kopierenMax" Type="System.String" Scope="User">
       <Value Profile="(Default)">10</Value>
     </Setting>
+    <Setting Name="Tmp1Ordner" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="PlotsVorhalten" Type="System.String" Scope="User">
+      <Value Profile="(Default)">3</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

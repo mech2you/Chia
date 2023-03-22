@@ -32,6 +32,7 @@ namespace Daten_kopieren_Chia_GPU_Plotter
         String kompression = "0";
         String plotterAuswahl = "";
         String gpuSharedMemory = "1";
+        String tmp1Ordner = "";
         String tmp2Ordner = "";
         String tmp3Ordner = "";
         int abstandZwischenStatusanzeigen = 2;
@@ -174,6 +175,7 @@ namespace Daten_kopieren_Chia_GPU_Plotter
                         parameters.Add("-f", FarmerKey.Text);
                         parameters.Add("-c", PoolContractAdresse.Text);
                         parameters.Add("waitforcopy", "");
+                        parameters.Add("-t", tmp1Ordner);
                         if (MadMaxRAMHalb.Checked == true)
                         {
                             parameters.Add("-2", tmp2Ordner);
@@ -183,7 +185,7 @@ namespace Daten_kopieren_Chia_GPU_Plotter
                             parameters.Add("-2", tmp2Ordner);
                             parameters.Add("-3", tmp3Ordner);
                         }
-                        parameters.Add("-t", quelle);
+                        parameters.Add("-d", quelle);
                     }
                     if (plotterAuswahl == "MadMax CPU Plotter")
                     {
@@ -193,8 +195,8 @@ namespace Daten_kopieren_Chia_GPU_Plotter
                         parameters.Add("-r", threads);
                         parameters.Add("-u", buckets);
                         parameters.Add("-v", buckets3);
-                        parameters.Add("-t", tmp2Ordner);
-                        parameters.Add("-2", tmp3Ordner);
+                        parameters.Add("-t", tmp1Ordner);
+                        parameters.Add("-2", tmp2Ordner);
                         parameters.Add("-d", quelle);
                         parameters.Add(waitforcopy, "");
                         parameters.Add("-c", PoolContractAdresse.Text);
@@ -510,7 +512,7 @@ namespace Daten_kopieren_Chia_GPU_Plotter
                                         w++;
                                     }
                                 }
-                                if (w > 2)//Wenn 3 Plots mehr vorhanden sind als Kopiervorgänge dann wird das Plotten unterbrochen
+                                if (w > Convert.ToInt32(PlotsVorhalten.Value))//Wenn X Plots mehr vorhanden sind als Kopiervorgänge dann wird das Plotten unterbrochen
                                 {
                                     PSBackgroundWorker.CancelAsync();
                                 }
@@ -734,8 +736,8 @@ namespace Daten_kopieren_Chia_GPU_Plotter
             KLevelAuswahl.Text = Properties.Settings.Default.kGröße;
 
             GPUGemeinsameSpeicherGUI.Value = Convert.ToDecimal(Properties.Settings.Default.gpuSharedMemory);
-
-
+            MadMaxTmp1OrdnerTB.Text = Properties.Settings.Default.Tmp1Ordner;
+            tmp1Ordner = Properties.Settings.Default.Tmp1Ordner;
             MadMaxTmp2OrdnerTB.Text = Properties.Settings.Default.MadMaxTmp2Ordner;
             tmp2Ordner = Properties.Settings.Default.MadMaxTmp2Ordner;
 
@@ -795,6 +797,7 @@ namespace Daten_kopieren_Chia_GPU_Plotter
                 PlotGleichmäßigVerteilen.Checked = false;
             }
             KopierenMax.Value = Convert.ToDecimal(Properties.Settings.Default.kopierenMax);
+            PlotsVorhalten.Value = Convert.ToDecimal(Properties.Settings.Default.PlotsVorhalten);
 
         }
         /// <summary>
@@ -860,35 +863,43 @@ namespace Daten_kopieren_Chia_GPU_Plotter
                 }
                 foreach (PSObject zeile in rückgabePS)
                 {
+                    ///_______________________GPU CHIA
                     if (zeile.ToString().IndexOf("3.0.0-alpha1-dev") != -1)// Version Chia GPU Plotter gefunden
                     {
                         PlotterGefunden.Checked = true;
                         gefunden = true;
                         logGlobal("Chia GPU Plotter gefunden");
+                        PlotterAuswahl.SelectedIndex = 0;
                     }
                     if (zeile.ToString().IndexOf("3.0.0-alpha3-dev") != -1)// Version Chia GPU Plotter gefunden
                     {
                         PlotterGefunden.Checked = true;
                         gefunden = true;
                         logGlobal("Chia GPU Plotter 3 alpha3 gefunden");
+                        PlotterAuswahl.SelectedIndex = 0;
                     }
-                    if (zeile.ToString().IndexOf("2.0.0-3e00fa3") != -1)// Version MadMax GPU Plotter gefunden
-                    {
-                        PlotterGefunden.Checked = true;
-                        gefunden = true;
-                        logGlobal("MadMax GPU Plotter gefunden");
-                    }
+                    ///_______________________CPU MADMAX
                     if (zeile.ToString().IndexOf("2.0.0-16eca1f") != -1)// Version MadMax CPU Plotter gefunden
                     {
                         PlotterGefunden.Checked = true;
                         gefunden = true;
                         logGlobal("Version MadMax CPU gefunden");
+                        PlotterAuswahl.SelectedIndex = 1;
+                    }
+                    ///_______________________GPU MADMAX
+                    if (zeile.ToString().IndexOf("2.0.0-3e00fa3") != -1)// Version MadMax GPU Plotter gefunden
+                    {
+                        PlotterGefunden.Checked = true;
+                        gefunden = true;
+                        logGlobal("MadMax GPU Plotter gefunden");
+                        PlotterAuswahl.SelectedIndex = 2;
                     }
                     if (zeile.ToString().IndexOf("2.0.0-29c814d") != -1)// Version MadMax CPU Plotter gefunden
                     {
                         PlotterGefunden.Checked = true;
                         gefunden = true;
                         logGlobal("Version MadMax GPU gefunden 2.0.0-29c814d");
+                        PlotterAuswahl.SelectedIndex = 2;
                     }
                 }
             }
@@ -1064,6 +1075,7 @@ namespace Daten_kopieren_Chia_GPU_Plotter
             Properties.Settings.Default.kGröße = KLevelAuswahl.SelectedItem.ToString();
             Properties.Settings.Default.kompression = KompressionAuswahl.SelectedItem.ToString();
             Properties.Settings.Default.gpuSharedMemory = GPUGemeinsameSpeicherGUI.Value.ToString();
+            Properties.Settings.Default.Tmp1Ordner = MadMaxTmp1OrdnerTB.Text;
             Properties.Settings.Default.MadMaxTmp2Ordner = MadMaxTmp2OrdnerTB.Text;
             Properties.Settings.Default.MadMaxTmp3Ordner = MadMaxTmp3OrdnerTB.Text;
             if (MadMaxRAMFull.Checked == true)
@@ -1117,6 +1129,7 @@ namespace Daten_kopieren_Chia_GPU_Plotter
                 Properties.Settings.Default.PlotGleichmäßigVerteilen = false;
             }
             Properties.Settings.Default.kopierenMax = Convert.ToString(KopierenMax.Value);
+            Properties.Settings.Default.PlotsVorhalten = Convert.ToString(PlotsVorhalten.Value);
             Properties.Settings.Default.Save();
 
 
@@ -1156,7 +1169,21 @@ namespace Daten_kopieren_Chia_GPU_Plotter
             string target = "https://www.paypal.com/donate/?hosted_button_id=T67HY3Z5H4222";
             Process.Start(new ProcessStartInfo() { FileName = target, UseShellExecute = true });
         }
+        private void MadMaxTmp1OrdnerBT_Click(object sender, EventArgs e)
+        {
+            using (FolderBrowserDialog dialog = new System.Windows.Forms.FolderBrowserDialog())
+            {
 
+                System.Windows.Forms.DialogResult result = dialog.ShowDialog();
+
+                if (result == System.Windows.Forms.DialogResult.OK)
+                {
+                    MadMaxTmp1OrdnerTB.Text = dialog.SelectedPath + "\\";
+                    tmp1Ordner = MadMaxTmp1OrdnerTB.Text;
+                }
+
+            }
+        }
         private void MadMaxTmpOrdnerBT_Click(object sender, EventArgs e)
         {
             using (FolderBrowserDialog dialog = new System.Windows.Forms.FolderBrowserDialog())
@@ -1327,8 +1354,6 @@ namespace Daten_kopieren_Chia_GPU_Plotter
                                             logGlobal("Fehler TMP Datei konnte nicht gelöscht werden -> " + dateipfad);
                                             logGlobal(ex.ToString());
                                         }
-
-
                                     }
                                 }
                             }
@@ -1476,6 +1501,202 @@ namespace Daten_kopieren_Chia_GPU_Plotter
         private void PlotterLogKopieren_Click(object sender, EventArgs e)
         {
             System.Windows.Forms.Clipboard.SetDataObject(PlotterLogKopieren.Text);
+        }
+
+        private void PlotterGefunden_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+        /// <summary>
+        /// Wird verwendet um die verschiednen Einstellungen vom jeweiligen Plotter einzustellen und anzuzeigen
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void PlotterAuswahl_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if ("Chia GPU Plotter" == PlotterAuswahl.SelectedItem.ToString())
+            {
+                KLevelAuswahl.Visible = false;
+                KLevelAuswahlL.Visible = false;
+
+                KompressionAuswahl.Visible = true;
+                KompressionAuswahlL.Visible = true;
+
+                GPUGemeinsameSpeicherGUI.Visible = false;
+                GPUGemeinsameSpeicherGUIL.Visible = false;
+
+                MadMaxRAMG.Visible = false;
+
+                ThreadsND.Visible = false;
+                ThreadsNDL.Visible = false;
+
+                BucketsND.Visible = false;
+                BucketsNDL.Visible = false;
+
+                Buckets3ND.Visible = false;
+                Buckets3NDL.Visible = false;
+
+                ThreadmultiplierforP2ND.Visible = false;
+                ThreadmultiplierforP2NDL.Visible = false;
+
+                MadMaxTmp1OrdnerBT.Visible = false;
+                MadMaxTmp1OrdnerTB.Visible = false;
+
+                MadMaxTmp2OrdnerBT.Visible = false;
+                MadMaxTmp2OrdnerTB.Visible = false;
+
+                MadMaxTmp3OrdnerBT.Visible = false;
+                MadMaxTmp3OrdnerTB.Visible = false;
+            }
+            if ("MadMax CPU Plotter" == PlotterAuswahl.SelectedItem.ToString())
+            {
+                KLevelAuswahl.Visible = false;
+                KLevelAuswahlL.Visible = false;
+
+                KompressionAuswahl.Visible = true;
+                KompressionAuswahlL.Visible = true;
+
+                GPUGemeinsameSpeicherGUI.Visible = false;
+                GPUGemeinsameSpeicherGUIL.Visible = false;
+
+                MadMaxRAMG.Visible = false;
+
+                ThreadsND.Visible = true;
+                ThreadsNDL.Visible = true;
+
+                BucketsND.Visible = true;
+                BucketsNDL.Visible = true;
+
+                Buckets3ND.Visible = true;
+                Buckets3NDL.Visible = true;
+
+                ThreadmultiplierforP2ND.Visible = true;
+                ThreadmultiplierforP2NDL.Visible = true;
+
+                MadMaxTmp1OrdnerBT.Visible = true;
+                MadMaxTmp1OrdnerTB.Visible = true;
+
+                MadMaxTmp2OrdnerBT.Visible = true;
+                MadMaxTmp2OrdnerTB.Visible = true;
+
+                MadMaxTmp3OrdnerBT.Visible = false;
+                MadMaxTmp3OrdnerTB.Visible = false;
+            }
+            if ("MadMax GPU Plotter" == PlotterAuswahl.SelectedItem.ToString())
+            {
+                KLevelAuswahl.Visible = false;
+                KLevelAuswahlL.Visible = false;
+
+                KompressionAuswahl.Visible = true;
+                KompressionAuswahlL.Visible = true;
+
+                GPUGemeinsameSpeicherGUI.Visible = true;
+                GPUGemeinsameSpeicherGUIL.Visible = true;
+
+                MadMaxRAMG.Visible = true;
+
+                ThreadsND.Visible = false;
+                ThreadsNDL.Visible = false;
+
+                BucketsND.Visible = false;
+                BucketsNDL.Visible = false;
+
+                Buckets3ND.Visible = false;
+                Buckets3NDL.Visible = false;
+
+                ThreadmultiplierforP2ND.Visible = false;
+                ThreadmultiplierforP2NDL.Visible = false;
+
+                MadMaxTmp1OrdnerBT.Visible = true;
+                MadMaxTmp1OrdnerTB.Visible = true;
+
+                MadMaxTmp2OrdnerBT.Visible = false;
+                MadMaxTmp2OrdnerTB.Visible = false;
+
+                MadMaxTmp3OrdnerBT.Visible = false;
+                MadMaxTmp3OrdnerTB.Visible = false;
+                if (MadMaxRAMHalb.Checked)
+                {
+                    MadMaxTmp2OrdnerBT.Visible = true;
+                    MadMaxTmp2OrdnerTB.Visible = true;
+                }
+                if (MadMaxRAMViertel.Checked)
+                {
+                    MadMaxTmp2OrdnerBT.Visible = true;
+                    MadMaxTmp2OrdnerTB.Visible = true;
+
+                    MadMaxTmp3OrdnerBT.Visible = true;
+                    MadMaxTmp3OrdnerTB.Visible = true;
+                }
+
+
+            }
+        }
+
+        private void MadMaxRAMHalb_CheckedChanged(object sender, EventArgs e)
+        {
+            MadMaxTmp2OrdnerBT.Visible = false;
+            MadMaxTmp2OrdnerTB.Visible = false;
+
+            MadMaxTmp3OrdnerBT.Visible = false;
+            MadMaxTmp3OrdnerTB.Visible = false;
+            if (MadMaxRAMHalb.Checked)
+            {
+                MadMaxTmp2OrdnerBT.Visible = true;
+                MadMaxTmp2OrdnerTB.Visible = true;
+            }
+            if (MadMaxRAMViertel.Checked)
+            {
+                MadMaxTmp2OrdnerBT.Visible = true;
+                MadMaxTmp2OrdnerTB.Visible = true;
+
+                MadMaxTmp3OrdnerBT.Visible = true;
+                MadMaxTmp3OrdnerTB.Visible = true;
+            }
+        }
+
+        private void MadMaxRAMViertel_CheckedChanged(object sender, EventArgs e)
+        {
+            MadMaxTmp2OrdnerBT.Visible = false;
+            MadMaxTmp2OrdnerTB.Visible = false;
+
+            MadMaxTmp3OrdnerBT.Visible = false;
+            MadMaxTmp3OrdnerTB.Visible = false;
+            if (MadMaxRAMHalb.Checked)
+            {
+                MadMaxTmp2OrdnerBT.Visible = true;
+                MadMaxTmp2OrdnerTB.Visible = true;
+            }
+            if (MadMaxRAMViertel.Checked)
+            {
+                MadMaxTmp2OrdnerBT.Visible = true;
+                MadMaxTmp2OrdnerTB.Visible = true;
+
+                MadMaxTmp3OrdnerBT.Visible = true;
+                MadMaxTmp3OrdnerTB.Visible = true;
+            }
+        }
+
+        private void MadMaxRAMFull_CheckedChanged(object sender, EventArgs e)
+        {
+            MadMaxTmp2OrdnerBT.Visible = false;
+            MadMaxTmp2OrdnerTB.Visible = false;
+
+            MadMaxTmp3OrdnerBT.Visible = false;
+            MadMaxTmp3OrdnerTB.Visible = false;
+            if (MadMaxRAMHalb.Checked)
+            {
+                MadMaxTmp2OrdnerBT.Visible = true;
+                MadMaxTmp2OrdnerTB.Visible = true;
+            }
+            if (MadMaxRAMViertel.Checked)
+            {
+                MadMaxTmp2OrdnerBT.Visible = true;
+                MadMaxTmp2OrdnerTB.Visible = true;
+
+                MadMaxTmp3OrdnerBT.Visible = true;
+                MadMaxTmp3OrdnerTB.Visible = true;
+            }
         }
     }
 }
