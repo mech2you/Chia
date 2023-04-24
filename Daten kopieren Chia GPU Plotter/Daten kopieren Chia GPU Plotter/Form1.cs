@@ -116,7 +116,10 @@ namespace Daten_kopieren_Chia_GPU_Plotter
                             {
                                 File.Create(pfad + "\\" + hddWakeUp);
                             }
-                            catch { }
+                            catch (Exception ex)
+                            {
+                                logGlobal("Fehler Pfad fehlt " + ex.Message.ToString());
+                            }
 
                         }
                     }
@@ -127,8 +130,17 @@ namespace Daten_kopieren_Chia_GPU_Plotter
                         {
                             if (File.Exists(pfad + "\\" + hddWakeUp))// Nur wenn die Datei vorhanden ist darf geschrieben werden 
                             {
-                                string[] lines = { "Test" };
-                                File.WriteAllLinesAsync(pfad + "\\" + hddWakeUp, lines);
+                                try
+                                {
+                                    string[] lines = { "Test" };
+                                    File.WriteAllLinesAsync(pfad + "\\" + hddWakeUp, lines);
+                                }
+                                catch (Exception ex)
+                                {
+                                    logGlobal("Fehler Schreizugriff fehlt?!" + ex.Message.ToString());
+                                }
+
+
                             }
                         }
 
@@ -282,17 +294,33 @@ namespace Daten_kopieren_Chia_GPU_Plotter
                 {
                     log.Invoke(new Action(() =>
                     {
-                        log.AppendText(message + Environment.NewLine);
-                        log.SelectionStart = log.Text.Length;
-                        log.ScrollToCaret();
+                        try
+                        {
+                            log.AppendText(message + Environment.NewLine);
+                            log.SelectionStart = log.Text.Length;
+                            log.ScrollToCaret();
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine(ex.ToString());
+                        }
+
 
                     }));
                 }
                 else
                 {
-                    log.Text += message + Environment.NewLine;
-                    log.SelectionStart = log.Text.Length;
-                    log.ScrollToCaret();
+                    try
+                    {
+                        log.Text += message + Environment.NewLine;
+                        log.SelectionStart = log.Text.Length;
+                        log.ScrollToCaret();
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex.ToString());
+                    }
+
                 }
             }
         }
@@ -375,9 +403,22 @@ namespace Daten_kopieren_Chia_GPU_Plotter
         public bool kopiervorgangStarten(Kopiervorgang _kopierer, KopierDaten _daten)
         {
             long free = 0, dummy1 = 0, dummy2 = 0;
+            long länge = 0;
             GetDiskFreeSpaceEx(_kopierer.zielpfad, ref free, ref dummy1, ref dummy2);// Gibt freie Speicherplatz zurück
             FileInfo info = new FileInfo(_daten.quellpfad + _daten.dateiname);
-            if (free > info.Length)// Ist genug Speicher da?
+            try
+            {
+                länge = info.Length;
+            }
+            catch (Exception ex)
+            {
+
+                logGlobal(ex.ToString());
+                return false;
+            }
+
+
+            if (free > länge)// Ist genug Speicher da?
             {
                 if (_kopierer.BWkopieren.IsBusy == false)// Ist BW noch frei?
                 {
@@ -471,9 +512,9 @@ namespace Daten_kopieren_Chia_GPU_Plotter
                             {
                                 bool gefunden = false;
                                 // fügt die Datei nur zum Kopieren hinzu wenn diese nicht auf der Liste ist
-                                foreach (KopierDaten inhalt in Kopierliste)
+                                for (int w = 0; w < Kopierliste.Count(); w++)
                                 {
-                                    if ((inhalt.quellpfad + inhalt.dateiname) == dateiname)
+                                    if ((Kopierliste[w].quellpfad + Kopierliste[w].dateiname) == dateiname)
                                     {
                                         gefunden = true;
                                     }
@@ -876,6 +917,13 @@ namespace Daten_kopieren_Chia_GPU_Plotter
                         PlotterGefunden.Checked = true;
                         gefunden = true;
                         logGlobal("Chia GPU Plotter 3 alpha3 gefunden");
+                        PlotterAuswahl.SelectedIndex = 0;
+                    }
+                    if (zeile.ToString().IndexOf("3.0.0-prealpha4") != -1)// Version Chia GPU Plotter gefunden
+                    {
+                        PlotterGefunden.Checked = true;
+                        gefunden = true;
+                        logGlobal("Chia GPU Plotter 3 alpha4 gefunden");
                         PlotterAuswahl.SelectedIndex = 0;
                     }
                     ///_______________________CPU MADMAX
