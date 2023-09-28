@@ -926,6 +926,13 @@ namespace Daten_kopieren_Chia_GPU_Plotter
                         logGlobal("Chia GPU Plotter 3 alpha4 gefunden");
                         PlotterAuswahl.SelectedIndex = 0;
                     }
+                    if (zeile.ToString().IndexOf("3.0.0") != -1)// Version Chia GPU Plotter gefunden
+                    {
+                        PlotterGefunden.Checked = true;
+                        gefunden = true;
+                        logGlobal("Chia GPU Plotter 3.0.0 gefunden");
+                        PlotterAuswahl.SelectedIndex = 0;
+                    }
                     ///_______________________CPU MADMAX
                     if (zeile.ToString().IndexOf("2.0.0-16eca1f") != -1)// Version MadMax CPU Plotter gefunden
                     {
