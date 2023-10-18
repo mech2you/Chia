@@ -22,6 +22,7 @@ using System.Text.RegularExpressions;
 using System.Text;
 using System.Collections;
 using static System.Net.Mime.MediaTypeNames;
+using System.Management.Automation.Language;
 
 namespace Daten_kopieren_Chia_GPU_Plotter
 {
@@ -44,6 +45,7 @@ namespace Daten_kopieren_Chia_GPU_Plotter
         String waitforcopy = "";
         String threadmultiplierforP2 = "";
         String pfadWakeUpHDD = "";
+        string tmpEndung = "plot"; // Wie ist die Endung der fertigen Plots
         public bool plotterAktiv = false;
 
         List<Kopiervorgang> DatenKopierer = new List<Kopiervorgang>();// Jedes Ziellaufwerk erhält einen kopierer
@@ -90,10 +92,31 @@ namespace Daten_kopieren_Chia_GPU_Plotter
             InitializeComponent();
             PSBackgroundWorker.DoWork += PSBackgroundWorker_DoWork;
             PSBackgroundWorker.WorkerSupportsCancellation = true;
+            PSBackgroundWorker.RunWorkerCompleted += PSBackgroundWorker_Completed;
 
             HHD_BW.WorkerSupportsCancellation = true;
             HHD_BW.DoWork += HHD_BW_DoWork;
 
+        }
+        /// <summary>
+        /// Vorbereitung aber noch nicht in Verwendung
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void PSBackgroundWorker_Completed(object sender, RunWorkerCompletedEventArgs e)
+        {
+            if (e.Cancelled == true)
+            {
+
+            }
+            else if (e.Error != null)
+            {
+
+            }
+            else
+            {
+
+            }
         }
         /// <summary>
         /// Wird verwendet festplatten nicht schalfen zu lassen
@@ -215,6 +238,18 @@ namespace Daten_kopieren_Chia_GPU_Plotter
                         parameters.Add("-f", FarmerKey.Text);
                         parameters.Add("-K", threadmultiplierforP2);
                     }
+                    if (plotterAuswahl == "noSSD Plotter")
+                    {
+                        parameters.Add("-c", kompression);
+                        parameters.Add("-a", Auszahlungsadresse.Text);
+                        parameters.Add("-w", FarmerName.Text);
+                        parameters.Add("--no-gpu-mining", null);
+                        parameters.Add("--no-temp", null);
+                        parameters.Add("--no-benchmark", null);
+                        parameters.Add("--no-rescan", null);
+                        parameters.Add("-d", quelle);
+                        //parameters.Add("-s", quelle + "TMP");
+                    }
 
                     //Powershell wird gestartet und die Argumenten mit dem jeweiligen Plotter ausgeführt
                     using (PowerShell powershell = PowerShell.Create().AddCommand(pfadBladBitGPUPlotter).AddParameters(parameters))//https://learn.microsoft.com/en-us/powershell/scripting/developer/hosting/runspace03-sample?view=powershell-7.3
@@ -226,8 +261,16 @@ namespace Daten_kopieren_Chia_GPU_Plotter
                             logPlotter(outItem.BaseObject.ToString());
                             if (worker.CancellationPending == true)// Bricht die Powershell ab
                             {
+                                logGlobal("Plotter wird angehalten!!");
+                                //powershell.Stop();
+
+                                System.Diagnostics.Process[] procs = System.Diagnostics.Process.GetProcessesByName("libclient.dll", "."); // use "." for this machine // Schließt den Prozess für noSSD
+                                foreach (var proc in procs)
+                                {
+                                    proc.Kill(true);
+                                }
                                 logGlobal("Plotter angehalten!!");
-                                powershell.Stop();
+                                powershell.Dispose();
                                 break;
                             }
                         }
@@ -499,7 +542,9 @@ namespace Daten_kopieren_Chia_GPU_Plotter
                 string[] dateien = Directory.GetFiles(quelle);
                 foreach (string dateiname in dateien)
                 {
-                    if (dateiname.Substring(dateiname.Length - 4) == "plot")// handelt es sich um einen fertigen Plot
+
+
+                    if (dateiname.Substring(dateiname.Length - 4) == tmpEndung)// handelt es sich um einen fertigen Plot
                     {
                         if (File.Exists(dateiname))// Nur wenn die Datei existiert geht es weiter
                         {
@@ -528,47 +573,52 @@ namespace Daten_kopieren_Chia_GPU_Plotter
                     }
                 }
                 bool abbrechen2 = false;
+                int bwBeschäftigtAnzahl = 0;
+                for (int j = 0; j < DatenKopierer.Count; j++)// Wieviel laufwerke sind beschäfigt
+                {
+                    if (DatenKopierer[j].BWkopieren.IsBusy == true)// 
+                    {
+                        bwBeschäftigtAnzahl++;
+                    }
+                }
                 for (int i = 0; i < DatenKopierer.Count; i++)// foreach kann nicht verwendet werden da Elemente gelöscht werden
                 {
+                    if (plotterAktiv == true)//Plotvorgang ist hält den Plotter an oder lässt ihn wieder laufen je nachdem wieviele Plots vorhanden sind
+                    {
+                        int w = 0;
+                        w -= Convert.ToInt32(KopierenMax.Value);// Plots vorhalten aber abzüglich der kopierenden Plots
+
+                        foreach (string dateiname in dateien)
+                        {
+                            if (File.Exists(dateiname))// Nur wenn die Datei existiert werden diese gezählt + tmp Plots
+                            {
+                                w++;
+                            }
+                        }
+                        if (w > Convert.ToInt32(PlotsVorhalten.Value))//Wenn X Plots mehr vorhanden sind als Kopiervorgänge dann wird das Plotten unterbrochen
+                        {
+                            PSBackgroundWorker.CancelAsync();
+                        }
+                        else
+                        {
+                            if (PSBackgroundWorker.IsBusy == false)// Setzt das Plotten fort da zu wenige Plots vorhanden sind
+                            {
+                                PSBackgroundWorker.RunWorkerAsync();
+                            }
+
+                        }
+                    }
                     if (DatenKopierer[i].BWkopieren.IsBusy == false)// Ein Laufwerk wird ausgewählt wo der BW nicht beschäftigt mit kopieren ist
                     {
 
-                        int bwBeschäftigtAnzahl = 0;
-                        for (int j = 0; j < DatenKopierer.Count; j++)// Wieviel laufwerke sind beschäfigt
+                        if (plotterAktiv == true)//Plotvorgang ist aktiv
                         {
-                            if (DatenKopierer[j].BWkopieren.IsBusy == true)// 
+                            if (KopierenMax.Value <= bwBeschäftigtAnzahl)// Mehr Kopiervorgänge aktiv sodas keine neuen gestartet werden sollen 
                             {
-                                bwBeschäftigtAnzahl++;
+                                break;
                             }
                         }
-                        if (KopierenMax.Value <= bwBeschäftigtAnzahl)// Zu viele Kopiervorgänge
-                        {
-                            if (plotterAktiv == true)//Plotvorgang ist aktiv
-                            {
-                                int w = 0;
-                                foreach (KopierDaten inhalt in Kopierliste)// Sucht wieveiel Dateien im Quellverzeichnis vorhanden sind
-                                {
-                                    if (inhalt.fertig == false)
-                                    {
-                                        w++;
-                                    }
-                                }
-                                if (w > Convert.ToInt32(PlotsVorhalten.Value))//Wenn X Plots mehr vorhanden sind als Kopiervorgänge dann wird das Plotten unterbrochen
-                                {
-                                    PSBackgroundWorker.CancelAsync();
-                                }
-                                else
-                                {
-                                    if (PSBackgroundWorker.IsBusy == false)
-                                    {
-                                        PSBackgroundWorker.RunWorkerAsync();
-                                    }
 
-                                }
-                            }
-                            abbrechen2 = true;
-                            break;
-                        }
                         if (PlotGleichmäßigVerteilen.Checked == true)
                         {
                             int freieSpeicher = 0;
@@ -637,6 +687,7 @@ namespace Daten_kopieren_Chia_GPU_Plotter
                             }
                         }
                     }
+
                     if (abbrechen2)
                     {
                         break;
@@ -840,6 +891,9 @@ namespace Daten_kopieren_Chia_GPU_Plotter
             KopierenMax.Value = Convert.ToDecimal(Properties.Settings.Default.kopierenMax);
             PlotsVorhalten.Value = Convert.ToDecimal(Properties.Settings.Default.PlotsVorhalten);
 
+            Auszahlungsadresse.Text = Properties.Settings.Default.Auszahlungsadresse;
+            FarmerName.Text = Properties.Settings.Default.FarmerName;
+
         }
         /// <summary>
         /// Dient zum löschen von Pfaden in der Liste
@@ -890,6 +944,10 @@ namespace Daten_kopieren_Chia_GPU_Plotter
                 {
 
                     rückgabePS = powershell.AddScript(pfadBladBitGPUPlotter + " --version").Invoke();
+                    if (rückgabePS.Count() == 0)
+                    {
+                        rückgabePS = powershell.AddScript(pfadBladBitGPUPlotter + " -v --no-rescan --no-benchmark --no-gpu-mining --no-gpu-plotting").Invoke();// SSd Plotter gibt infos nur mit -v zurück
+                    }
                     if (powershell.HadErrors)
                     {
                         foreach (var error in powershell.Streams.Error)
@@ -941,7 +999,7 @@ namespace Daten_kopieren_Chia_GPU_Plotter
                         logGlobal("Version MadMax CPU gefunden");
                         PlotterAuswahl.SelectedIndex = 1;
                     }
-                    ///_______________________GPU MADMAX
+
                     if (zeile.ToString().IndexOf("2.0.0-3e00fa3") != -1)// Version MadMax GPU Plotter gefunden
                     {
                         PlotterGefunden.Checked = true;
@@ -962,6 +1020,14 @@ namespace Daten_kopieren_Chia_GPU_Plotter
                         gefunden = true;
                         logGlobal("Version MadMax GPU gefunden 2.0.0-b7375ce");
                         PlotterAuswahl.SelectedIndex = 2;
+                    }
+                    ///_______________________noSSD Plotter
+                    if (zeile.ToString().IndexOf("NoSSDChiaPool version 2.2") != -1)// Version MadMax CPU Plotter gefunden
+                    {
+                        PlotterGefunden.Checked = true;
+                        gefunden = true;
+                        logGlobal("Version NoSSD Plotter gefunden Version 2.2");
+                        PlotterAuswahl.SelectedIndex = 3;
                     }
                 }
             }
@@ -1192,6 +1258,8 @@ namespace Daten_kopieren_Chia_GPU_Plotter
             }
             Properties.Settings.Default.kopierenMax = Convert.ToString(KopierenMax.Value);
             Properties.Settings.Default.PlotsVorhalten = Convert.ToString(PlotsVorhalten.Value);
+            Properties.Settings.Default.Auszahlungsadresse = Auszahlungsadresse.Text;
+            Properties.Settings.Default.FarmerName = FarmerName.Text;
             Properties.Settings.Default.Save();
 
 
@@ -1562,7 +1630,7 @@ namespace Daten_kopieren_Chia_GPU_Plotter
 
         private void PlotterLogKopieren_Click(object sender, EventArgs e)
         {
-            System.Windows.Forms.Clipboard.SetDataObject(PlotterLogKopieren.Text);
+            System.Windows.Forms.Clipboard.SetDataObject(PlotterLog.Text);
         }
 
         private void PlotterGefunden_CheckedChanged(object sender, EventArgs e)
@@ -1578,11 +1646,21 @@ namespace Daten_kopieren_Chia_GPU_Plotter
         {
             if ("Chia GPU Plotter" == PlotterAuswahl.SelectedItem.ToString())
             {
+                tmpEndung = "plot";
                 KLevelAuswahl.Visible = false;
                 KLevelAuswahlL.Visible = false;
 
                 KompressionAuswahl.Visible = true;
                 KompressionAuswahlL.Visible = true;
+
+                FarmerKey.Visible = true;
+                FarmerKeyL.Visible = true;
+
+                PoolContractAdresse.Visible = true;
+                PoolContractAdresseL.Visible = true;
+
+                AnzahlPlots.Visible = true;
+                AnzahlPlotsL.Visible = true;
 
                 GPUGemeinsameSpeicherGUI.Visible = false;
                 GPUGemeinsameSpeicherGUIL.Visible = false;
@@ -1612,8 +1690,18 @@ namespace Daten_kopieren_Chia_GPU_Plotter
             }
             if ("MadMax CPU Plotter" == PlotterAuswahl.SelectedItem.ToString())
             {
+                tmpEndung = "plot";
                 KLevelAuswahl.Visible = false;
                 KLevelAuswahlL.Visible = false;
+
+                FarmerKey.Visible = true;
+                FarmerKeyL.Visible = true;
+
+                PoolContractAdresse.Visible = true;
+                PoolContractAdresseL.Visible = true;
+
+                AnzahlPlots.Visible = true;
+                AnzahlPlotsL.Visible = true;
 
                 KompressionAuswahl.Visible = true;
                 KompressionAuswahlL.Visible = true;
@@ -1646,6 +1734,17 @@ namespace Daten_kopieren_Chia_GPU_Plotter
             }
             if ("MadMax GPU Plotter" == PlotterAuswahl.SelectedItem.ToString())
             {
+                tmpEndung = "plot";
+
+                FarmerKey.Visible = true;
+                FarmerKeyL.Visible = true;
+
+                PoolContractAdresse.Visible = true;
+                PoolContractAdresseL.Visible = true;
+
+                AnzahlPlots.Visible = true;
+                AnzahlPlotsL.Visible = true;
+
                 KLevelAuswahl.Visible = false;
                 KLevelAuswahlL.Visible = false;
 
@@ -1690,7 +1789,57 @@ namespace Daten_kopieren_Chia_GPU_Plotter
                     MadMaxTmp3OrdnerBT.Visible = true;
                     MadMaxTmp3OrdnerTB.Visible = true;
                 }
+            }
+            if ("noSSD Plotter" == PlotterAuswahl.SelectedItem.ToString())
+            {
+                tmpEndung = ".fpt";
+                KLevelAuswahl.Visible = false;
+                KLevelAuswahlL.Visible = false;
+                KompressionAuswahl.Visible = true;
+                KompressionAuswahlL.Visible = true;
+                GPUGemeinsameSpeicherGUI.Visible = false;
+                GPUGemeinsameSpeicherGUIL.Visible = false;
 
+                FarmerKey.Visible = false;
+                FarmerKeyL.Visible = false;
+
+                PoolContractAdresse.Visible = false;
+                PoolContractAdresseL.Visible = false;
+
+                AnzahlPlots.Visible = false;
+                AnzahlPlotsL.Visible = false;
+
+                MadMaxRAMG.Visible = false;
+
+                ThreadsND.Visible = false;
+                ThreadsNDL.Visible = false;
+
+                BucketsND.Visible = false;
+                BucketsNDL.Visible = false;
+
+                Buckets3ND.Visible = false;
+                Buckets3NDL.Visible = false;
+
+                ThreadmultiplierforP2ND.Visible = false;
+                ThreadmultiplierforP2NDL.Visible = false;
+
+                MadMaxTmp1OrdnerBT.Visible = false;
+                MadMaxTmp1OrdnerTB.Visible = false;
+
+                MadMaxTmp2OrdnerBT.Visible = false;
+                MadMaxTmp2OrdnerTB.Visible = false;
+
+                MadMaxTmp3OrdnerBT.Visible = false;
+                MadMaxTmp3OrdnerTB.Visible = false;
+
+                MadMaxTmp2OrdnerBT.Visible = false;
+                MadMaxTmp2OrdnerTB.Visible = false;
+
+                MadMaxTmp2OrdnerBT.Visible = false;
+                MadMaxTmp2OrdnerTB.Visible = false;
+
+                MadMaxTmp3OrdnerBT.Visible = false;
+                MadMaxTmp3OrdnerTB.Visible = false;
 
             }
         }

@@ -41,8 +41,8 @@
             FarmerKey = new TextBox();
             PoolContractAdresse = new TextBox();
             label1 = new Label();
-            label2 = new Label();
-            label3 = new Label();
+            FarmerKeyL = new Label();
+            PoolContractAdresseL = new Label();
             AnzahlPlots = new NumericUpDown();
             AnzahlPlotsL = new Label();
             StartPlot = new Button();
@@ -59,7 +59,6 @@
             KLevelAuswahl = new ComboBox();
             KompressionAuswahl = new ComboBox();
             GPUGemeinsameSpeicherGUI = new NumericUpDown();
-            InfoGUI = new RichTextBox();
             PlotterAuswahlL = new Label();
             KLevelAuswahlL = new Label();
             KompressionAuswahlL = new Label();
@@ -99,6 +98,10 @@
             MadMaxTmp1OrdnerTB = new TextBox();
             PlotsVorhalten = new NumericUpDown();
             label16 = new Label();
+            AuszahlungsadresseL = new Label();
+            Auszahlungsadresse = new TextBox();
+            FarmerNameL = new Label();
+            FarmerName = new TextBox();
             ((System.ComponentModel.ISupportInitialize)AnzahlPlots).BeginInit();
             ((System.ComponentModel.ISupportInitialize)GPUGemeinsameSpeicherGUI).BeginInit();
             MadMaxRAMG.SuspendLayout();
@@ -181,7 +184,7 @@
             // 
             // LogLöschen
             // 
-            LogLöschen.Location = new Point(559, 674);
+            LogLöschen.Location = new Point(559, 1007);
             LogLöschen.Name = "LogLöschen";
             LogLöschen.Size = new Size(155, 34);
             LogLöschen.TabIndex = 8;
@@ -234,23 +237,23 @@
             label1.TabIndex = 14;
             label1.Text = "Cuda Plotter Pfad";
             // 
-            // label2
+            // FarmerKeyL
             // 
-            label2.AutoSize = true;
-            label2.Location = new Point(720, 88);
-            label2.Name = "label2";
-            label2.Size = new Size(151, 25);
-            label2.TabIndex = 15;
-            label2.Text = "Farmer public key";
+            FarmerKeyL.AutoSize = true;
+            FarmerKeyL.Location = new Point(720, 88);
+            FarmerKeyL.Name = "FarmerKeyL";
+            FarmerKeyL.Size = new Size(151, 25);
+            FarmerKeyL.TabIndex = 15;
+            FarmerKeyL.Text = "Farmer public key";
             // 
-            // label3
+            // PoolContractAdresseL
             // 
-            label3.AutoSize = true;
-            label3.Location = new Point(720, 125);
-            label3.Name = "label3";
-            label3.Size = new Size(183, 25);
-            label3.TabIndex = 16;
-            label3.Text = "Pool contract address";
+            PoolContractAdresseL.AutoSize = true;
+            PoolContractAdresseL.Location = new Point(720, 125);
+            PoolContractAdresseL.Name = "PoolContractAdresseL";
+            PoolContractAdresseL.Size = new Size(183, 25);
+            PoolContractAdresseL.TabIndex = 16;
+            PoolContractAdresseL.Text = "Pool contract address";
             // 
             // AnzahlPlots
             // 
@@ -379,7 +382,7 @@
             // PlotterAuswahl
             // 
             PlotterAuswahl.FormattingEnabled = true;
-            PlotterAuswahl.Items.AddRange(new object[] { "Chia GPU Plotter", "MadMax CPU Plotter", "MadMax GPU Plotter" });
+            PlotterAuswahl.Items.AddRange(new object[] { "Chia GPU Plotter", "MadMax CPU Plotter", "MadMax GPU Plotter", "noSSD Plotter" });
             PlotterAuswahl.Location = new Point(597, 197);
             PlotterAuswahl.Name = "PlotterAuswahl";
             PlotterAuswahl.Size = new Size(219, 33);
@@ -401,7 +404,7 @@
             // KompressionAuswahl
             // 
             KompressionAuswahl.FormattingEnabled = true;
-            KompressionAuswahl.Items.AddRange(new object[] { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9" });
+            KompressionAuswahl.Items.AddRange(new object[] { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15" });
             KompressionAuswahl.Location = new Point(924, 197);
             KompressionAuswahl.Name = "KompressionAuswahl";
             KompressionAuswahl.Size = new Size(141, 33);
@@ -417,14 +420,6 @@
             GPUGemeinsameSpeicherGUI.Size = new Size(84, 31);
             GPUGemeinsameSpeicherGUI.TabIndex = 32;
             GPUGemeinsameSpeicherGUI.Value = new decimal(new int[] { 115, 0, 0, 0 });
-            // 
-            // InfoGUI
-            // 
-            InfoGUI.Location = new Point(2107, 665);
-            InfoGUI.Name = "InfoGUI";
-            InfoGUI.Size = new Size(272, 123);
-            InfoGUI.TabIndex = 33;
-            InfoGUI.Text = "18TB c8 235";
             // 
             // PlotterAuswahlL
             // 
@@ -684,7 +679,7 @@
             // 
             // ZugriffsrechtPrüfen
             // 
-            ZugriffsrechtPrüfen.Location = new Point(559, 754);
+            ZugriffsrechtPrüfen.Location = new Point(296, 794);
             ZugriffsrechtPrüfen.Name = "ZugriffsrechtPrüfen";
             ZugriffsrechtPrüfen.Size = new Size(257, 34);
             ZugriffsrechtPrüfen.TabIndex = 59;
@@ -712,17 +707,17 @@
             // 
             // PlotterLog
             // 
-            PlotterLog.Location = new Point(702, 539);
+            PlotterLog.Location = new Point(720, 539);
             PlotterLog.Name = "PlotterLog";
-            PlotterLog.Size = new Size(1678, 120);
+            PlotterLog.Size = new Size(1660, 502);
             PlotterLog.TabIndex = 62;
             PlotterLog.Text = "";
             // 
             // log
             // 
-            log.Location = new Point(702, 340);
+            log.Location = new Point(720, 340);
             log.Name = "log";
-            log.Size = new Size(1678, 193);
+            log.Size = new Size(1660, 193);
             log.TabIndex = 63;
             log.Text = "";
             // 
@@ -756,7 +751,7 @@
             // 
             // PlotterLogKopieren
             // 
-            PlotterLogKopieren.Location = new Point(576, 625);
+            PlotterLogKopieren.Location = new Point(559, 967);
             PlotterLogKopieren.Name = "PlotterLogKopieren";
             PlotterLogKopieren.Size = new Size(120, 34);
             PlotterLogKopieren.TabIndex = 67;
@@ -799,11 +794,47 @@
             label16.TabIndex = 71;
             label16.Text = "Plots vorhalten";
             // 
+            // AuszahlungsadresseL
+            // 
+            AuszahlungsadresseL.AutoSize = true;
+            AuszahlungsadresseL.Location = new Point(720, 306);
+            AuszahlungsadresseL.Name = "AuszahlungsadresseL";
+            AuszahlungsadresseL.Size = new Size(172, 25);
+            AuszahlungsadresseL.TabIndex = 73;
+            AuszahlungsadresseL.Text = "Auszahlungsadresse";
+            // 
+            // Auszahlungsadresse
+            // 
+            Auszahlungsadresse.Location = new Point(906, 303);
+            Auszahlungsadresse.Name = "Auszahlungsadresse";
+            Auszahlungsadresse.Size = new Size(945, 31);
+            Auszahlungsadresse.TabIndex = 72;
+            // 
+            // FarmerNameL
+            // 
+            FarmerNameL.AutoSize = true;
+            FarmerNameL.Location = new Point(720, 269);
+            FarmerNameL.Name = "FarmerNameL";
+            FarmerNameL.Size = new Size(118, 25);
+            FarmerNameL.TabIndex = 75;
+            FarmerNameL.Text = "Farmer Name";
+            // 
+            // FarmerName
+            // 
+            FarmerName.Location = new Point(906, 266);
+            FarmerName.Name = "FarmerName";
+            FarmerName.Size = new Size(945, 31);
+            FarmerName.TabIndex = 74;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(2384, 803);
+            ClientSize = new Size(2388, 1053);
+            Controls.Add(FarmerNameL);
+            Controls.Add(FarmerName);
+            Controls.Add(AuszahlungsadresseL);
+            Controls.Add(Auszahlungsadresse);
             Controls.Add(PlotsVorhalten);
             Controls.Add(KopierenMax);
             Controls.Add(label16);
@@ -840,7 +871,6 @@
             Controls.Add(KompressionAuswahlL);
             Controls.Add(KLevelAuswahlL);
             Controls.Add(PlotterAuswahlL);
-            Controls.Add(InfoGUI);
             Controls.Add(GPUGemeinsameSpeicherGUI);
             Controls.Add(KompressionAuswahl);
             Controls.Add(KLevelAuswahl);
@@ -857,8 +887,8 @@
             Controls.Add(StartPlot);
             Controls.Add(AnzahlPlotsL);
             Controls.Add(AnzahlPlots);
-            Controls.Add(label3);
-            Controls.Add(label2);
+            Controls.Add(PoolContractAdresseL);
+            Controls.Add(FarmerKeyL);
             Controls.Add(label1);
             Controls.Add(PoolContractAdresse);
             Controls.Add(FarmerKey);
@@ -873,7 +903,7 @@
             Controls.Add(KopierenStarten);
             Controls.Add(Kopieren);
             Name = "Form1";
-            Text = "mech2youDV v1.1.11";
+            Text = "mech2youDV v1.2.1";
             FormClosing += Form1_FormClosing;
             Load += Form1_Load;
             ((System.ComponentModel.ISupportInitialize)AnzahlPlots).EndInit();
@@ -905,8 +935,8 @@
         private TextBox FarmerKey;
         private TextBox PoolContractAdresse;
         private Label label1;
-        private Label label2;
-        private Label label3;
+        private Label FarmerKeyL;
+        private Label PoolContractAdresseL;
         private NumericUpDown AnzahlPlots;
         private Label label4;
         private Button StartPlot;
@@ -976,5 +1006,9 @@
         private NumericUpDown numericUpDown1;
         private Label label16;
         private NumericUpDown PlotsVorhalten;
+        private Label AuszahlungsadresseL;
+        private TextBox Auszahlungsadresse;
+        private Label FarmerNameL;
+        private TextBox FarmerName;
     }
 }

@@ -11,7 +11,7 @@ namespace Daten_kopieren_Chia_GPU_Plotter
     {
         public String quellpfad="";// Woher kommen die Daten mit Dateiname
         public String dateiname = ""; // Wie lautet der Dateinname
-        public bool fertig = false;// Ist der Kopiervorgang abgeschlossen
+        public bool fertig = false;// Ist der Kopiervorgang abgeschlossen oder im Gange
 
         public KopierDaten()
         {
