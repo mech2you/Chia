@@ -404,7 +404,7 @@
             // KompressionAuswahl
             // 
             KompressionAuswahl.FormattingEnabled = true;
-            KompressionAuswahl.Items.AddRange(new object[] { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15" });
+            KompressionAuswahl.Items.AddRange(new object[] { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20" });
             KompressionAuswahl.Location = new Point(924, 197);
             KompressionAuswahl.Name = "KompressionAuswahl";
             KompressionAuswahl.Size = new Size(141, 33);
@@ -903,7 +903,7 @@
             Controls.Add(KopierenStarten);
             Controls.Add(Kopieren);
             Name = "Form1";
-            Text = "mech2youDV v1.2.1";
+            Text = "mech2youDV v1.2.2";
             FormClosing += Form1_FormClosing;
             Load += Form1_Load;
             ((System.ComponentModel.ISupportInitialize)AnzahlPlots).EndInit();

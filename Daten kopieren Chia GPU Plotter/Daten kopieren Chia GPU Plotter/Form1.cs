@@ -269,8 +269,15 @@ namespace Daten_kopieren_Chia_GPU_Plotter
                                 {
                                     proc.Kill(true);
                                 }
+                                procs = System.Diagnostics.Process.GetProcessesByName("cuda_plot_k32.exe", "."); // use "." for this machine // Schließt den Prozess für noSSD
+                                foreach (var proc in procs)
+                                {
+                                    proc.Kill(true);
+                                }
                                 logGlobal("Plotter angehalten!!");
+                                powershell.Stop();
                                 powershell.Dispose();
+
                                 break;
                             }
                         }
@@ -1021,6 +1028,13 @@ namespace Daten_kopieren_Chia_GPU_Plotter
                         logGlobal("Version MadMax GPU gefunden 2.0.0-b7375ce");
                         PlotterAuswahl.SelectedIndex = 2;
                     }
+                    if (zeile.ToString().IndexOf("2.0.0-3287c51") != -1)// Version MadMax CPU Plotter gefunden
+                    {
+                        PlotterGefunden.Checked = true;
+                        gefunden = true;
+                        logGlobal("Version MadMax GPU gefunden 2.0.0-3287c51");
+                        PlotterAuswahl.SelectedIndex = 2;
+                    }
                     ///_______________________noSSD Plotter
                     if (zeile.ToString().IndexOf("NoSSDChiaPool version 2.2") != -1)// Version MadMax CPU Plotter gefunden
                     {
@@ -1735,6 +1749,10 @@ namespace Daten_kopieren_Chia_GPU_Plotter
             if ("MadMax GPU Plotter" == PlotterAuswahl.SelectedItem.ToString())
             {
                 tmpEndung = "plot";
+                FarmerName.Visible = false;
+                FarmerNameL.Visible = false;
+                FarmerKey.Visible = false;
+                FarmerKeyL.Visible = false;
 
                 FarmerKey.Visible = true;
                 FarmerKeyL.Visible = true;
